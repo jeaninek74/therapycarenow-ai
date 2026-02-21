@@ -42,40 +42,43 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&display=swap');
+
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
+  /* TherapyCareNow: Calm teal primary */
+  --primary: oklch(0.48 0.12 210);
+  --primary-foreground: oklch(0.99 0 0);
+  --sidebar-primary: oklch(0.48 0.12 210);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --chart-1: oklch(0.48 0.12 210);
+  --chart-2: oklch(0.58 0.12 155);
+  --chart-3: oklch(0.72 0.16 65);
+  --chart-4: oklch(0.52 0.22 25);
+  --chart-5: oklch(0.68 0.10 280);
+  --radius: 0.75rem;
+  --background: oklch(0.98 0.005 220);
+  --foreground: oklch(0.18 0.02 240);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
+  --card-foreground: oklch(0.18 0.02 240);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
+  --popover-foreground: oklch(0.18 0.02 240);
+  --secondary: oklch(0.92 0.04 155);
+  --secondary-foreground: oklch(0.25 0.04 155);
+  --muted: oklch(0.95 0.01 220);
+  --muted-foreground: oklch(0.52 0.02 240);
+  --accent: oklch(0.93 0.04 280);
+  --accent-foreground: oklch(0.28 0.06 280);
+  --destructive: oklch(0.52 0.22 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.88 0.01 220);
+  --input: oklch(0.88 0.01 220);
+  --ring: oklch(0.48 0.12 210);
+  --sidebar: oklch(0.98 0.005 220);
+  --sidebar-foreground: oklch(0.18 0.02 240);
+  --sidebar-accent: oklch(0.93 0.04 280);
+  --sidebar-accent-foreground: oklch(0.28 0.06 280);
+  --sidebar-border: oklch(0.88 0.01 220);
+  --sidebar-ring: oklch(0.48 0.12 210);
 }
 
 .dark {
@@ -119,7 +122,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
   }
+  h1, h2, h3 { @apply font-semibold tracking-tight; }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [type="button"]:not(:disabled),
@@ -169,9 +174,24 @@
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 1280px;
     }
+  }
+
+  /* Crisis button */
+  .btn-crisis {
+    @apply bg-destructive text-destructive-foreground font-semibold rounded-xl px-6 py-3
+           hover:opacity-90 active:scale-95 transition-all shadow-md;
+  }
+
+  /* Emergency FAB pulse */
+  @keyframes pulse-ring {
+    0%, 100% { box-shadow: 0 0 0 0 oklch(0.52 0.22 25 / 0.5); }
+    50% { box-shadow: 0 0 0 10px oklch(0.52 0.22 25 / 0); }
+  }
+  .animate-crisis-pulse {
+    animation: pulse-ring 2.5s ease-in-out infinite;
   }
 }

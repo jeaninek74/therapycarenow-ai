@@ -5,34 +5,46 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import Triage from "./pages/Triage";
+import CrisisMode from "./pages/CrisisMode";
+import UrgentOptions from "./pages/UrgentOptions";
+import RoutineOptions from "./pages/RoutineOptions";
+import FindTherapist from "./pages/FindTherapist";
+import ProviderProfile from "./pages/ProviderProfile";
+import BenefitsWallet from "./pages/BenefitsWallet";
+import FreeResources from "./pages/FreeResources";
+import AIAssistant from "./pages/AIAssistant";
+import Settings from "./pages/Settings";
+import EmergencyFAB from "./components/EmergencyFAB";
 
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
+      <Route path="/" component={Home} />
+      <Route path="/triage" component={Triage} />
+      <Route path="/crisis" component={CrisisMode} />
+      <Route path="/urgent" component={UrgentOptions} />
+      <Route path="/routine" component={RoutineOptions} />
+      <Route path="/find-therapist" component={FindTherapist} />
+      <Route path="/provider/:id" component={ProviderProfile} />
+      <Route path="/benefits" component={BenefitsWallet} />
+      <Route path="/free-resources" component={FreeResources} />
+      <Route path="/ai-assistant" component={AIAssistant} />
+      <Route path="/settings" component={Settings} />
+      <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        // switchable
-      >
+      <ThemeProvider defaultTheme="light">
         <TooltipProvider>
           <Toaster />
           <Router />
+          <EmergencyFAB />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
