@@ -15,6 +15,20 @@
       "when": 1771698349659,
       "tag": "0001_overrated_titania",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1771704748194,
+      "tag": "0002_wakeful_jean_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1771705154169,
+      "tag": "0003_curious_war_machine",
+      "breakpoints": true
     }
   ]
 }

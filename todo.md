@@ -97,3 +97,60 @@
 - [x] Wire notifyOwner on crisis_mode_triggered audit event (HIPAA-safe: no PHI, only event type + state + timestamp)
 - [x] Add notification for moderation-triggered crisis mode
 - [x] Show notification status in admin dashboard recent events
+
+## Clinician Portal (NPI-Gated)
+
+### Database Schema
+- [x] clinician_profiles table (userId, npiNumber, npiVerified, licenseType, licenseState, specialty, practiceType)
+- [x] clients table (clinicianId, name, dob, diagnosisCodes, goals, status, createdAt)
+- [x] session_notes table (clientId, clinicianId, noteType SOAP/DAP, rawTranscript, generatedNote, approvedNote, approvedAt)
+- [x] treatment_plans table (clientId, clinicianId, diagnosis, goals, interventions, aiSuggestions, status)
+- [x] risk_flags table (clientId, clinicianId, flagType, severity, source, detectedAt, resolvedAt)
+- [x] client_checkins table (clientId, mood, energy, anxiety, notes, completedAt)
+- [x] homework_assignments table (clientId, clinicianId, title, description, dueDate, completedAt)
+- [x] intake_responses table (clientId, questionKey, answer, completedAt)
+- [x] billing_codes table (clinicianId, clientId, sessionNoteId, cptCode, diagnosisCode, suggestedCode, issueFlags)
+
+### Backend
+- [x] NPI verification endpoint (NPPES API lookup by NPI number)
+- [x] Clinician role in users table (extend enum to include 'clinician')
+- [x] clinicianProcedure middleware (role-gated to clinician + NPI verified)
+- [x] SOAP/DAP note generation from transcript (AI with strict clinical format)
+- [x] Voice transcript upload and transcription endpoint
+- [x] Note approval/edit workflow
+- [x] Smart treatment plan AI suggestions (diagnosis + goals → interventions)
+- [x] Risk detection engine (scan notes and check-ins for crisis signals)
+- [x] Client check-in submission and pattern tracking
+- [x] Homework assignment CRUD
+- [x] Adaptive intake questionnaire engine (dynamic branching logic)
+- [x] HIPAA compliance auto-checker (documentation completeness scoring)
+- [x] Revenue optimization: CPT code suggestions and claim issue prediction
+- [x] Practice analytics: burnout indicators, outcome dashboards, session metrics
+
+### Frontend
+- [x] /clinician/login — NPI-gated login page with credential type selector
+- [x] /clinician/dashboard — Clinician home with today's sessions, alerts, quick actions
+- [x] /clinician/clients — Client roster with search, filter, add client
+- [x] /clinician/clients/:id — Client detail: notes, treatment plan, check-ins, risk flags
+- [x] /clinician/notes/new — AI note creation: speak/upload transcript → SOAP/DAP generation
+- [x] /clinician/notes/:id — Note review, edit, and approval workflow
+- [x] /clinician/treatment-plans/:clientId — Treatment plan with AI intervention suggestions
+- [x] /clinician/risk — Risk detection panel with flagged clients and severity levels
+- [x] /clinician/engagement — Client engagement: check-in patterns, homework tracker
+- [x] /clinician/intake/:clientId — Adaptive intake questionnaire flow
+- [x] /clinician/compliance — HIPAA compliance checker and documentation scoring
+- [x] /clinician/revenue — CPT code optimizer and claim issue predictor
+- [x] /clinician/analytics — Practice analytics: burnout indicators, outcome dashboards
+- [x] Clinician nav section in NavBar (only visible to clinician role)
+
+## Provider License Verification System
+
+- [x] Add verificationStatus, npiNumber, npiVerifiedAt, licenseState, licenseNumber, verificationNotes fields to providers table
+- [x] Build licenseVerification.ts module: NPI lookup via NPPES + state license cross-check
+- [x] Add provider submission endpoint: therapists submit NPI + license info for verification
+- [x] Gate provider search: only return providers with verificationStatus = 'verified'
+- [x] Admin verification queue: review pending, approve/reject with notes
+- [x] Re-verification flag: mark providers whose verification is older than 90 days
+- [x] Verified badge on provider cards and profiles
+- [x] Verification status panel in admin dashboard
+- [x] Vitest tests for license verification engine

@@ -18,7 +18,7 @@ export const users = mysqlTable("users", {
   name: text("name"),
   email: varchar("email", { length: 320 }),
   loginMethod: varchar("loginMethod", { length: 64 }),
-  role: mysqlEnum("role", ["user", "admin"]).default("user").notNull(),
+  role: mysqlEnum("role", ["user", "admin", "clinician"]).default("user").notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
@@ -118,6 +118,19 @@ export const providers = mysqlTable(
     licenseState: varchar("licenseState", { length: 2 }).notNull(),
     licenseNumber: varchar("licenseNumber", { length: 64 }),
     licenseType: varchar("licenseType", { length: 64 }), // LCSW, LPC, PhD, etc.
+    // ── License Verification ──────────────────────────────────────────────────
+    npiNumber: varchar("npiNumber", { length: 10 }),
+    verificationStatus: mysqlEnum("verificationStatus", [
+      "unverified",      // default for seed/bulk import — not shown in directory
+      "pending",         // submitted for verification, awaiting admin review
+      "verified",        // NPI confirmed + admin approved — shown in directory
+      "rejected",        // failed verification
+      "expired",         // verification older than 90 days, needs re-check
+    ]).default("unverified").notNull(),
+    npiVerifiedAt: timestamp("npiVerifiedAt"),
+    licenseVerifiedAt: timestamp("licenseVerifiedAt"),
+    verificationNotes: text("verificationNotes"), // admin notes on approval/rejection
+    npiData: text("npiData"), // JSON from NPPES
     telehealthAvailable: boolean("telehealthAvailable").notNull().default(false),
     inPersonAvailable: boolean("inPersonAvailable").notNull().default(true),
     city: varchar("city", { length: 128 }),
@@ -139,10 +152,57 @@ export const providers = mysqlTable(
     index("idx_provider_state").on(table.licenseState),
     index("idx_provider_telehealth").on(table.telehealthAvailable),
     index("idx_provider_cost").on(table.costTag),
+    index("idx_provider_verification").on(table.verificationStatus),
+    index("idx_provider_npi").on(table.npiNumber),
   ]
 );
 
 export type Provider = typeof providers.$inferSelect;
+export type InsertProvider = typeof providers.$inferInsert;
+
+// ─── Provider Submissions (self-submitted by therapists for verification) ──────
+
+export const providerSubmissions = mysqlTable(
+  "provider_submissions",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    // Submitted by a logged-in user (optional — can be anonymous)
+    userId: int("userId"),
+    // Provider info
+    name: varchar("name", { length: 256 }).notNull(),
+    npiNumber: varchar("npiNumber", { length: 10 }).notNull(),
+    licenseType: varchar("licenseType", { length: 64 }).notNull(),
+    licenseState: varchar("licenseState", { length: 2 }).notNull(),
+    licenseNumber: varchar("licenseNumber", { length: 64 }),
+    specialty: text("specialty"), // comma-separated
+    phone: varchar("phone", { length: 32 }),
+    website: varchar("website", { length: 512 }),
+    bookingUrl: varchar("bookingUrl", { length: 512 }),
+    telehealthAvailable: boolean("telehealthAvailable").default(false),
+    city: varchar("city", { length: 128 }),
+    stateCode: varchar("stateCode", { length: 2 }),
+    zipCode: varchar("zipCode", { length: 10 }),
+    bio: text("bio"),
+    // Verification workflow
+    status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
+    npiLookupResult: text("npiLookupResult"), // JSON from NPPES
+    npiValid: boolean("npiValid").default(false),
+    adminNotes: text("adminNotes"),
+    reviewedAt: timestamp("reviewedAt"),
+    reviewedBy: int("reviewedBy"), // admin userId
+    // Linked provider record (set after approval)
+    providerId: int("providerId"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index("idx_submission_status").on(table.status),
+    index("idx_submission_npi").on(table.npiNumber),
+  ]
+);
+
+export type ProviderSubmission = typeof providerSubmissions.$inferSelect;
+export type InsertProviderSubmission = typeof providerSubmissions.$inferInsert;
 
 // ─── Provider Specialties ──────────────────────────────────────────────────────
 
@@ -272,3 +332,256 @@ export const triageSessions = mysqlTable("triage_sessions", {
 });
 
 export type TriageSession = typeof triageSessions.$inferSelect;
+
+// ─── Clinician Profiles (NPI-gated) ────────────────────────────────────────────
+
+export const clinicianProfiles = mysqlTable(
+  "clinician_profiles",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull().unique(),
+    npiNumber: varchar("npiNumber", { length: 10 }).notNull().unique(),
+    npiVerified: boolean("npiVerified").notNull().default(false),
+    npiVerifiedAt: timestamp("npiVerifiedAt"),
+    npiData: text("npiData"), // JSON from NPPES API
+    licenseType: mysqlEnum("licenseType", [
+      "therapist",
+      "social_worker",
+      "psychiatrist",
+      "psychologist",
+      "counselor",
+      "other",
+    ]).notNull(),
+    licenseState: varchar("licenseState", { length: 2 }).notNull(),
+    licenseNumber: varchar("licenseNumber", { length: 64 }),
+    specialty: varchar("specialty", { length: 256 }),
+    practiceType: mysqlEnum("practiceType", [
+      "solo",
+      "group",
+      "hospital",
+      "community",
+      "telehealth_only",
+    ]).default("solo"),
+    isActive: boolean("isActive").notNull().default(true),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index("idx_clinician_npi").on(table.npiNumber),
+    index("idx_clinician_user").on(table.userId),
+  ]
+);
+
+export type ClinicianProfile = typeof clinicianProfiles.$inferSelect;
+export type InsertClinicianProfile = typeof clinicianProfiles.$inferInsert;
+
+// ─── Clients (managed by clinicians) ──────────────────────────────────────────
+
+export const clients = mysqlTable(
+  "clients",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clinicianId: int("clinicianId").notNull(),
+    firstName: varchar("firstName", { length: 128 }).notNull(),
+    lastName: varchar("lastName", { length: 128 }).notNull(),
+    dateOfBirth: varchar("dateOfBirth", { length: 16 }),
+    diagnosisCodes: text("diagnosisCodes"), // JSON array of ICD-10 codes
+    goals: text("goals"), // JSON array
+    status: mysqlEnum("status", ["active", "inactive", "discharged", "waitlist"]).default("active").notNull(),
+    riskLevel: mysqlEnum("riskLevel", ["low", "moderate", "high", "crisis"]).default("low"),
+    notes: text("notes"), // general notes
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index("idx_client_clinician").on(table.clinicianId),
+    index("idx_client_status").on(table.status),
+  ]
+);
+
+export type Client = typeof clients.$inferSelect;
+export type InsertClient = typeof clients.$inferInsert;
+
+// ─── Session Notes (SOAP / DAP) ────────────────────────────────────────────────
+
+export const sessionNotes = mysqlTable(
+  "session_notes",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clientId: int("clientId").notNull(),
+    clinicianId: int("clinicianId").notNull(),
+    noteType: mysqlEnum("noteType", ["SOAP", "DAP"]).notNull().default("SOAP"),
+    sessionDate: timestamp("sessionDate").notNull(),
+    rawTranscript: text("rawTranscript"), // stored encrypted / clinician-only
+    generatedNote: text("generatedNote"), // AI-generated draft
+    approvedNote: text("approvedNote"), // clinician-reviewed final
+    status: mysqlEnum("status", ["draft", "pending_review", "approved", "signed"]).default("draft").notNull(),
+    approvedAt: timestamp("approvedAt"),
+    sessionDurationMin: int("sessionDurationMin"),
+    cptCode: varchar("cptCode", { length: 16 }),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index("idx_note_client").on(table.clientId),
+    index("idx_note_clinician").on(table.clinicianId),
+    index("idx_note_status").on(table.status),
+  ]
+);
+
+export type SessionNote = typeof sessionNotes.$inferSelect;
+export type InsertSessionNote = typeof sessionNotes.$inferInsert;
+
+// ─── Treatment Plans ───────────────────────────────────────────────────────────
+
+export const treatmentPlans = mysqlTable(
+  "treatment_plans",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clientId: int("clientId").notNull(),
+    clinicianId: int("clinicianId").notNull(),
+    diagnosisCodes: text("diagnosisCodes"), // JSON array
+    goals: text("goals"), // JSON array
+    interventions: text("interventions"), // JSON array (clinician-edited)
+    aiSuggestions: text("aiSuggestions"), // JSON array (AI-generated)
+    progressNotes: text("progressNotes"),
+    status: mysqlEnum("status", ["active", "completed", "discontinued"]).default("active").notNull(),
+    reviewDate: timestamp("reviewDate"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index("idx_plan_client").on(table.clientId),
+    index("idx_plan_clinician").on(table.clinicianId),
+  ]
+);
+
+export type TreatmentPlan = typeof treatmentPlans.$inferSelect;
+export type InsertTreatmentPlan = typeof treatmentPlans.$inferInsert;
+
+// ─── Risk Flags ────────────────────────────────────────────────────────────────
+
+export const riskFlags = mysqlTable(
+  "risk_flags",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clientId: int("clientId").notNull(),
+    clinicianId: int("clinicianId").notNull(),
+    flagType: varchar("flagType", { length: 64 }).notNull(),
+    // 'suicidal_ideation', 'self_harm', 'harm_to_others', 'substance_use',
+    // 'crisis_language', 'missed_sessions', 'declining_mood'
+    severity: mysqlEnum("severity", ["low", "moderate", "high", "critical"]).notNull(),
+    source: mysqlEnum("source", ["note", "checkin", "intake", "manual"]).notNull(),
+    sourceId: int("sourceId"), // ID of the note/checkin that triggered it
+    description: text("description"), // clinician-safe summary, no raw text
+    isResolved: boolean("isResolved").notNull().default(false),
+    resolvedAt: timestamp("resolvedAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_risk_client").on(table.clientId),
+    index("idx_risk_severity").on(table.severity),
+    index("idx_risk_resolved").on(table.isResolved),
+  ]
+);
+
+export type RiskFlag = typeof riskFlags.$inferSelect;
+export type InsertRiskFlag = typeof riskFlags.$inferInsert;
+
+// ─── Client Check-ins ──────────────────────────────────────────────────────────
+
+export const clientCheckins = mysqlTable(
+  "client_checkins",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clientId: int("clientId").notNull(),
+    clinicianId: int("clinicianId").notNull(),
+    mood: int("mood").notNull(), // 1-10 scale
+    energy: int("energy").notNull(), // 1-10 scale
+    anxiety: int("anxiety").notNull(), // 1-10 scale
+    sleep: int("sleep"), // hours
+    notes: text("notes"), // optional client note
+    completedAt: timestamp("completedAt").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_checkin_client").on(table.clientId),
+    index("idx_checkin_date").on(table.completedAt),
+  ]
+);
+
+export type ClientCheckin = typeof clientCheckins.$inferSelect;
+export type InsertClientCheckin = typeof clientCheckins.$inferInsert;
+
+// ─── Homework Assignments ──────────────────────────────────────────────────────
+
+export const homeworkAssignments = mysqlTable(
+  "homework_assignments",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clientId: int("clientId").notNull(),
+    clinicianId: int("clinicianId").notNull(),
+    title: varchar("title", { length: 256 }).notNull(),
+    description: text("description"),
+    dueDate: timestamp("dueDate"),
+    isCompleted: boolean("isCompleted").notNull().default(false),
+    completedAt: timestamp("completedAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_hw_client").on(table.clientId),
+    index("idx_hw_completed").on(table.isCompleted),
+  ]
+);
+
+export type HomeworkAssignment = typeof homeworkAssignments.$inferSelect;
+export type InsertHomeworkAssignment = typeof homeworkAssignments.$inferInsert;
+
+// ─── Adaptive Intake Responses ─────────────────────────────────────────────────
+
+export const intakeResponses = mysqlTable(
+  "intake_responses",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clientId: int("clientId").notNull(),
+    clinicianId: int("clinicianId").notNull(),
+    questionKey: varchar("questionKey", { length: 128 }).notNull(),
+    questionText: text("questionText"),
+    answer: text("answer").notNull(),
+    completedAt: timestamp("completedAt").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_intake_client").on(table.clientId),
+  ]
+);
+
+export type IntakeResponse = typeof intakeResponses.$inferSelect;
+export type InsertIntakeResponse = typeof intakeResponses.$inferInsert;
+
+// ─── Billing / CPT Codes ───────────────────────────────────────────────────────
+
+export const billingRecords = mysqlTable(
+  "billing_records",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clinicianId: int("clinicianId").notNull(),
+    clientId: int("clientId").notNull(),
+    sessionNoteId: int("sessionNoteId"),
+    cptCode: varchar("cptCode", { length: 16 }),
+    diagnosisCode: varchar("diagnosisCode", { length: 16 }),
+    suggestedCptCode: varchar("suggestedCptCode", { length: 16 }),
+    issueFlags: text("issueFlags"), // JSON array of potential claim issues
+    sessionDate: timestamp("sessionDate").notNull(),
+    sessionDurationMin: int("sessionDurationMin"),
+    status: mysqlEnum("status", ["pending", "submitted", "approved", "denied", "corrected"]).default("pending").notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [
+    index("idx_billing_clinician").on(table.clinicianId),
+    index("idx_billing_client").on(table.clientId),
+    index("idx_billing_status").on(table.status),
+  ]
+);
+
+export type BillingRecord = typeof billingRecords.$inferSelect;
+export type InsertBillingRecord = typeof billingRecords.$inferInsert;

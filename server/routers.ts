@@ -26,6 +26,8 @@ import {
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "./_core/notification";
+import { clinicianRouter } from "./routers/clinician";
+import { verificationRouter } from "./routers/verification";
 
 // ─── Rate limiting (in-memory, simple) ────────────────────────────────────────
 
@@ -424,6 +426,8 @@ export const appRouter = router({
 
   triage: triageRouter,
   crisis: crisisRouter,
+  clinician: clinicianRouter,
+  verification: verificationRouter,
   freeResources: freeResourcesRouter,
   providers: providerRouter,
   benefits: benefitsRouter,
