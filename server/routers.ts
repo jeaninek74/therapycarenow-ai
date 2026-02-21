@@ -19,7 +19,12 @@ import {
   recordConsent,
   getStateCompliance,
   getAllStateCompliance,
+  getAuditEventStats,
+  getTriageStats,
+  getProviderStats,
+  bulkImportProviders,
 } from "./db";
+import { TRPCError } from "@trpc/server";
 
 // ─── Rate limiting (in-memory, simple) ────────────────────────────────────────
 
@@ -324,6 +329,53 @@ const complianceRouter = router({
   }),
 });
 
+// ─── Admin Router ─────────────────────────────────────────────────────────────
+
+const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.user.role !== "admin") {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+  }
+  return next({ ctx });
+});
+
+const adminRouter = router({
+  getStats: adminProcedure.query(async () => {
+    const [auditStats, triageStats, providerStats] = await Promise.all([
+      getAuditEventStats(),
+      getTriageStats(),
+      getProviderStats(),
+    ]);
+    return { auditStats, triageStats, providerStats };
+  }),
+
+  bulkImportProviders: adminProcedure
+    .input(
+      z.object({
+        providers: z.array(
+          z.object({
+            name: z.string().min(1),
+            licenseState: z.string().length(2),
+            licenseType: z.string().min(1),
+            telehealth: z.boolean(),
+            inPerson: z.boolean(),
+            city: z.string().min(1),
+            stateCode: z.string().length(2),
+            phone: z.string().optional(),
+            website: z.string().url().optional(),
+            bio: z.string().optional(),
+            costTag: z.enum(["free", "sliding_scale", "insurance", "self_pay"]),
+            urgency: z.enum(["within_24h", "within_72h", "this_week", "flexible"]),
+            specialties: z.array(z.string()),
+            insurance: z.array(z.string()),
+          })
+        ).max(500),
+      })
+    )
+    .mutation(async ({ input }) => {
+      return bulkImportProviders(input.providers);
+    }),
+});
+
 // ─── App Router ────────────────────────────────────────────────────────────────
 
 export const appRouter = router({
@@ -345,6 +397,7 @@ export const appRouter = router({
   benefits: benefitsRouter,
   ai: aiRouter,
   compliance: complianceRouter,
+  admin: adminRouter,
 });
 
 export type AppRouter = typeof appRouter;

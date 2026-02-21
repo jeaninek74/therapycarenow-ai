@@ -64,3 +64,26 @@
 - [x] Data minimization enforcement in all logging paths
 - [x] AI disabled in Crisis Mode (CrisisMode page has no AI component)
 - [x] Consent required before saving benefits data
+
+## Enhancement 1: Expanded Provider Directory
+- [x] Bulk-import tRPC endpoint (admin only) for JSON provider ingestion (up to 500/batch)
+- [x] Admin bulk-import UI panel with JSON paste and result feedback
+- [x] getProviderStats query helper for admin analytics
+- [x] bulkImportProviders DB helper with error tracking
+
+## Enhancement 2: Geolocation Auto-Detection
+- [x] useGeolocation hook with 50-state bounding box detection
+- [x] Auto-detect on triage start screen with graceful fallback to StatePicker
+- [x] Show detected state name with confirmation UI
+- [x] Fallback to manual StatePicker on denied/unavailable/error
+
+## Enhancement 3: Admin Dashboard
+- [x] Admin dashboard at /admin (role-gated to admin users)
+- [x] Audit event breakdown bar chart (event type × count)
+- [x] Triage volume metrics (total, emergency, urgent, routine)
+- [x] Risk level pie chart
+- [x] Top states by triage volume bar chart
+- [x] Provider directory stats (total, by state, by license type)
+- [x] Recent audit events feed (HIPAA-safe: no raw text)
+- [x] Admin link in NavBar for admin-role users
+- [x] Bulk import tab in admin dashboard

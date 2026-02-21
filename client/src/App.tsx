@@ -15,6 +15,7 @@ import BenefitsWallet from "./pages/BenefitsWallet";
 import FreeResources from "./pages/FreeResources";
 import AIAssistant from "./pages/AIAssistant";
 import Settings from "./pages/Settings";
+import AdminDashboard from "./pages/AdminDashboard";
 import EmergencyFAB from "./components/EmergencyFAB";
 
 function Router() {
@@ -31,6 +32,7 @@ function Router() {
       <Route path="/free-resources" component={FreeResources} />
       <Route path="/ai-assistant" component={AIAssistant} />
       <Route path="/settings" component={Settings} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

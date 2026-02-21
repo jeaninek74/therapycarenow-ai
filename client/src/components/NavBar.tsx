@@ -1,10 +1,12 @@
 import { Link, useLocation } from "wouter";
-import { Heart, Menu, X } from "lucide-react";
+import { Heart, Menu, X, LayoutDashboard } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
 
 export default function NavBar() {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   const links = [
     { href: "/find-therapist", label: "Find a Therapist" },
@@ -35,6 +37,17 @@ export default function NavBar() {
               {link.label}
             </Link>
           ))}
+          {user?.role === "admin" && (
+            <Link
+              href="/admin"
+              className={`text-sm font-medium transition-colors flex items-center gap-1 ${
+                location === "/admin" ? "text-primary" : "text-muted-foreground hover:text-primary"
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Admin
+            </Link>
+          )}
         </div>
 
         {/* Mobile menu toggle */}
@@ -60,6 +73,16 @@ export default function NavBar() {
               {link.label}
             </Link>
           ))}
+          {user?.role === "admin" && (
+            <Link
+              href="/admin"
+              className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors flex items-center gap-2"
+              onClick={() => setMenuOpen(false)}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Admin Dashboard
+            </Link>
+          )}
         </div>
       )}
     </nav>

@@ -407,3 +407,194 @@ export async function getAllStateCompliance() {
   if (!db) return [];
   return db.select().from(stateCompliance).orderBy(stateCompliance.stateName);
 }
+
+// ─── Admin Analytics ───────────────────────────────────────────────────────────
+
+export async function getAuditEventStats() {
+  const db = await getDb();
+  if (!db) return { total: 0, byType: [], byRiskLevel: [], recentEvents: [] };
+
+  // Total events
+  const totalResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(auditEvents);
+  const total = Number(totalResult[0]?.count ?? 0);
+
+  // By event type
+  const byType = await db
+    .select({
+      eventType: auditEvents.eventType,
+      count: sql<number>`count(*)`,
+    })
+    .from(auditEvents)
+    .groupBy(auditEvents.eventType)
+    .orderBy(sql`count(*) desc`);
+
+  // By risk level (triage events only)
+  const byRiskLevel = await db
+    .select({
+      riskLevel: auditEvents.riskLevel,
+      count: sql<number>`count(*)`,
+    })
+    .from(auditEvents)
+    .where(sql`${auditEvents.riskLevel} IS NOT NULL`)
+    .groupBy(auditEvents.riskLevel)
+    .orderBy(sql`count(*) desc`);
+
+  // Recent 20 events
+  const recentEvents = await db
+    .select()
+    .from(auditEvents)
+    .orderBy(sql`${auditEvents.createdAt} desc`)
+    .limit(20);
+
+  return {
+    total,
+    byType: byType.map((r) => ({ eventType: r.eventType, count: Number(r.count) })),
+    byRiskLevel: byRiskLevel.map((r) => ({ riskLevel: r.riskLevel, count: Number(r.count) })),
+    recentEvents,
+  };
+}
+
+export async function getTriageStats() {
+  const db = await getDb();
+  if (!db) return { total: 0, emergency: 0, urgent: 0, routine: 0, byState: [] };
+
+  const totalResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(triageSessions);
+  const total = Number(totalResult[0]?.count ?? 0);
+
+  const emergencyResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(triageSessions)
+    .where(eq(triageSessions.riskLevel, "EMERGENCY"));
+
+  const urgentResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(triageSessions)
+    .where(eq(triageSessions.riskLevel, "URGENT"));
+
+  const routineResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(triageSessions)
+    .where(eq(triageSessions.riskLevel, "ROUTINE"));
+
+  const byState = await db
+    .select({
+      stateCode: triageSessions.stateCode,
+      count: sql<number>`count(*)`,
+    })
+    .from(triageSessions)
+    .where(sql`${triageSessions.stateCode} IS NOT NULL`)
+    .groupBy(triageSessions.stateCode)
+    .orderBy(sql`count(*) desc`)
+    .limit(10);
+
+  return {
+    total,
+    emergency: Number(emergencyResult[0]?.count ?? 0),
+    urgent: Number(urgentResult[0]?.count ?? 0),
+    routine: Number(routineResult[0]?.count ?? 0),
+    byState: byState.map((r) => ({ stateCode: r.stateCode, count: Number(r.count) })),
+  };
+}
+
+export async function getProviderStats() {
+  const db = await getDb();
+  if (!db) return { total: 0, byState: [], byLicenseType: [] };
+
+  const totalResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(providers)
+    .where(eq(providers.isActive, true));
+  const total = Number(totalResult[0]?.count ?? 0);
+
+  const byState = await db
+    .select({
+      stateCode: providers.stateCode,
+      count: sql<number>`count(*)`,
+    })
+    .from(providers)
+    .where(eq(providers.isActive, true))
+    .groupBy(providers.stateCode)
+    .orderBy(sql`count(*) desc`)
+    .limit(15);
+
+  const byLicenseType = await db
+    .select({
+      licenseType: providers.licenseType,
+      count: sql<number>`count(*)`,
+    })
+    .from(providers)
+    .where(eq(providers.isActive, true))
+    .groupBy(providers.licenseType)
+    .orderBy(sql`count(*) desc`);
+
+  return {
+    total,
+    byState: byState.map((r) => ({ stateCode: r.stateCode ?? "N/A", count: Number(r.count) })),
+    byLicenseType: byLicenseType.map((r) => ({ licenseType: r.licenseType ?? "Unknown", count: Number(r.count) })),
+  };
+}
+
+export async function bulkImportProviders(providerList: Array<{
+  name: string;
+  licenseState: string;
+  licenseType: string;
+  telehealth: boolean;
+  inPerson: boolean;
+  city: string;
+  stateCode: string;
+  phone?: string;
+  website?: string;
+  bio?: string;
+  costTag: "free" | "sliding_scale" | "insurance" | "self_pay";
+  urgency: "within_24h" | "within_72h" | "this_week" | "flexible";
+  specialties: string[];
+  insurance: string[];
+}>) {
+  const db = await getDb();
+  if (!db) return { imported: 0, errors: 0 };
+
+  let imported = 0;
+  let errors = 0;
+
+  for (const p of providerList) {
+    try {
+      const [result] = await db.insert(providers).values({
+        name: p.name,
+        licenseState: p.licenseState,
+        licenseType: p.licenseType,
+        telehealthAvailable: p.telehealth,
+        inPersonAvailable: p.inPerson,
+        city: p.city,
+        stateCode: p.stateCode,
+        phone: p.phone ?? null,
+        website: p.website ?? null,
+        bio: p.bio ?? null,
+        costTag: p.costTag,
+        urgencyAvailability: p.urgency,
+        acceptsNewPatients: true,
+      }).onDuplicateKeyUpdate({ set: { isActive: true } });
+
+      const providerId = (result as any).insertId;
+      if (providerId) {
+        for (const specialty of p.specialties) {
+          await db.insert(providerSpecialties).values({ providerId, specialty })
+            .onDuplicateKeyUpdate({ set: { specialty } });
+        }
+        for (const ins of p.insurance) {
+          await db.insert(providerInsurance).values({ providerId, insuranceName: ins })
+            .onDuplicateKeyUpdate({ set: { insuranceName: ins } });
+        }
+      }
+      imported++;
+    } catch (err) {
+      console.error(`[BulkImport] Failed to import provider ${p.name}:`, err);
+      errors++;
+    }
+  }
+
+  return { imported, errors };
+}
