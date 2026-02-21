@@ -25,6 +25,7 @@ import {
   bulkImportProviders,
 } from "./db";
 import { TRPCError } from "@trpc/server";
+import { notifyOwner } from "./_core/notification";
 
 // ─── Rate limiting (in-memory, simple) ────────────────────────────────────────
 
@@ -100,6 +101,21 @@ const triageRouter = router({
           triggerSource: "triage",
           stateCode: input.stateCode,
         });
+
+        // Notify owner — HIPAA-safe: no PHI, no raw text, only event metadata
+        notifyOwner({
+          title: "🚨 TherapyCareNow: Crisis Mode Activated",
+          content: [
+            "A user has been routed to Crisis Mode via the triage flow.",
+            `Trigger: Deterministic triage engine`,
+            `State: ${input.stateCode ?? "Not provided"}`,
+            `Risk Level: EMERGENCY`,
+            `Time (UTC): ${new Date().toISOString()}`,
+            "",
+            "No personal health information is included in this alert.",
+            "User has been shown 911, 988 call/text/chat, and local crisis resources.",
+          ].join("\n"),
+        }).catch((err) => console.warn("[Notification] Crisis triage notify failed:", err));
       }
 
       return { ...result, sessionToken };
@@ -291,6 +307,22 @@ const aiRouter = router({
           triggerSource: "moderation",
           stateCode: input.stateCode,
         });
+
+        // Notify owner — HIPAA-safe: no raw user message stored or transmitted
+        notifyOwner({
+          title: "🚨 TherapyCareNow: Crisis Mode Activated via AI Moderation",
+          content: [
+            "A user's AI assistant input was flagged by the OpenAI moderation gateway.",
+            `Trigger: AI moderation (content flagged as high-risk)`,
+            `State: ${input.stateCode ?? "Not provided"}`,
+            `Risk Level: EMERGENCY`,
+            `Time (UTC): ${new Date().toISOString()}`,
+            "",
+            "The AI assistant was blocked. No clinical advice was provided.",
+            "User has been redirected to Crisis Mode with 911/988 resources.",
+            "No personal health information or message content is included in this alert.",
+          ].join("\n"),
+        }).catch((err) => console.warn("[Notification] Crisis moderation notify failed:", err));
 
         return {
           content: null,

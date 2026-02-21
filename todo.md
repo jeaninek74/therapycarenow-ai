@@ -87,3 +87,13 @@
 - [x] Recent audit events feed (HIPAA-safe: no raw text)
 - [x] Admin link in NavBar for admin-role users
 - [x] Bulk import tab in admin dashboard
+
+## Enhancement 4: Auto-Admin Promotion & Richer Provider Dataset
+- [x] Auto-promote platform owner to admin role on first login (already in db.ts via ENV.ownerOpenId — verified)
+- [x] Add admin promotion instructions to Settings page for owner
+- [x] Seed expanded provider dataset: 154 providers across all 50 states (3+ per state, diverse specialties and license types)
+
+## Enhancement 5: Crisis Activation Owner Notifications
+- [x] Wire notifyOwner on crisis_mode_triggered audit event (HIPAA-safe: no PHI, only event type + state + timestamp)
+- [x] Add notification for moderation-triggered crisis mode
+- [x] Show notification status in admin dashboard recent events
