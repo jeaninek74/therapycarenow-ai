@@ -1,0 +1,8 @@
+{
+  "query": "\nSELECT 'providers' as tbl, COUNT(*) as cnt FROM providers\nUNION ALL SELECT 'crisis_resources', COUNT(*) FROM crisis_resources\nUNION ALL SELECT 'free_resources', COUNT(*) FROM free_resources\nUNION ALL SELECT 'eap_employers', COUNT(*) FROM eap_employers\nUNION ALL SELECT 'state_compliance', COUNT(*) FROM state_compliance\nUNION ALL SELECT 'users', COUNT(*) FROM users\nUNION ALL SELECT 'clinician_profiles', COUNT(*) FROM clinician_profiles\nUNION ALL SELECT 'clients', COUNT(*) FROM clients\nUNION ALL SELECT 'session_notes', COUNT(*) FROM session_notes;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4TCdEkG57UNdEiY.c05417ee9a59 --database NReUutbzXJkGRJ3cRyQ7r7 --execute \nSELECT 'providers' as tbl, COUNT(*) as cnt FROM providers\nUNION ALL SELECT 'crisis_resources', COUNT(*) FROM crisis_resources\nUNION ALL SELECT 'free_resources', COUNT(*) FROM free_resources\nUNION ALL SELECT 'eap_employers', COUNT(*) FROM eap_employers\nUNION ALL SELECT 'state_compliance', COUNT(*) FROM state_compliance\nUNION ALL SELECT 'users', COUNT(*) FROM users\nUNION ALL SELECT 'clinician_profiles', COUNT(*) FROM clinician_profiles\nUNION ALL SELECT 'clients', COUNT(*) FROM clients\nUNION ALL SELECT 'session_notes', COUNT(*) FROM session_notes;\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1146 (42S02) at line 2: Table 'nreuutbzxjkgrj3cryq7r7.eap_employers' doesn't exist"
+  ]
+}

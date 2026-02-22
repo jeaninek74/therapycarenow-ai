@@ -1,0 +1,30 @@
+{
+  "query": "\nSELECT 'providers' as tbl, COUNT(*) as cnt FROM providers\nUNION ALL SELECT 'crisis_resources', COUNT(*) FROM crisis_resources\nUNION ALL SELECT 'free_resources', COUNT(*) FROM free_resources\nUNION ALL SELECT 'state_compliance', COUNT(*) FROM state_compliance\nUNION ALL SELECT 'users', COUNT(*) FROM users;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4TCdEkG57UNdEiY.c05417ee9a59 --database NReUutbzXJkGRJ3cRyQ7r7 --execute \nSELECT 'providers' as tbl, COUNT(*) as cnt FROM providers\nUNION ALL SELECT 'crisis_resources', COUNT(*) FROM crisis_resources\nUNION ALL SELECT 'free_resources', COUNT(*) FROM free_resources\nUNION ALL SELECT 'state_compliance', COUNT(*) FROM state_compliance\nUNION ALL SELECT 'users', COUNT(*) FROM users;\n",
+  "rows": [
+    {
+      "tbl": "crisis_resources",
+      "cnt": "165"
+    },
+    {
+      "tbl": "providers",
+      "cnt": "214"
+    },
+    {
+      "tbl": "users",
+      "cnt": "1"
+    },
+    {
+      "tbl": "state_compliance",
+      "cnt": "50"
+    },
+    {
+      "tbl": "free_resources",
+      "cnt": "480"
+    }
+  ],
+  "messages": [],
+  "stdout": "tbl\tcnt\ncrisis_resources\t165\nproviders\t214\nusers\t1\nstate_compliance\t50\nfree_resources\t480\n",
+  "stderr": "",
+  "execution_time_ms": 70
+}

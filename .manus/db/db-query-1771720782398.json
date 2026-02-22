@@ -1,0 +1,17 @@
+{
+  "query": "SELECT (SELECT COUNT(*) FROM providers) as providers, (SELECT COUNT(*) FROM crisis_resources) as crisis_resources, (SELECT COUNT(*) FROM free_resources) as free_resources, (SELECT COUNT(*) FROM state_compliance) as state_compliance, (SELECT COUNT(*) FROM users) as users;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4TCdEkG57UNdEiY.c05417ee9a59 --database NReUutbzXJkGRJ3cRyQ7r7 --execute SELECT (SELECT COUNT(*) FROM providers) as providers, (SELECT COUNT(*) FROM crisis_resources) as crisis_resources, (SELECT COUNT(*) FROM free_resources) as free_resources, (SELECT COUNT(*) FROM state_compliance) as state_compliance, (SELECT COUNT(*) FROM users) as users;",
+  "rows": [
+    {
+      "providers": "214",
+      "crisis_resources": "165",
+      "free_resources": "480",
+      "state_compliance": "50",
+      "users": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "providers\tcrisis_resources\tfree_resources\tstate_compliance\tusers\n214\t165\t480\t50\t1\n",
+  "stderr": "",
+  "execution_time_ms": 209
+}
