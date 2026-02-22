@@ -28,6 +28,7 @@ import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "./_core/notification";
 import { clinicianRouter } from "./routers/clinician";
 import { verificationRouter } from "./routers/verification";
+import { subscriptionRouter, messagingRouter } from "./routers/subscription";
 
 // ─── Rate limiting (in-memory, simple) ────────────────────────────────────────
 
@@ -434,6 +435,8 @@ export const appRouter = router({
   ai: aiRouter,
   compliance: complianceRouter,
   admin: adminRouter,
+  subscription: subscriptionRouter,
+  messaging: messagingRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -154,3 +154,41 @@
 - [x] Verified badge on provider cards and profiles
 - [x] Verification status panel in admin dashboard
 - [x] Vitest tests for license verification engine
+
+## PWA Configuration
+- [ ] Install vite-plugin-pwa and configure manifest
+- [ ] Web app manifest with TherapyCareNow icons and theme color
+- [ ] Service worker with offline caching strategy (Workbox)
+- [ ] Offline fallback page
+- [ ] iOS meta tags for standalone mode
+- [ ] PWA install prompt component
+
+## Stripe Clinician Subscriptions
+- [ ] Add clinician_subscriptions and stripe_events tables to schema
+- [ ] Run db:push for new tables
+- [ ] Stripe webhook handler for subscription lifecycle events
+- [ ] 14-day free trial logic on clinician NPI registration
+- [ ] Paywall middleware: block clinicianProcedure if subscription lapsed
+- [ ] Subscription status banner in ClinicianDashboard
+- [ ] Billing portal redirect (Stripe Customer Portal)
+- [ ] ClinicianSubscription page with plan details and upgrade CTA
+- [ ] Trial countdown display
+- [ ] Grace period handling (3-day grace after trial/subscription expiry)
+
+## Encrypted Client Messaging
+- [ ] Add messages and message_threads tables to schema
+- [ ] Run db:push for new tables
+- [ ] AES-256 encryption layer for message content (server-side)
+- [ ] Message retention policy (90-day auto-purge, configurable per clinician)
+- [ ] tRPC procedures: sendMessage, getThread, markRead, deleteMessage
+- [ ] HIPAA audit logging for all message events (no message content in audit log)
+- [ ] Message thread UI on ClientDetail page (new tab)
+- [ ] Real-time polling (5-second interval)
+- [ ] Unread message badge on ClientDetail tab
+- [ ] Message deletion with audit trail
+
+## Cloudflare Deployment
+- [ ] Store Cloudflare API token, Zone ID, Account ID as secrets
+- [ ] Cloudflare Pages deployment configuration
+- [ ] wrangler.toml with project settings
+- [ ] DNS documentation for custom domain setup

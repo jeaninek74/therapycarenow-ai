@@ -10,8 +10,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
   ArrowLeft, FileText, Brain, Activity, ClipboardList,
-  Plus, CheckCircle2, AlertTriangle, Loader2, Wand2
+  Plus, CheckCircle2, AlertTriangle, Loader2, Wand2, MessageSquare
 } from "lucide-react";
+import SecureMessaging from "./SecureMessaging";
 import { toast } from "sonner";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -181,6 +182,9 @@ export default function ClientDetail() {
             </TabsTrigger>
             <TabsTrigger value="intake" className="flex items-center gap-1.5">
               <ClipboardList className="w-4 h-4" /> Intake
+            </TabsTrigger>
+            <TabsTrigger value="messages" className="flex items-center gap-1.5">
+              <MessageSquare className="w-4 h-4" /> Messages
             </TabsTrigger>
           </TabsList>
 
@@ -377,6 +381,23 @@ export default function ClientDetail() {
                 <p className="text-sm text-gray-500 mt-3">
                   Dynamic questionnaire that adapts based on client responses. Results are stored and inform treatment planning.
                 </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="messages" className="h-[600px] flex flex-col">
+            <Card className="bg-white border-gray-200 flex-1 flex flex-col overflow-hidden">
+              <CardContent className="p-0 flex-1 flex flex-col overflow-hidden">
+                {client ? (
+                  <SecureMessaging
+                    clientId={clientId}
+                    clientName={`${client.firstName} ${client.lastName}`}
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <Loader2 className="w-6 h-6 animate-spin text-teal-600" />
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>

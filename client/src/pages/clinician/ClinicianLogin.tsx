@@ -197,7 +197,7 @@ export default function ClinicianLogin() {
                   {!isAuthenticated ? (
                     <>
                       <p className="text-slate-300 text-sm text-center">
-                        First, sign in with your Manus account. Then verify your NPI.
+                        First, create or sign in to your TherapyCareNow account. Then verify your NPI to access the Clinician Portal.
                       </p>
                       <a href={getLoginUrl()} className="block">
                         <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white h-12 text-base">

@@ -28,6 +28,7 @@ import RiskPanel from "./pages/clinician/RiskPanel";
 import AdaptiveIntake from "./pages/clinician/AdaptiveIntake";
 import ClinicianCompliance from "./pages/clinician/ClinicianCompliance";
 import ClinicianRevenue from "./pages/clinician/ClinicianRevenue";
+import ClinicianSubscription from "./pages/clinician/ClinicianSubscription";
 import EmergencyFAB from "./components/EmergencyFAB";
 
 function Router() {
@@ -58,6 +59,7 @@ function Router() {
       <Route path="/clinician/intake/:clientId" component={AdaptiveIntake} />
       <Route path="/clinician/compliance" component={ClinicianCompliance} />
       <Route path="/clinician/revenue" component={ClinicianRevenue} />
+      <Route path="/clinician/subscribe" component={ClinicianSubscription} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

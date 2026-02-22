@@ -585,3 +585,101 @@ export const billingRecords = mysqlTable(
 
 export type BillingRecord = typeof billingRecords.$inferSelect;
 export type InsertBillingRecord = typeof billingRecords.$inferInsert;
+
+// ─── Clinician Subscriptions (Stripe) ─────────────────────────────────────────
+
+export const clinicianSubscriptions = mysqlTable(
+  "clinician_subscriptions",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    userId: int("userId").notNull().unique(),
+    stripeCustomerId: varchar("stripeCustomerId", { length: 64 }),
+    stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 64 }),
+    stripePriceId: varchar("stripePriceId", { length: 64 }),
+    status: mysqlEnum("status", [
+      "trialing",
+      "active",
+      "past_due",
+      "canceled",
+      "unpaid",
+      "incomplete",
+      "paused",
+    ])
+      .default("trialing")
+      .notNull(),
+    trialStartAt: timestamp("trialStartAt").defaultNow().notNull(),
+    trialEndAt: timestamp("trialEndAt").notNull(),
+    currentPeriodStart: timestamp("currentPeriodStart"),
+    currentPeriodEnd: timestamp("currentPeriodEnd"),
+    canceledAt: timestamp("canceledAt"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  (table) => [index("idx_sub_user").on(table.userId), index("idx_sub_stripe").on(table.stripeSubscriptionId)]
+);
+
+export type ClinicianSubscription = typeof clinicianSubscriptions.$inferSelect;
+export type InsertClinicianSubscription = typeof clinicianSubscriptions.$inferInsert;
+
+// ─── Stripe Webhook Events (idempotency log) ───────────────────────────────────
+
+export const stripeEvents = mysqlTable("stripe_events", {
+  id: int("id").autoincrement().primaryKey(),
+  stripeEventId: varchar("stripeEventId", { length: 64 }).notNull().unique(),
+  eventType: varchar("eventType", { length: 64 }).notNull(),
+  processedAt: timestamp("processedAt").defaultNow().notNull(),
+});
+
+export type StripeEvent = typeof stripeEvents.$inferSelect;
+
+// ─── Message Threads ───────────────────────────────────────────────────────────
+
+export const messageThreads = mysqlTable(
+  "message_threads",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    clinicianId: int("clinicianId").notNull(),
+    clientId: int("clientId").notNull(),
+    lastMessageAt: timestamp("lastMessageAt"),
+    clinicianUnreadCount: int("clinicianUnreadCount").default(0).notNull(),
+    clientUnreadCount: int("clientUnreadCount").default(0).notNull(),
+    retentionDays: int("retentionDays").default(90).notNull(),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_thread_clinician").on(table.clinicianId),
+    index("idx_thread_client").on(table.clientId),
+  ]
+);
+
+export type MessageThread = typeof messageThreads.$inferSelect;
+export type InsertMessageThread = typeof messageThreads.$inferInsert;
+
+// ─── Secure Messages (AES-256 encrypted content) ──────────────────────────────
+
+export const secureMessages = mysqlTable(
+  "secure_messages",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    threadId: int("threadId").notNull(),
+    senderType: mysqlEnum("senderType", ["clinician", "client"]).notNull(),
+    senderId: int("senderId").notNull(),
+    // AES-256-GCM encrypted content stored as base64
+    encryptedContent: text("encryptedContent").notNull(),
+    iv: varchar("iv", { length: 32 }).notNull(), // initialization vector (hex)
+    authTag: varchar("authTag", { length: 32 }).notNull(), // GCM auth tag (hex)
+    readAt: timestamp("readAt"),
+    deletedAt: timestamp("deletedAt"), // soft delete with audit trail
+    deletedBy: int("deletedBy"),
+    purgeAfter: timestamp("purgeAfter").notNull(), // retention policy enforcement
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  (table) => [
+    index("idx_msg_thread").on(table.threadId),
+    index("idx_msg_sender").on(table.senderId),
+    index("idx_msg_purge").on(table.purgeAfter),
+  ]
+);
+
+export type SecureMessage = typeof secureMessages.$inferSelect;
+export type InsertSecureMessage = typeof secureMessages.$inferInsert;
