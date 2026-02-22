@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Search, Filter, Phone, Video, MapPin, DollarSign, ChevronRight, Loader2, Globe } from "lucide-react";
@@ -48,6 +48,25 @@ export default function FindTherapist() {
   const [insurance, setInsurance] = useState<string | undefined>(undefined);
   const [costTag, setCostTag] = useState<"free" | "sliding_scale" | "insurance" | "self_pay" | undefined>(undefined);
   const [showFilters, setShowFilters] = useState(false);
+  const [limit, setLimit] = useState(50);
+
+  // Pre-fill from directory navigation
+  useEffect(() => {
+    const preState = sessionStorage.getItem("tcn_state");
+    const preCity = sessionStorage.getItem("tcn_city");
+    if (preState) {
+      setStateCode(preState);
+      sessionStorage.removeItem("tcn_state");
+    }
+    if (preCity) {
+      setCityInput(preCity);
+      setCity(preCity);
+      sessionStorage.removeItem("tcn_city");
+    }
+  }, []);
+
+  // Reset limit when filters change
+  const resetLimit = () => setLimit(50);
 
   const { data: searchData, isLoading } = trpc.providers.search.useQuery({
     stateCode,
@@ -56,7 +75,7 @@ export default function FindTherapist() {
     specialty,
     insurance,
     costTag,
-    limit: 20,
+    limit,
   });
 
   const localProviders = searchData?.local ?? [];
@@ -174,10 +193,12 @@ export default function FindTherapist() {
           ) : totalCount > 0 ? (
             <div>
               <p className="text-sm text-muted-foreground mb-4">
-                {totalCount} provider{totalCount !== 1 ? "s" : ""} found
+                Showing {localProviders.length} provider{localProviders.length !== 1 ? "s" : ""}
+                {stateCode && ` in ${stateCode}`}
+                {city && ` · ${city}`}
                 {liveProviders.length > 0 && (
                   <span className="ml-2 inline-flex items-center gap-1 text-xs bg-blue-500/10 text-blue-600 dark:text-blue-400 px-2 py-0.5 rounded-full">
-                    <Globe className="w-3 h-3" /> {liveProviders.length} from live NPI registry
+                    <Globe className="w-3 h-3" /> +{liveProviders.length} from live NPI registry
                   </span>
                 )}
               </p>
@@ -202,6 +223,17 @@ export default function FindTherapist() {
                   </>
                 )}
               </div>
+              {/* Load more */}
+              {localProviders.length >= limit && (
+                <div className="flex justify-center mt-8">
+                  <button
+                    onClick={() => setLimit((l) => l + 50)}
+                    className="px-6 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+                  >
+                    Load more providers
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-20 bg-card rounded-2xl border border-border">

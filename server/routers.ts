@@ -24,6 +24,8 @@ import {
   getTriageStats,
   getProviderStats,
   bulkImportProviders,
+  getProviderCountByState,
+  getCitiesByState,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "./_core/notification";
@@ -185,13 +187,14 @@ const providerRouter = router({
         insurance: z.string().optional(),
         costTag: z.enum(["free", "sliding_scale", "insurance", "self_pay"]).optional(),
         urgency: z.string().optional(),
-        limit: z.number().min(1).max(50).optional(),
+        limit: z.number().min(1).max(100).optional(),
+        offset: z.number().min(0).optional(),
       })
     )
     .query(async ({ input }) => {
       // Run local DB search and live NPPES search in parallel
       const [localResult, liveResult] = await Promise.allSettled([
-        searchProviders(input),
+        searchProviders({ ...input }),
         searchLiveProviders({
           stateCode: input.stateCode,
           city: input.city,
@@ -224,6 +227,16 @@ const providerRouter = router({
       });
 
       return provider;
+    }),
+
+  getStateDirectory: publicProcedure.query(async () => {
+    return getProviderCountByState();
+  }),
+
+  getCitiesForState: publicProcedure
+    .input(z.object({ stateCode: z.string().length(2) }))
+    .query(async ({ input }) => {
+      return getCitiesByState(input.stateCode);
     }),
 });
 

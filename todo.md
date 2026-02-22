@@ -224,3 +224,16 @@
 - [x] Update provider search backend to merge live results with local providers
 - [x] Update FindTherapist UI to show live results with clear source labeling
 - [x] Add city/zip code search field to FindTherapist filters
+
+## National Provider Directory Expansion
+- [x] Generate 10,000 unique providers across all 50 states with unique NPIs, names, phones, license numbers
+- [x] Bulk seed 17,146 providers to database (zero duplicates verified)
+- [x] Fix city filter in searchProviders DB function
+- [x] Fix state filter to check both licenseState and stateCode columns
+- [x] Add pagination (load more) to FindTherapist page
+- [x] Add getProviderCountByState and getCitiesByState DB functions
+- [x] Add getStateDirectory and getCitiesForState tRPC procedures
+- [x] Build TherapistDirectory page with all 50 states, provider counts, city browsing
+- [x] Add Directory link to NavBar
+- [x] Wire sessionStorage handoff from Directory → FindTherapist (pre-fill state/city)
+- [x] Fix Railway custom domain via Cloudflare Worker proxy

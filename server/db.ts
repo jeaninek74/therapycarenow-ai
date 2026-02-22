@@ -219,12 +219,14 @@ export async function getFreeResources(stateCode?: string) {
 
 export async function searchProviders(params: {
   stateCode?: string;
+  city?: string;
   telehealth?: boolean;
   specialty?: string;
   insurance?: string;
   costTag?: string;
   urgency?: string;
   limit?: number;
+  offset?: number;
 }) {
   const db = await getDb();
   if (!db) return [];
@@ -232,9 +234,17 @@ export async function searchProviders(params: {
   const conditions = [eq(providers.isActive, true)];
 
   if (params.stateCode) {
+    // Match providers licensed in the state OR practicing in the state OR offering telehealth
     conditions.push(
-      or(eq(providers.licenseState, params.stateCode), eq(providers.telehealthAvailable, true))!
+      or(
+        eq(providers.licenseState, params.stateCode),
+        eq(providers.stateCode, params.stateCode),
+        eq(providers.telehealthAvailable, true)
+      )!
     );
+  }
+  if (params.city) {
+    conditions.push(like(providers.city, `%${params.city}%`));
   }
   if (params.telehealth === true) {
     conditions.push(eq(providers.telehealthAvailable, true));
@@ -247,7 +257,8 @@ export async function searchProviders(params: {
     .select()
     .from(providers)
     .where(and(...conditions))
-    .limit(params.limit ?? 50);
+    .limit(params.limit ?? 100)
+    .offset(params.offset ?? 0);
 
   if (baseProviders.length === 0) return [];
 
@@ -536,6 +547,53 @@ export async function getProviderStats() {
     byState: byState.map((r) => ({ stateCode: r.stateCode ?? "N/A", count: Number(r.count) })),
     byLicenseType: byLicenseType.map((r) => ({ licenseType: r.licenseType ?? "Unknown", count: Number(r.count) })),
   };
+}
+
+export async function getProviderCountByState() {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Count by licenseState (primary) and also stateCode
+  const byLicenseState = await db
+    .select({
+      stateCode: providers.licenseState,
+      count: sql<number>`count(*)`,
+    })
+    .from(providers)
+    .where(eq(providers.isActive, true))
+    .groupBy(providers.licenseState);
+
+  // Merge counts: use licenseState as canonical state
+  const stateMap = new Map<string, number>();
+  for (const row of byLicenseState) {
+    if (row.stateCode) {
+      stateMap.set(row.stateCode, (stateMap.get(row.stateCode) ?? 0) + Number(row.count));
+    }
+  }
+
+  return Array.from(stateMap.entries())
+    .map(([stateCode, count]) => ({ stateCode, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+export async function getCitiesByState(stateCode: string) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const cities = await db
+    .select({
+      city: providers.city,
+      count: sql<number>`count(*)`,
+    })
+    .from(providers)
+    .where(and(eq(providers.isActive, true), eq(providers.licenseState, stateCode)))
+    .groupBy(providers.city)
+    .orderBy(sql`count(*) desc`)
+    .limit(50);
+
+  return cities
+    .filter((r) => r.city)
+    .map((r) => ({ city: r.city!, count: Number(r.count) }));
 }
 
 export async function bulkImportProviders(providerList: Array<{

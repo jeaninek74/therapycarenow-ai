@@ -30,6 +30,7 @@ import AdaptiveIntake from "./pages/clinician/AdaptiveIntake";
 import ClinicianCompliance from "./pages/clinician/ClinicianCompliance";
 import ClinicianRevenue from "./pages/clinician/ClinicianRevenue";
 import ClinicianSubscription from "./pages/clinician/ClinicianSubscription";
+import TherapistDirectory from "./pages/TherapistDirectory";
 import EmergencyFAB from "./components/EmergencyFAB";
 
 function Router() {
@@ -50,6 +51,7 @@ function Router() {
       <Route path="/admin/verification" component={AdminVerificationQueue} />
       <Route path="/admin/compliance" component={ComplianceMonitor} />
       <Route path="/join-directory" component={ProviderSubmission} />
+      <Route path="/directory" component={TherapistDirectory} />
       {/* Clinician Portal */}
       <Route path="/clinician/login" component={ClinicianLogin} />
       <Route path="/clinician/dashboard" component={ClinicianDashboard} />

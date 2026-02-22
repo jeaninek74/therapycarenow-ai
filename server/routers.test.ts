@@ -19,6 +19,12 @@ vi.mock("./db", () => ({
   lookupEAP: vi.fn().mockResolvedValue(null),
   getStateCompliance: vi.fn().mockResolvedValue(null),
   getAllStateCompliance: vi.fn().mockResolvedValue([]),
+  getProviderCountByState: vi.fn().mockResolvedValue([]),
+  getCitiesByState: vi.fn().mockResolvedValue([]),
+  getProviderStats: vi.fn().mockResolvedValue({ total: 0, byState: [], byLicenseType: [] }),
+  getAuditEventStats: vi.fn().mockResolvedValue({ total: 0, byType: [], byRiskLevel: [] }),
+  getTriageStats: vi.fn().mockResolvedValue({ total: 0, emergency: 0, urgent: 0, routine: 0, byState: [] }),
+  bulkImportProviders: vi.fn().mockResolvedValue({ inserted: 0, errors: [] }),
 }));
 
 vi.mock("./aiGuardrails", () => ({
@@ -113,15 +119,38 @@ describe("Crisis Router", () => {
 });
 
 describe("Provider Router", () => {
-  it("returns providers list", async () => {
+  it("returns search result with local and live arrays", async () => {
     const caller = appRouter.createCaller(makeCtx());
     const result = await caller.providers.search({});
-    expect(Array.isArray(result)).toBe(true);
+    expect(result).toHaveProperty("local");
+    expect(result).toHaveProperty("live");
+    expect(Array.isArray(result.local)).toBe(true);
+    expect(Array.isArray(result.live)).toBe(true);
   });
 
   it("accepts telehealth filter", async () => {
     const caller = appRouter.createCaller(makeCtx());
     const result = await caller.providers.search({ telehealth: true });
+    expect(result).toHaveProperty("local");
+    expect(Array.isArray(result.local)).toBe(true);
+  });
+
+  it("accepts city and stateCode filters", async () => {
+    const caller = appRouter.createCaller(makeCtx());
+    const result = await caller.providers.search({ stateCode: "CA", city: "Los Angeles" });
+    expect(result).toHaveProperty("local");
+    expect(Array.isArray(result.local)).toBe(true);
+  });
+
+  it("returns state directory", async () => {
+    const caller = appRouter.createCaller(makeCtx());
+    const result = await caller.providers.getStateDirectory();
+    expect(Array.isArray(result)).toBe(true);
+  });
+
+  it("returns cities for a state", async () => {
+    const caller = appRouter.createCaller(makeCtx());
+    const result = await caller.providers.getCitiesForState({ stateCode: "TX" });
     expect(Array.isArray(result)).toBe(true);
   });
 });
