@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight } from "lucide-react";
+import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Stethoscope, FileText, TrendingUp, Lock } from "lucide-react";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {
@@ -128,6 +128,93 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Clinician Portal Pricing ─────────────────────────────────────── */}
+      <section className="container py-20">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-semibold px-4 py-2 rounded-full mb-4">
+            <Stethoscope className="w-4 h-4" />
+            For Mental Health Clinicians
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+            AI-powered tools built for your practice
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Reduce documentation time, improve client outcomes, and stay HIPAA-compliant — all in one clinician portal designed specifically for mental health professionals.
+          </p>
+        </div>
+
+        {/* Feature highlights */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+          <ClinicianFeature
+            icon={<FileText className="w-6 h-6 text-primary" />}
+            title="AI SOAP & DAP Notes"
+            description="Generate clinical notes from session transcripts in seconds. Review, edit, and approve before saving."
+          />
+          <ClinicianFeature
+            icon={<TrendingUp className="w-6 h-6 text-primary" />}
+            title="Treatment Planning"
+            description="AI-assisted treatment plans with diagnosis-aligned goals and evidence-based interventions."
+          />
+          <ClinicianFeature
+            icon={<Lock className="w-6 h-6 text-primary" />}
+            title="HIPAA-Compliant Messaging"
+            description="Encrypted client-clinician messaging with audit logging and 90-day retention policy."
+          />
+        </div>
+
+        {/* Pricing card */}
+        <div className="max-w-md mx-auto">
+          <div className="relative bg-card border-2 border-primary rounded-3xl p-8 shadow-xl">
+            {/* Popular badge */}
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+              <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
+                14-DAY FREE TRIAL
+              </span>
+            </div>
+
+            <div className="text-center mb-8 pt-2">
+              <h3 className="text-xl font-bold text-foreground mb-1">Clinician Pro</h3>
+              <p className="text-muted-foreground text-sm mb-4">Everything you need to run a modern practice</p>
+              <div className="flex items-end justify-center gap-1">
+                <span className="text-5xl font-extrabold text-foreground">$49</span>
+                <span className="text-muted-foreground text-lg mb-2">/month</span>
+              </div>
+              <p className="text-sm text-muted-foreground mt-1">per clinician · cancel anytime</p>
+            </div>
+
+            <ul className="space-y-3 mb-8">
+              {[
+                "NPI-verified clinician login",
+                "AI SOAP & DAP note generation",
+                "Smart treatment plan builder",
+                "Risk detection & alerts",
+                "Adaptive intake questionnaires",
+                "HIPAA compliance auto-checker",
+                "CPT code optimizer",
+                "Practice analytics dashboard",
+                "Encrypted client messaging",
+                "14-day free trial — no credit card required",
+              ].map((feature) => (
+                <li key={feature} className="flex items-start gap-3 text-sm text-foreground">
+                  <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                  <span>{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Link
+              href="/clinician/login"
+              className="block w-full text-center bg-primary text-primary-foreground font-semibold rounded-xl px-6 py-4 text-base hover:opacity-90 active:scale-95 transition-all shadow-md"
+            >
+              Start Free Trial
+            </Link>
+            <p className="text-center text-xs text-muted-foreground mt-3">
+              NPI number required · Verified clinicians only
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Safety disclaimer */}
       <section className="container py-12">
         <div className="bg-card border border-border rounded-2xl p-6 text-center max-w-2xl mx-auto">
@@ -192,6 +279,26 @@ function Step({ number, title, description }: { number: string; title: string; d
       </div>
       <h3 className="font-semibold text-foreground mb-2">{title}</h3>
       <p className="text-muted-foreground text-sm leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
+function ClinicianFeature({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-6 hover:shadow-md hover:border-primary/30 transition-all">
+      <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
+        {icon}
+      </div>
+      <h3 className="font-semibold text-foreground mb-2">{title}</h3>
+      <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
     </div>
   );
 }

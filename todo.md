@@ -192,3 +192,8 @@
 - [ ] Cloudflare Pages deployment configuration
 - [ ] wrangler.toml with project settings
 - [ ] DNS documentation for custom domain setup
+
+## Live Stripe & Landing Page Updates
+- [ ] Update Stripe to live keys (sk_live, pk_live, webhook secret)
+- [x] Add clinician pricing section to landing page (Home.tsx)
+- [ ] Verify Cloudflare DNS points therapycarenow.com to Manus hosted URL
