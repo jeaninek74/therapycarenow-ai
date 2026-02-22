@@ -29,6 +29,14 @@ import { notifyOwner } from "./_core/notification";
 import { clinicianRouter } from "./routers/clinician";
 import { verificationRouter } from "./routers/verification";
 import { subscriptionRouter, messagingRouter } from "./routers/subscription";
+import {
+  runFullComplianceSync,
+  getActiveAlerts,
+  getRecentSyncLogs,
+  getRecentPolicyUpdates,
+  getComplianceSummary,
+  dismissAlert,
+} from "./complianceSync";
 
 // ─── Rate limiting (in-memory, simple) ────────────────────────────────────────
 
@@ -361,6 +369,38 @@ const complianceRouter = router({
 
   getAll: publicProcedure.query(async () => {
     return getAllStateCompliance();
+  }),
+
+  // ─── Automated Monitoring ─────────────────────────────────────────────────
+  getSummary: publicProcedure.query(async () => {
+    return getComplianceSummary();
+  }),
+
+  getAlerts: publicProcedure.query(async () => {
+    return getActiveAlerts();
+  }),
+
+  getSyncLogs: publicProcedure.query(async () => {
+    return getRecentSyncLogs(20);
+  }),
+
+  getPolicyUpdates: publicProcedure.query(async () => {
+    return getRecentPolicyUpdates(30);
+  }),
+
+  dismissAlert: protectedProcedure
+    .input(z.object({ alertId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      await dismissAlert(input.alertId, ctx.user.id);
+      return { success: true };
+    }),
+
+  triggerSync: protectedProcedure.mutation(async ({ ctx }) => {
+    if (ctx.user.role !== "admin") {
+      throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+    }
+    const results = await runFullComplianceSync();
+    return { results };
   }),
 });
 

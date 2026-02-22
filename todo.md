@@ -197,3 +197,22 @@
 - [ ] Update Stripe to live keys (sk_live, pk_live, webhook secret)
 - [x] Add clinician pricing section to landing page (Home.tsx)
 - [ ] Verify Cloudflare DNS points therapycarenow.com to Manus hosted URL
+
+## Google & Outlook OAuth Login
+- [ ] Install passport, passport-google-oauth20, passport-microsoft packages
+- [ ] Add GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, MICROSOFT_CLIENT_ID, MICROSOFT_CLIENT_SECRET secrets
+- [ ] Create backend OAuth routes for Google and Microsoft (callback, session handling)
+- [ ] Update login UI (ManusDialog + ClinicianLogin) with Google and Outlook sign-in buttons
+- [ ] Handle new OAuth users: create user record on first login, link to existing account by email
+
+## Automated Compliance Monitoring
+- [x] Add compliance_sync_log and compliance_alerts tables to schema
+- [x] Build SAMHSA public API feed parser (treatment locator, behavioral health stats)
+- [x] Build CMS public feed parser (CPT code updates, Medicare/Medicaid behavioral health policies)
+- [x] Build LexisNexis/Westlaw placeholder integration layer (activates when API keys provided)
+- [x] Create complianceSync.ts module with runSync(), detectChanges(), createAlert()
+- [x] Add tRPC procedures: getComplianceStatus, getAlerts, dismissAlert, triggerManualSync
+- [x] Register scheduled daily sync job (runs at 2am UTC)
+- [x] Build /admin/compliance-monitor page with sync status, change feed, and alert management
+- [x] Wire notifyOwner() on new compliance alerts
+- [x] Write vitest tests for compliance sync module

@@ -683,3 +683,66 @@ export const secureMessages = mysqlTable(
 
 export type SecureMessage = typeof secureMessages.$inferSelect;
 export type InsertSecureMessage = typeof secureMessages.$inferInsert;
+
+// ─── Compliance Sync Log ───────────────────────────────────────────────────────
+export const complianceSyncLog = mysqlTable("compliance_sync_log", {
+  id: int("id").autoincrement().primaryKey(),
+  source: mysqlEnum("source", ["SAMHSA", "CMS", "LEXISNEXIS", "WESTLAW", "MANUAL"]).notNull(),
+  syncType: varchar("syncType", { length: 64 }).notNull(),
+  status: mysqlEnum("status", ["success", "failed", "partial"]).notNull(),
+  recordsChecked: int("recordsChecked").default(0).notNull(),
+  recordsUpdated: int("recordsUpdated").default(0).notNull(),
+  changesDetected: int("changesDetected").default(0).notNull(),
+  errorMessage: text("errorMessage"),
+  syncedAt: timestamp("syncedAt").defaultNow().notNull(),
+});
+export type ComplianceSyncLog = typeof complianceSyncLog.$inferSelect;
+
+// ─── Compliance Alerts ─────────────────────────────────────────────────────────
+export const complianceAlerts = mysqlTable("compliance_alerts", {
+  id: int("id").autoincrement().primaryKey(),
+  source: mysqlEnum("source", ["SAMHSA", "CMS", "LEXISNEXIS", "WESTLAW", "MANUAL"]).notNull(),
+  severity: mysqlEnum("severity", ["info", "warning", "critical"]).notNull(),
+  category: varchar("category", { length: 64 }).notNull(),
+  title: varchar("title", { length: 256 }).notNull(),
+  description: text("description").notNull(),
+  affectedStates: text("affectedStates"),
+  sourceUrl: varchar("sourceUrl", { length: 512 }),
+  effectiveDate: timestamp("effectiveDate"),
+  dismissedAt: timestamp("dismissedAt"),
+  dismissedBy: int("dismissedBy"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type ComplianceAlert = typeof complianceAlerts.$inferSelect;
+export type InsertComplianceAlert = typeof complianceAlerts.$inferInsert;
+
+// ─── CPT Code Registry (auto-updated from CMS) ────────────────────────────────
+export const cptCodes = mysqlTable("cpt_codes", {
+  id: int("id").autoincrement().primaryKey(),
+  code: varchar("code", { length: 10 }).notNull().unique(),
+  description: text("description").notNull(),
+  category: varchar("category", { length: 128 }),
+  minDurationMin: int("minDurationMin"),
+  maxDurationMin: int("maxDurationMin"),
+  isActive: boolean("isActive").notNull().default(true),
+  lastVerifiedAt: timestamp("lastVerifiedAt"),
+  sourceUrl: varchar("sourceUrl", { length: 512 }),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+export type CptCode = typeof cptCodes.$inferSelect;
+export type InsertCptCode = typeof cptCodes.$inferInsert;
+
+// ─── Federal Policy Updates (from CMS/SAMHSA feeds) ───────────────────────────
+export const federalPolicyUpdates = mysqlTable("federal_policy_updates", {
+  id: int("id").autoincrement().primaryKey(),
+  source: mysqlEnum("source", ["SAMHSA", "CMS", "LEXISNEXIS", "WESTLAW", "MANUAL"]).notNull(),
+  title: varchar("title", { length: 512 }).notNull(),
+  summary: text("summary"),
+  category: varchar("category", { length: 128 }),
+  sourceUrl: varchar("sourceUrl", { length: 512 }),
+  publishedAt: timestamp("publishedAt"),
+  effectiveDate: timestamp("effectiveDate"),
+  isRead: boolean("isRead").notNull().default(false),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+export type FederalPolicyUpdate = typeof federalPolicyUpdates.$inferSelect;

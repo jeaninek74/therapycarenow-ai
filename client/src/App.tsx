@@ -17,6 +17,7 @@ import AIAssistant from "./pages/AIAssistant";
 import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminVerificationQueue from "./pages/AdminVerificationQueue";
+import ComplianceMonitor from "./pages/admin/ComplianceMonitor";
 import ProviderSubmission from "./pages/ProviderSubmission";
 import ClinicianLogin from "./pages/clinician/ClinicianLogin";
 import ClinicianDashboard from "./pages/clinician/ClinicianDashboard";
@@ -47,6 +48,7 @@ function Router() {
       <Route path="/settings" component={Settings} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/verification" component={AdminVerificationQueue} />
+      <Route path="/admin/compliance" component={ComplianceMonitor} />
       <Route path="/join-directory" component={ProviderSubmission} />
       {/* Clinician Portal */}
       <Route path="/clinician/login" component={ClinicianLogin} />
