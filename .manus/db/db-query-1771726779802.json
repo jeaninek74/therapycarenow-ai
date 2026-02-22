@@ -1,0 +1,46 @@
+{
+  "query": "\nSELECT COUNT(*) as total FROM providers;\nSELECT stateCode, COUNT(*) as count FROM providers GROUP BY stateCode ORDER BY count DESC LIMIT 10;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4TCdEkG57UNdEiY.c05417ee9a59 --database NReUutbzXJkGRJ3cRyQ7r7 --execute \nSELECT COUNT(*) as total FROM providers;\nSELECT stateCode, COUNT(*) as count FROM providers GROUP BY stateCode ORDER BY count DESC LIMIT 10;\n",
+  "rows": [
+    {
+      "total": "174"
+    },
+    {
+      "total": "stateCode\tcount"
+    },
+    {
+      "total": "FL\t6"
+    },
+    {
+      "total": "TX\t6"
+    },
+    {
+      "total": "CA\t6"
+    },
+    {
+      "total": "NY\t6"
+    },
+    {
+      "total": "WA\t5"
+    },
+    {
+      "total": "IL\t5"
+    },
+    {
+      "total": "AZ\t4"
+    },
+    {
+      "total": "NJ\t4"
+    },
+    {
+      "total": "CO\t4"
+    },
+    {
+      "total": "GA\t4"
+    }
+  ],
+  "messages": [],
+  "stdout": "total\n174\nstateCode\tcount\nFL\t6\nTX\t6\nCA\t6\nNY\t6\nWA\t5\nIL\t5\nAZ\t4\nNJ\t4\nCO\t4\nGA\t4\n",
+  "stderr": "",
+  "execution_time_ms": 66
+}

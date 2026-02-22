@@ -1,0 +1,91 @@
+{
+  "query": "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'providers' ORDER BY ORDINAL_POSITION;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4TCdEkG57UNdEiY.c05417ee9a59 --database NReUutbzXJkGRJ3cRyQ7r7 --execute SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'providers' ORDER BY ORDINAL_POSITION;",
+  "rows": [
+    {
+      "COLUMN_NAME": "id"
+    },
+    {
+      "COLUMN_NAME": "name"
+    },
+    {
+      "COLUMN_NAME": "licenseState"
+    },
+    {
+      "COLUMN_NAME": "licenseNumber"
+    },
+    {
+      "COLUMN_NAME": "licenseType"
+    },
+    {
+      "COLUMN_NAME": "telehealthAvailable"
+    },
+    {
+      "COLUMN_NAME": "inPersonAvailable"
+    },
+    {
+      "COLUMN_NAME": "city"
+    },
+    {
+      "COLUMN_NAME": "stateCode"
+    },
+    {
+      "COLUMN_NAME": "zipCode"
+    },
+    {
+      "COLUMN_NAME": "phone"
+    },
+    {
+      "COLUMN_NAME": "bookingUrl"
+    },
+    {
+      "COLUMN_NAME": "website"
+    },
+    {
+      "COLUMN_NAME": "languages"
+    },
+    {
+      "COLUMN_NAME": "costTag"
+    },
+    {
+      "COLUMN_NAME": "acceptsNewPatients"
+    },
+    {
+      "COLUMN_NAME": "urgencyAvailability"
+    },
+    {
+      "COLUMN_NAME": "bio"
+    },
+    {
+      "COLUMN_NAME": "isActive"
+    },
+    {
+      "COLUMN_NAME": "createdAt"
+    },
+    {
+      "COLUMN_NAME": "updatedAt"
+    },
+    {
+      "COLUMN_NAME": "npiNumber"
+    },
+    {
+      "COLUMN_NAME": "verificationStatus"
+    },
+    {
+      "COLUMN_NAME": "npiVerifiedAt"
+    },
+    {
+      "COLUMN_NAME": "licenseVerifiedAt"
+    },
+    {
+      "COLUMN_NAME": "verificationNotes"
+    },
+    {
+      "COLUMN_NAME": "npiData"
+    }
+  ],
+  "messages": [],
+  "stdout": "COLUMN_NAME\nid\nname\nlicenseState\nlicenseNumber\nlicenseType\ntelehealthAvailable\ninPersonAvailable\ncity\nstateCode\nzipCode\nphone\nbookingUrl\nwebsite\nlanguages\ncostTag\nacceptsNewPatients\nurgencyAvailability\nbio\nisActive\ncreatedAt\nupdatedAt\nnpiNumber\nverificationStatus\nnpiVerifiedAt\nlicenseVerifiedAt\nverificationNotes\nnpiData\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

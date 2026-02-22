@@ -1,0 +1,9 @@
+{
+  "query": "\nDELETE p1 FROM providers p1\nINNER JOIN providers p2 \nWHERE p1.id > p2.id \nAND p1.name = p2.name \nAND p1.stateCode = p2.stateCode \nAND COALESCE(p1.city, '') = COALESCE(p2.city, '');\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4TCdEkG57UNdEiY.c05417ee9a59 --database NReUutbzXJkGRJ3cRyQ7r7 --execute \nDELETE p1 FROM providers p1\nINNER JOIN providers p2 \nWHERE p1.id > p2.id \nAND p1.name = p2.name \nAND p1.stateCode = p2.stateCode \nAND COALESCE(p1.city, '') = COALESCE(p2.city, '');\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 66
+}

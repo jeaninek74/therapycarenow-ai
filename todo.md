@@ -216,3 +216,11 @@
 - [x] Build /admin/compliance-monitor page with sync status, change feed, and alert management
 - [x] Wire notifyOwner() on new compliance alerts
 - [x] Write vitest tests for compliance sync module
+
+## Provider Directory Fixes
+- [x] Remove duplicate providers from the database
+- [x] Add unique constraint on provider name + state + city to prevent future duplicates
+- [x] Integrate live therapist search API (NPPES NPI Registry - free, public, no key required)
+- [x] Update provider search backend to merge live results with local providers
+- [x] Update FindTherapist UI to show live results with clear source labeling
+- [x] Add city/zip code search field to FindTherapist filters

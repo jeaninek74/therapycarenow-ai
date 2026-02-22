@@ -8,12 +8,13 @@ import StatePicker from "@/components/StatePicker";
 export default function UrgentOptions() {
   const [stateCode, setStateCode] = useState<string | undefined>(undefined);
   const { data: crisisResources } = trpc.crisis.getResources.useQuery({ stateCode });
-  const { data: providers } = trpc.providers.search.useQuery({
+  const { data: searchData } = trpc.providers.search.useQuery({
     stateCode,
     urgency: "within_24h",
     telehealth: true,
     limit: 3,
   });
+  const providers = [...(searchData?.local ?? []), ...(searchData?.live ?? [])].slice(0, 3);
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,14 +76,14 @@ export default function UrgentOptions() {
         </section>
 
         {/* Urgent providers */}
-        {providers && providers.length > 0 && (
+        {providers.length > 0 && (
           <section className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-5 h-5 text-primary" />
               <h2 className="text-xl font-semibold text-foreground">Available within 24 hours</h2>
             </div>
             <div className="flex flex-col gap-3">
-              {providers.map((p) => (
+              {providers.map((p: any) => (
                 <Link
                   key={p.id}
                   href={`/provider/${p.id}`}

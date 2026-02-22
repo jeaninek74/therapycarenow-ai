@@ -1,0 +1,130 @@
+{
+  "query": "\nSELECT name, stateCode, city, COUNT(*) as count \nFROM providers \nGROUP BY name, stateCode, city \nHAVING COUNT(*) > 1 \nORDER BY count DESC \nLIMIT 30;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway04.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 4TCdEkG57UNdEiY.c05417ee9a59 --database NReUutbzXJkGRJ3cRyQ7r7 --execute \nSELECT name, stateCode, city, COUNT(*) as count \nFROM providers \nGROUP BY name, stateCode, city \nHAVING COUNT(*) > 1 \nORDER BY count DESC \nLIMIT 30;\n",
+  "rows": [
+    {
+      "name": "Marcus Williams, LCSW",
+      "stateCode": "CA",
+      "city": "San Francisco",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Kevin O'Brien, PhD",
+      "stateCode": "CO",
+      "city": "Denver",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Nina Patel, PsyD",
+      "stateCode": "NJ",
+      "city": "Newark",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Sarah Chen, PhD",
+      "stateCode": "CA",
+      "city": "Los Angeles",
+      "count": "3"
+    },
+    {
+      "name": "Jennifer Walsh, LICSW",
+      "stateCode": "MA",
+      "city": "Boston",
+      "count": "3"
+    },
+    {
+      "name": "Michael Torres, LCSW",
+      "stateCode": "AZ",
+      "city": "Phoenix",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Carlos Mendez, PhD",
+      "stateCode": "IL",
+      "city": "Chicago",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Thomas Brown, PsyD",
+      "stateCode": "WA",
+      "city": "Seattle",
+      "count": "3"
+    },
+    {
+      "name": "Lisa Nguyen, LMHC",
+      "stateCode": "WA",
+      "city": "Tacoma",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Maria Santos, PsyD",
+      "stateCode": "FL",
+      "city": "Miami",
+      "count": "3"
+    },
+    {
+      "name": "James Thompson, LPC",
+      "stateCode": "TX",
+      "city": "Dallas",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Emily Rodriguez, PsyD",
+      "stateCode": "TX",
+      "city": "Houston",
+      "count": "3"
+    },
+    {
+      "name": "Stephanie Davis, LPC",
+      "stateCode": "GA",
+      "city": "Atlanta",
+      "count": "3"
+    },
+    {
+      "name": "Robert Kim, LMFT",
+      "stateCode": "NY",
+      "city": "Brooklyn",
+      "count": "3"
+    },
+    {
+      "name": "David Park, LMHC",
+      "stateCode": "FL",
+      "city": "Orlando",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Amanda Foster, PhD",
+      "stateCode": "OH",
+      "city": "Columbus",
+      "count": "3"
+    },
+    {
+      "name": "Rachel Green, LCPC",
+      "stateCode": "IL",
+      "city": "Chicago",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Aisha Johnson, PhD",
+      "stateCode": "NY",
+      "city": "New York",
+      "count": "3"
+    },
+    {
+      "name": "Dr. Patricia Moore, PsyD",
+      "stateCode": "VA",
+      "city": "Richmond",
+      "count": "3"
+    },
+    {
+      "name": "Brandon Lee, LPC",
+      "stateCode": "NC",
+      "city": "Charlotte",
+      "count": "3"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tstateCode\tcity\tcount\nMarcus Williams, LCSW\tCA\tSan Francisco\t3\nDr. Kevin O'Brien, PhD\tCO\tDenver\t3\nDr. Nina Patel, PsyD\tNJ\tNewark\t3\nDr. Sarah Chen, PhD\tCA\tLos Angeles\t3\nJennifer Walsh, LICSW\tMA\tBoston\t3\nMichael Torres, LCSW\tAZ\tPhoenix\t3\nDr. Carlos Mendez, PhD\tIL\tChicago\t3\nDr. Thomas Brown, PsyD\tWA\tSeattle\t3\nLisa Nguyen, LMHC\tWA\tTacoma\t3\nDr. Maria Santos, PsyD\tFL\tMiami\t3\nJames Thompson, LPC\tTX\tDallas\t3\nDr. Emily Rodriguez, PsyD\tTX\tHouston\t3\nStephanie Davis, LPC\tGA\tAtlanta\t3\nRobert Kim, LMFT\tNY\tBrooklyn\t3\nDavid Park, LMHC\tFL\tOrlando\t3\nDr. Amanda Foster, PhD\tOH\tColumbus\t3\nRachel Green, LCPC\tIL\tChicago\t3\nDr. Aisha Johnson, PhD\tNY\tNew York\t3\nDr. Patricia Moore, PsyD\tVA\tRichmond\t3\nBrandon Lee, LPC\tNC\tCharlotte\t3\n",
+  "stderr": "",
+  "execution_time_ms": 60
+}

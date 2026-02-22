@@ -6,6 +6,7 @@ import { z } from "zod";
 import { nanoid } from "nanoid";
 import { classifyRisk, TRIAGE_QUESTIONS } from "./triage";
 import { moderateInput, getSupportAssistantResponse } from "./aiGuardrails";
+import { searchLiveProviders } from "./liveProviderSearch";
 import {
   logAuditEvent,
   saveTriageSession,
@@ -178,6 +179,7 @@ const providerRouter = router({
     .input(
       z.object({
         stateCode: z.string().length(2).optional(),
+        city: z.string().optional(),
         telehealth: z.boolean().optional(),
         specialty: z.string().optional(),
         insurance: z.string().optional(),
@@ -187,7 +189,28 @@ const providerRouter = router({
       })
     )
     .query(async ({ input }) => {
-      return searchProviders(input);
+      // Run local DB search and live NPPES search in parallel
+      const [localResult, liveResult] = await Promise.allSettled([
+        searchProviders(input),
+        searchLiveProviders({
+          stateCode: input.stateCode,
+          city: input.city,
+          specialty: input.specialty,
+          telehealth: input.telehealth,
+          limit: 30,
+        }),
+      ]);
+
+      const local = localResult.status === "fulfilled" ? localResult.value : [];
+      const live = liveResult.status === "fulfilled" ? liveResult.value : [];
+
+      // Deduplicate: skip live results whose NPI matches a local provider
+      const localNpis = new Set(
+        local.map((p: any) => p.npiNumber).filter(Boolean)
+      );
+      const filteredLive = live.filter((p) => !localNpis.has(p.npiNumber));
+
+      return { local, live: filteredLive };
     }),
 
   getById: publicProcedure

@@ -7,7 +7,8 @@ import StatePicker from "@/components/StatePicker";
 
 export default function RoutineOptions() {
   const [stateCode, setStateCode] = useState<string | undefined>(undefined);
-  const { data: providers } = trpc.providers.search.useQuery({ stateCode, limit: 3 });
+  const { data: searchData } = trpc.providers.search.useQuery({ stateCode, limit: 3 });
+  const providers = [...(searchData?.local ?? []), ...(searchData?.live ?? [])].slice(0, 3);
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,11 +63,11 @@ export default function RoutineOptions() {
         </section>
 
         {/* Suggested providers */}
-        {providers && providers.length > 0 && (
+        {providers.length > 0 && (
           <section>
             <h2 className="text-xl font-semibold text-foreground mb-4">Suggested providers</h2>
             <div className="flex flex-col gap-3">
-              {providers.map((p) => (
+              {providers.map((p: any) => (
                 <Link
                   key={p.id}
                   href={`/provider/${p.id}`}
