@@ -237,3 +237,26 @@
 - [x] Add Directory link to NavBar
 - [x] Wire sessionStorage handoff from Directory → FindTherapist (pre-fill state/city)
 - [x] Fix Railway custom domain via Cloudflare Worker proxy
+
+## Auth Replacement — Remove Manus OAuth
+- [x] Replace Manus OAuth with email/password + JWT auth on server
+- [x] Add bcrypt password hashing to user registration/login
+- [x] Update useAuth hook to use new email/password auth
+- [x] Replace login page with email/password form (no Manus OAuth button)
+- [x] Remove all Manus OAuth references from NavBar and all pages
+- [ ] Update clinician login to use email/password
+- [ ] Test full auth flow on Railway
+- [ ] Push to Railway and verify therapycarenow.com works without OAuth errors
+
+## Risk Protections
+- [x] Data privacy: rate limiting on auth endpoints (max 5 attempts/15 min)
+- [x] Data privacy: no PII in server logs or URL query params
+- [x] Data privacy: CORS lockdown to therapycarenow.com only in production
+- [x] Privacy risk: cookie/consent banner on first visit
+- [x] Privacy risk: Privacy Policy page (/privacy) with data handling disclosures
+- [x] Privacy risk: HIPAA notice on all health-related pages
+- [x] Misrepresentation: AI disclaimer banner on AI Assistant, Triage, and all AI outputs
+- [x] Misrepresentation: Provider verification badge (verified vs unverified vs pending)
+- [ ] Misrepresentation: Crisis resource accuracy disclaimer
+- [x] Misrepresentation: Terms of Service page (/terms)
+- [x] Misrepresentation: "Not a licensed therapist" notice on all AI-generated content

@@ -3,11 +3,11 @@ import express from "express";
 import { createServer } from "http";
 import net from "net";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
-import { registerOAuthRoutes } from "./oauth";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
 import { startComplianceScheduler } from "../complianceScheduler";
+import { applyHelmet, apiRateLimiter, authRateLimiter, sanitizeRequestBody } from "./security";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -39,11 +39,19 @@ async function startServer() {
     }
     next();
   });
+  // Security headers (helmet)
+  applyHelmet(app);
   // Configure body parser with larger size limit for file uploads
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
-  // OAuth callback under /api/oauth/callback
-  registerOAuthRoutes(app);
+  // Input sanitization (NoSQL injection prevention)
+  app.use(sanitizeRequestBody);
+  // Rate limiting: auth endpoints get stricter limits
+  app.use("/api/trpc/auth.login", authRateLimiter);
+  app.use("/api/trpc/auth.register", authRateLimiter);
+  app.use("/api/trpc/clinician.register", authRateLimiter);
+  // General API rate limit
+  app.use("/api/trpc", apiRateLimiter);
   // tRPC API
   app.use(
     "/api/trpc",

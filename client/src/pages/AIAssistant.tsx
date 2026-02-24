@@ -4,6 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Bot, Send, AlertTriangle, Shield, Loader2, Phone } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import StatePicker from "@/components/StatePicker";
+import AIDisclaimerBanner from "@/components/AIDisclaimerBanner";
 import { Streamdown } from "streamdown";
 import { toast } from "sonner";
 
@@ -82,6 +83,8 @@ export default function AIAssistant() {
       <NavBar />
 
       <div className="container flex-1 flex flex-col py-6 max-w-2xl mx-auto">
+        <AIDisclaimerBanner />
+        <div className="mt-4" />
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">

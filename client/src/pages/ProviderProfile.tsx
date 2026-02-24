@@ -2,6 +2,7 @@ import { useParams, Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Phone, Video, MapPin, DollarSign, ChevronLeft, Loader2, Shield } from "lucide-react";
 import NavBar from "@/components/NavBar";
+import VerificationBadge from "@/components/VerificationBadge";
 
 export default function ProviderProfile() {
   const { id } = useParams<{ id: string }>();
@@ -46,6 +47,9 @@ export default function ProviderProfile() {
             <div>
               <h1 className="text-2xl font-bold text-foreground mb-1">{provider.name}</h1>
               <p className="text-muted-foreground">{provider.licenseType} · Licensed in {provider.licenseState}</p>
+              <div className="mt-2">
+                <VerificationBadge status={(provider.verificationStatus as "verified" | "pending" | "unverified" | "self_reported") ?? "unverified"} />
+              </div>
               {provider.city && (
                 <p className="text-muted-foreground text-sm flex items-center gap-1 mt-1">
                   <MapPin className="w-4 h-4" />

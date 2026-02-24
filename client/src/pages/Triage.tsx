@@ -4,6 +4,7 @@ import { trpc } from "@/lib/trpc";
 import { Shield, ChevronLeft, Loader2, AlertTriangle, MapPin, X, CheckCircle2 } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import StatePicker from "@/components/StatePicker";
+import AIDisclaimerBanner from "@/components/AIDisclaimerBanner";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { toast } from "sonner";
 
@@ -105,6 +106,7 @@ export default function Triage() {
       <NavBar />
 
       <div className="container py-12 max-w-xl mx-auto">
+        <div className="mb-6"><AIDisclaimerBanner compact /></div>
         {/* ── Start Screen ── */}
         {step === "start" && (
           <div className="text-center">

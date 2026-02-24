@@ -31,6 +31,10 @@ import ClinicianCompliance from "./pages/clinician/ClinicianCompliance";
 import ClinicianRevenue from "./pages/clinician/ClinicianRevenue";
 import ClinicianSubscription from "./pages/clinician/ClinicianSubscription";
 import TherapistDirectory from "./pages/TherapistDirectory";
+import Login from "./pages/Login";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
+import ConsentBanner from "./components/ConsentBanner";
 import EmergencyFAB from "./components/EmergencyFAB";
 
 function Router() {
@@ -52,6 +56,10 @@ function Router() {
       <Route path="/admin/compliance" component={ComplianceMonitor} />
       <Route path="/join-directory" component={ProviderSubmission} />
       <Route path="/directory" component={TherapistDirectory} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Login} />
+      <Route path="/privacy" component={PrivacyPolicy} />
+      <Route path="/terms" component={TermsOfService} />
       {/* Clinician Portal */}
       <Route path="/clinician/login" component={ClinicianLogin} />
       <Route path="/clinician/dashboard" component={ClinicianDashboard} />
@@ -78,6 +86,7 @@ function App() {
           <Toaster />
           <Router />
           <EmergencyFAB />
+          <ConsentBanner />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
