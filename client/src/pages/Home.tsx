@@ -1,6 +1,5 @@
 import { Link } from "wouter";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, AlertTriangle, Lock, FileWarning, Star, Quote } from "lucide-react";
-import { useState } from "react";
+import { Heart, Phone, Search, Shield, ChevronRight, Check, Brain, UserCheck, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {
@@ -180,38 +179,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Quick access cards */}
-      <section className="bg-muted/40 py-16">
-        <div className="container">
-          <h2 className="text-2xl font-semibold text-foreground mb-8">More ways we can help</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <QuickCard
-              href="/triage"
-              icon={<Phone className="w-6 h-6 text-destructive" />}
-              title="Get Help Now"
-              description="Answer 5 quick questions to find the right support level for your situation."
-            />
-            <QuickCard
-              href="/directory"
-              icon={<Search className="w-6 h-6 text-primary" />}
-              title="Browse by State"
-              description="Explore therapists, psychiatrists, and psychologists in every state and city."
-            />
-            <QuickCard
-              href="/benefits"
-              icon={<Briefcase className="w-6 h-6 text-[oklch(0.58_0.12_155)]" />}
-              title="Benefits Wallet"
-              description="Save your insurance and employer EAP info to speed up matching."
-            />
-            <QuickCard
-              href="/free-resources"
-              icon={<BookOpen className="w-6 h-6 text-[oklch(0.68_0.10_280)]" />}
-              title="Free & Low-Cost Help"
-              description="Community clinics, hotlines, and sliding scale providers near you."
-            />
-          </div>
-        </div>
-      </section>
+
 
       {/* How it works */}
       <section className="container py-16">
@@ -236,70 +204,28 @@ export default function Home() {
       </section>
 
 
-      {/* Interactive Demo */}
+      {/* Interactive Demo CTA */}
       <section className="container py-16">
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium px-4 py-2 rounded-full mb-4">
+        <div className="bg-gradient-to-br from-teal-900 via-slate-900 to-indigo-900 rounded-3xl p-10 text-center text-white">
+          <div className="inline-flex items-center gap-2 bg-white/10 text-white/80 text-sm font-medium px-4 py-2 rounded-full mb-6">
             <Play className="w-4 h-4" />
             Interactive Demo
           </div>
-          <h2 className="text-3xl font-bold text-foreground mb-3">See how it works</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Try a live walkthrough of the provider search — no account required.
+          <h2 className="text-3xl font-bold mb-3">See TherapyCareNow in Action</h2>
+          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">
+            Explore every feature — from finding a therapist to benefits and free resources — in a guided walkthrough. No account required.
           </p>
-        </div>
-        <InteractiveDemo />
-      </section>
-
-      {/* Risk Disclosures */}
-      <section className="bg-muted/30 py-16">
-        <div className="container">
-          <div className="mb-8 text-center">
-            <h2 className="text-2xl font-semibold text-foreground mb-2">Important Disclosures</h2>
-            <p className="text-muted-foreground">Please read before using TherapyCareNow</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Data Risk */}
-            <div className="bg-card border border-amber-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-                  <AlertTriangle className="w-5 h-5 text-amber-600" />
-                </div>
-                <h3 className="font-semibold text-foreground">Data Risk</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                TherapyCareNow aggregates provider information from publicly available sources including the National Provider Identifier (NPI) registry, state licensing boards, and provider self-submissions. While we strive for accuracy, provider data may be incomplete, outdated, or contain errors. We do not independently verify every credential, insurance panel, or availability listing. Always confirm provider details directly before booking an appointment.
-              </p>
-            </div>
-
-            {/* Privacy Risk */}
-            <div className="bg-card border border-blue-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                  <Lock className="w-5 h-5 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-foreground">Privacy Risk</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Any information you enter on TherapyCareNow — including your location, insurance details, or mental health concerns — is used solely to match you with appropriate providers. We do not sell your personal data to third parties. However, no digital platform can guarantee absolute security. Do not enter sensitive clinical information (such as diagnoses or treatment history) into search fields or public-facing forms. Review our Privacy Policy for full details on data handling and your rights.
-              </p>
-            </div>
-
-            {/* Misrepresentation Risk */}
-            <div className="bg-card border border-rose-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0">
-                  <FileWarning className="w-5 h-5 text-rose-600" />
-                </div>
-                <h3 className="font-semibold text-foreground">Misrepresentation Risk</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Provider profiles on TherapyCareNow may include self-reported information that has not been independently audited. Credentials, specialties, and insurance acceptance are subject to change. TherapyCareNow is not responsible for misrepresentations made by listed providers. If you encounter a provider whose credentials appear fraudulent or whose conduct is inappropriate, please report them using the flag feature on their profile or contact us directly. Always verify a provider's license status with your state licensing board before beginning treatment.
-              </p>
-            </div>
-          </div>
+          <Link
+            href="/demo"
+            className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold rounded-xl px-8 py-4 text-lg transition-all active:scale-95"
+          >
+            <Play className="w-5 h-5" />
+            Launch Demo
+          </Link>
         </div>
       </section>
+
+
 
       {/* Testimonials */}
       <section className="bg-gradient-to-b from-secondary/20 to-background py-16">
@@ -344,14 +270,25 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border py-8">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Heart className="w-4 h-4 text-primary" />
-            <span>TherapyCareNow · All 50 states</span>
+        <div className="container flex flex-col gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Heart className="w-4 h-4 text-primary" />
+              <span>TherapyCareNow · All 50 states</span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link href="/therapists" className="hover:text-foreground transition-colors">Therapists</Link>
+              <Link href="/psychiatrists" className="hover:text-foreground transition-colors">Psychiatrists</Link>
+              <Link href="/psychologists" className="hover:text-foreground transition-colors">Psychologists</Link>
+              <Link href="/free-resources" className="hover:text-foreground transition-colors">Free Resources</Link>
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Use</Link>
+            </div>
           </div>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Use</Link>
+          <div className="border-t border-border pt-4 flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs">
+            <Link href="/disclosures#data-risk" className="hover:text-foreground transition-colors">Data Risk Disclosure</Link>
+            <Link href="/disclosures#privacy-risk" className="hover:text-foreground transition-colors">Privacy Risk Disclosure</Link>
+            <Link href="/disclosures#misrepresentation" className="hover:text-foreground transition-colors">Misrepresentation Risk</Link>
             <Link href="/settings" className="hover:text-foreground transition-colors">Settings</Link>
           </div>
         </div>
@@ -486,130 +423,6 @@ function Step({ number, title, description }: { number: string; title: string; d
   );
 }
 
-
-// ── Interactive Demo ──────────────────────────────────────────────────────────
-function InteractiveDemo() {
-  const [step, setStep] = useState(0);
-  const [selectedType, setSelectedType] = useState<string | null>(null);
-  const [selectedState, setSelectedState] = useState<string | null>(null);
-  const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
-
-  const providerTypes = [
-    { label: "Therapist", icon: "🧠", desc: "Talk therapy & counseling" },
-    { label: "Psychiatrist", icon: "💊", desc: "Medication management" },
-    { label: "Psychologist", icon: "📋", desc: "Testing & assessment" },
-  ];
-
-  const states = ["California", "Texas", "New York", "Florida", "Illinois", "Pennsylvania"];
-  const concerns = ["Anxiety", "Depression", "Trauma / PTSD", "ADHD", "Relationship issues", "Grief & loss"];
-
-  const reset = () => { setStep(0); setSelectedType(null); setSelectedState(null); setSelectedConcern(null); };
-
-  return (
-    <div className="bg-card border border-border rounded-2xl overflow-hidden max-w-3xl mx-auto shadow-sm">
-      {/* Progress bar */}
-      <div className="h-1.5 bg-muted">
-        <div
-          className="h-full bg-primary transition-all duration-500"
-          style={{ width: `${(step / 3) * 100}%` }}
-        />
-      </div>
-
-      <div className="p-8">
-        {step === 0 && (
-          <div>
-            <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 1 of 3</p>
-            <h3 className="text-xl font-bold text-foreground mb-2">What type of provider are you looking for?</h3>
-            <p className="text-sm text-muted-foreground mb-6">Choose the type that best matches your needs.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {providerTypes.map((t) => (
-                <button
-                  key={t.label}
-                  onClick={() => { setSelectedType(t.label); setStep(1); }}
-                  className="flex flex-col items-center gap-2 p-5 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-center group"
-                >
-                  <span className="text-3xl">{t.icon}</span>
-                  <span className="font-semibold text-foreground group-hover:text-primary transition-colors">{t.label}</span>
-                  <span className="text-xs text-muted-foreground">{t.desc}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {step === 1 && (
-          <div>
-            <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 2 of 3</p>
-            <h3 className="text-xl font-bold text-foreground mb-2">Which state are you in?</h3>
-            <p className="text-sm text-muted-foreground mb-6">We have verified {selectedType?.toLowerCase()}s in all 50 states.</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {states.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => { setSelectedState(s); setStep(2); }}
-                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-            <button onClick={() => setStep(0)} className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div>
-            <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 3 of 3</p>
-            <h3 className="text-xl font-bold text-foreground mb-2">What are you dealing with?</h3>
-            <p className="text-sm text-muted-foreground mb-6">Select your primary concern to refine your results.</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {concerns.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => { setSelectedConcern(c); setStep(3); }}
-                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary"
-                >
-                  {c}
-                </button>
-              ))}
-            </div>
-            <button onClick={() => setStep(1)} className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
-          </div>
-        )}
-
-        {step === 3 && (
-          <div className="text-center">
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-              <Check className="w-8 h-8 text-primary" />
-            </div>
-            <h3 className="text-xl font-bold text-foreground mb-2">Your personalized results are ready</h3>
-            <p className="text-muted-foreground text-sm mb-2">
-              We found <span className="font-semibold text-foreground">{selectedType}s</span> in{" "}
-              <span className="font-semibold text-foreground">{selectedState}</span> who specialize in{" "}
-              <span className="font-semibold text-foreground">{selectedConcern}</span>.
-            </p>
-            <p className="text-xs text-muted-foreground mb-6">This is a demo — click below to run a real search with live provider data.</p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href={`/find-therapist?category=${selectedType}&state=${selectedState}&concern=${selectedConcern}`}
-                className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-6 py-3 hover:opacity-90 transition-all"
-              >
-                <Search className="w-4 h-4" />
-                Search Real Providers
-              </Link>
-              <button
-                onClick={reset}
-                className="inline-flex items-center justify-center gap-2 border border-border rounded-xl px-6 py-3 text-sm font-medium text-foreground hover:bg-muted/50 transition-all"
-              >
-                Try Again
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
 // ── Testimonials ──────────────────────────────────────────────────────────────
 const TESTIMONIALS: {
