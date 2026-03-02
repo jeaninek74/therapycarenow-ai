@@ -310,3 +310,9 @@
 - [x] Rebuild TherapistDirectory.tsx with three category tabs and per-city breakdown showing all three types
 - [x] Rebuild FindTherapist.tsx with category tab switcher and category-filtered search results
 - [x] All 20 tests passing, 0 TypeScript errors
+
+## Nav + SEO Landing Pages (Mar 2026)
+- [x] Create /psychiatrists SEO landing page
+- [x] Create /psychologists SEO landing page
+- [x] Update NavBar with dropdown "Find a Provider" menu showing all three types
+- [x] Register new routes in App.tsx

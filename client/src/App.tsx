@@ -32,6 +32,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ConsentBanner from "./components/ConsentBanner";
 import InteractiveDemo from "./pages/InteractiveDemo";
+import PsychiatristsLanding from "./pages/PsychiatristsLanding";
+import PsychologistsLanding from "./pages/PsychologistsLanding";
 
 function Router() {
   return (
@@ -53,6 +55,10 @@ function Router() {
       <Route path="/privacy" component={PrivacyPolicy} />
       <Route path="/terms" component={TermsOfService} />
       <Route path="/demo" component={InteractiveDemo} />
+      {/* Provider type landing pages */}
+      <Route path="/psychiatrists" component={PsychiatristsLanding} />
+      <Route path="/psychologists" component={PsychologistsLanding} />
+      <Route path="/therapists" component={FindTherapist} />
       {/* Clinician Portal */}
       <Route path="/clinician/login" component={ClinicianLogin} />
       <Route path="/clinician/dashboard" component={ClinicianDashboard} />
