@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
 
@@ -7,11 +7,11 @@ vi.mock("./db", () => ({
   getDb: vi.fn().mockResolvedValue(null),
   upsertUser: vi.fn().mockResolvedValue(undefined),
   getUserByOpenId: vi.fn().mockResolvedValue(null),
+  getUserByEmail: vi.fn().mockResolvedValue(null),
   getUserProfile: vi.fn().mockResolvedValue(null),
   upsertUserProfile: vi.fn().mockResolvedValue(undefined),
   recordConsent: vi.fn().mockResolvedValue(undefined),
   logAuditEvent: vi.fn().mockResolvedValue(undefined),
-  saveTriageSession: vi.fn().mockResolvedValue(undefined),
   getCrisisResources: vi.fn().mockResolvedValue([]),
   getFreeResources: vi.fn().mockResolvedValue([]),
   searchProviders: vi.fn().mockResolvedValue([]),
@@ -22,8 +22,7 @@ vi.mock("./db", () => ({
   getProviderCountByState: vi.fn().mockResolvedValue([]),
   getCitiesByState: vi.fn().mockResolvedValue([]),
   getProviderStats: vi.fn().mockResolvedValue({ total: 0, byState: [], byLicenseType: [] }),
-  getAuditEventStats: vi.fn().mockResolvedValue({ total: 0, byType: [], byRiskLevel: [] }),
-  getTriageStats: vi.fn().mockResolvedValue({ total: 0, emergency: 0, urgent: 0, routine: 0, byState: [] }),
+  getAuditEventStats: vi.fn().mockResolvedValue({ total: 0, byType: [], byRiskLevel: [], recentEvents: [] }),
   bulkImportProviders: vi.fn().mockResolvedValue({ inserted: 0, errors: [] }),
 }));
 
@@ -42,81 +41,6 @@ function makeCtx(user?: TrpcContext["user"]): TrpcContext {
     } as unknown as TrpcContext["res"],
   };
 }
-
-describe("Triage Router", () => {
-  it("classifies EMERGENCY when immediateDanger=true", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    const result = await caller.triage.submit({
-      immediateDanger: true,
-      harmSelf: false,
-      harmOthers: false,
-      needHelpSoon: false,
-      needHelpToday: false,
-    });
-    expect(result.riskLevel).toBe("EMERGENCY");
-    expect(result.crisisMode).toBe(true);
-  });
-
-  it("classifies EMERGENCY when harmSelf=true", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    const result = await caller.triage.submit({
-      immediateDanger: false,
-      harmSelf: true,
-      harmOthers: false,
-      needHelpSoon: false,
-      needHelpToday: false,
-    });
-    expect(result.riskLevel).toBe("EMERGENCY");
-    expect(result.crisisMode).toBe(true);
-  });
-
-  it("classifies URGENT when needHelpSoon=true", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    const result = await caller.triage.submit({
-      immediateDanger: false,
-      harmSelf: false,
-      harmOthers: false,
-      needHelpSoon: true,
-      needHelpToday: false,
-    });
-    expect(result.riskLevel).toBe("URGENT");
-    expect(result.crisisMode).toBe(false);
-  });
-
-  it("classifies ROUTINE when all answers are false", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    const result = await caller.triage.submit({
-      immediateDanger: false,
-      harmSelf: false,
-      harmOthers: false,
-      needHelpSoon: false,
-      needHelpToday: false,
-    });
-    expect(result.riskLevel).toBe("ROUTINE");
-    expect(result.crisisMode).toBe(false);
-  });
-
-  it("returns questions list", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    const result = await caller.triage.getQuestions();
-    expect(result).toHaveLength(5);
-    expect(result[0].id).toBe("immediateDanger");
-  });
-});
-
-describe("Crisis Router", () => {
-  it("returns crisis resources (empty when DB unavailable)", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    const result = await caller.crisis.getResources({});
-    expect(Array.isArray(result)).toBe(true);
-  });
-
-  it("accepts stateCode filter", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    const result = await caller.crisis.getResources({ stateCode: "CA" });
-    expect(Array.isArray(result)).toBe(true);
-  });
-});
 
 describe("Provider Router", () => {
   it("returns search result with local and live arrays", async () => {
@@ -168,7 +92,7 @@ describe("Auth Router", () => {
       openId: "test-user",
       email: "test@example.com",
       name: "Test User",
-      loginMethod: "manus",
+      loginMethod: "email",
       role: "user",
       createdAt: new Date(),
       updatedAt: new Date(),

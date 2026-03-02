@@ -12,7 +12,6 @@ import {
   providerSpecialties,
   providers,
   stateCompliance,
-  triageSessions,
   userProfiles,
   users,
 } from "../drizzle/schema";
@@ -140,34 +139,6 @@ export async function logAuditEvent(event: {
   } catch (err) {
     console.error("[Audit] Failed to log event:", err);
   }
-}
-
-// ─── Triage Sessions ───────────────────────────────────────────────────────────
-
-export async function saveTriageSession(data: {
-  sessionToken: string;
-  userId?: number;
-  riskLevel: "EMERGENCY" | "URGENT" | "ROUTINE";
-  immediateDanger: boolean;
-  harmSelf: boolean;
-  harmOthers: boolean;
-  needHelpSoon: boolean;
-  needHelpToday: boolean;
-  stateCode?: string;
-}) {
-  const db = await getDb();
-  if (!db) return;
-  await db.insert(triageSessions).values({
-    sessionToken: data.sessionToken,
-    userId: data.userId ?? null,
-    riskLevel: data.riskLevel,
-    immediateDanger: data.immediateDanger,
-    harmSelf: data.harmSelf,
-    harmOthers: data.harmOthers,
-    needHelpSoon: data.needHelpSoon,
-    needHelpToday: data.needHelpToday,
-    stateCode: data.stateCode ?? null,
-  });
 }
 
 // ─── Crisis Resources ──────────────────────────────────────────────────────────
@@ -474,49 +445,7 @@ export async function getAuditEventStats() {
   };
 }
 
-export async function getTriageStats() {
-  const db = await getDb();
-  if (!db) return { total: 0, emergency: 0, urgent: 0, routine: 0, byState: [] };
 
-  const totalResult = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(triageSessions);
-  const total = Number(totalResult[0]?.count ?? 0);
-
-  const emergencyResult = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(triageSessions)
-    .where(eq(triageSessions.riskLevel, "EMERGENCY"));
-
-  const urgentResult = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(triageSessions)
-    .where(eq(triageSessions.riskLevel, "URGENT"));
-
-  const routineResult = await db
-    .select({ count: sql<number>`count(*)` })
-    .from(triageSessions)
-    .where(eq(triageSessions.riskLevel, "ROUTINE"));
-
-  const byState = await db
-    .select({
-      stateCode: triageSessions.stateCode,
-      count: sql<number>`count(*)`,
-    })
-    .from(triageSessions)
-    .where(sql`${triageSessions.stateCode} IS NOT NULL`)
-    .groupBy(triageSessions.stateCode)
-    .orderBy(sql`count(*) desc`)
-    .limit(10);
-
-  return {
-    total,
-    emergency: Number(emergencyResult[0]?.count ?? 0),
-    urgent: Number(urgentResult[0]?.count ?? 0),
-    routine: Number(routineResult[0]?.count ?? 0),
-    byState: byState.map((r) => ({ stateCode: r.stateCode, count: Number(r.count) })),
-  };
-}
 
 export async function getProviderStats() {
   const db = await getDb();

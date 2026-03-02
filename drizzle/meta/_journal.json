@@ -50,6 +50,13 @@
       "when": 1771861548413,
       "tag": "0006_worthless_colossus",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1772431448111,
+      "tag": "0007_brown_zarda",
+      "breakpoints": true
     }
   ]
 }

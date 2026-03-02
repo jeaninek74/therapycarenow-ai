@@ -4,14 +4,10 @@ import { registerUser, loginUser, createSessionToken } from "./_core/auth";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
-import { nanoid } from "nanoid";
-import { classifyRisk, TRIAGE_QUESTIONS } from "./triage";
 import { moderateInput, getSupportAssistantResponse } from "./aiGuardrails";
 import { searchLiveProviders } from "./liveProviderSearch";
 import {
   logAuditEvent,
-  saveTriageSession,
-  getCrisisResources,
   getFreeResources,
   searchProviders,
   getProviderById,
@@ -22,7 +18,6 @@ import {
   getStateCompliance,
   getAllStateCompliance,
   getAuditEventStats,
-  getTriageStats,
   getProviderStats,
   bulkImportProviders,
   getProviderCountByState,
@@ -57,104 +52,6 @@ function checkRateLimit(key: string, maxRequests: number, windowMs: number): boo
   entry.count++;
   return true;
 }
-
-// ─── Triage Router ─────────────────────────────────────────────────────────────
-
-const triageRouter = router({
-  getQuestions: publicProcedure.query(() => TRIAGE_QUESTIONS),
-
-  submit: publicProcedure
-    .input(
-      z.object({
-        immediateDanger: z.boolean(),
-        harmSelf: z.boolean(),
-        harmOthers: z.boolean(),
-        needHelpSoon: z.boolean(),
-        needHelpToday: z.boolean(),
-        stateCode: z.string().length(2).optional(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      // Rate limiting: 10 triage submissions per 5 minutes per IP
-      const ip = ctx.req.headers["x-forwarded-for"] as string || "unknown";
-      const rateLimitKey = `triage:${ip}`;
-      if (!checkRateLimit(rateLimitKey, 10, 5 * 60 * 1000)) {
-        throw new Error("Too many requests. Please wait a moment.");
-      }
-
-      // Deterministic classification — never AI
-      const result = classifyRisk(input);
-
-      // Save session (no raw text stored)
-      const sessionToken = nanoid(32);
-      await saveTriageSession({
-        sessionToken,
-        userId: ctx.user?.id,
-        riskLevel: result.riskLevel,
-        immediateDanger: input.immediateDanger,
-        harmSelf: input.harmSelf,
-        harmOthers: input.harmOthers,
-        needHelpSoon: input.needHelpSoon,
-        needHelpToday: input.needHelpToday,
-        stateCode: input.stateCode,
-      });
-
-      // Audit log (HIPAA-safe: no raw text)
-      await logAuditEvent({
-        userId: ctx.user?.id,
-        eventType: "triage_completed",
-        riskLevel: result.riskLevel,
-        triggerSource: "triage",
-        stateCode: input.stateCode,
-      });
-
-      if (result.crisisMode) {
-        await logAuditEvent({
-          userId: ctx.user?.id,
-          eventType: "crisis_mode_triggered",
-          riskLevel: "EMERGENCY",
-          triggerSource: "triage",
-          stateCode: input.stateCode,
-        });
-
-        // Notify owner — HIPAA-safe: no PHI, no raw text, only event metadata
-        notifyOwner({
-          title: "🚨 TherapyCareNow: Crisis Mode Activated",
-          content: [
-            "A user has been routed to Crisis Mode via the triage flow.",
-            `Trigger: Deterministic triage engine`,
-            `State: ${input.stateCode ?? "Not provided"}`,
-            `Risk Level: EMERGENCY`,
-            `Time (UTC): ${new Date().toISOString()}`,
-            "",
-            "No personal health information is included in this alert.",
-            "User has been shown 911, 988 call/text/chat, and local crisis resources.",
-          ].join("\n"),
-        }).catch((err) => console.warn("[Notification] Crisis triage notify failed:", err));
-      }
-
-      return { ...result, sessionToken };
-    }),
-});
-
-// ─── Crisis Resources Router ───────────────────────────────────────────────────
-
-const crisisRouter = router({
-  getResources: publicProcedure
-    .input(z.object({ stateCode: z.string().length(2).optional() }))
-    .query(async ({ input, ctx }) => {
-      const resources = await getCrisisResources(input.stateCode);
-
-      await logAuditEvent({
-        userId: ctx.user?.id,
-        eventType: "resource_clicked",
-        resourceType: "crisis",
-        stateCode: input.stateCode,
-      });
-
-      return resources;
-    }),
-});
 
 // ─── Free Resources Router ─────────────────────────────────────────────────────
 
@@ -452,12 +349,11 @@ const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 
 const adminRouter = router({
   getStats: adminProcedure.query(async () => {
-    const [auditStats, triageStats, providerStats] = await Promise.all([
+    const [auditStats, providerStats] = await Promise.all([
       getAuditEventStats(),
-      getTriageStats(),
       getProviderStats(),
     ]);
-    return { auditStats, triageStats, providerStats };
+    return { auditStats, providerStats };
   }),
 
   bulkImportProviders: adminProcedure
@@ -538,8 +434,6 @@ export const appRouter = router({
     }),
   }),
 
-  triage: triageRouter,
-  crisis: crisisRouter,
   clinician: clinicianRouter,
   verification: verificationRouter,
   freeResources: freeResourcesRouter,

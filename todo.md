@@ -260,3 +260,23 @@
 - [ ] Misrepresentation: Crisis resource accuracy disclaimer
 - [x] Misrepresentation: Terms of Service page (/terms)
 - [x] Misrepresentation: "Not a licensed therapist" notice on all AI-generated content
+
+## Triage Removal & Full Risk Audit
+- [ ] Remove Triage page and all triage routes from App.tsx
+- [ ] Remove triage router/procedures from routers.ts
+- [ ] Remove triage DB functions from db.ts
+- [ ] Remove triage_sessions table references from schema
+- [ ] Remove Get Help Now / triage links from NavBar and Home page
+- [ ] Remove Urgent and Routine outcome pages (triage results)
+- [ ] Remove triage test file
+- [ ] Data risk: verify rate limiting active on all auth endpoints
+- [ ] Data risk: confirm no PII in any server log output
+- [ ] Data risk: confirm secure HttpOnly cookies with SameSite=Strict
+- [ ] Data risk: confirm CORS restricted to production domain
+- [ ] Privacy risk: consent banner visible on first visit on all pages
+- [ ] Privacy risk: Privacy Policy page complete and linked in footer
+- [ ] Privacy risk: HIPAA notice on all health-data pages
+- [ ] Misrepresentation: AI disclaimer on every AI-generated output
+- [ ] Misrepresentation: verification badge on all provider cards (not just profile)
+- [ ] Misrepresentation: crisis resource accuracy disclaimer on crisis pages
+- [ ] Misrepresentation: ToS linked in footer and consent banner

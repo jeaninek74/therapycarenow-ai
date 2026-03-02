@@ -61,11 +61,11 @@ export const auditEvents = mysqlTable("audit_events", {
   id: int("id").autoincrement().primaryKey(),
   userId: int("userId"), // nullable for anonymous
   eventType: varchar("eventType", { length: 64 }).notNull(),
-  // event types: triage_completed, crisis_mode_triggered, resource_clicked,
+  // event types: crisis_mode_triggered, resource_clicked,
   //              provider_contact_clicked, benefits_saved, ai_assistant_used,
   //              moderation_triggered
   riskLevel: mysqlEnum("riskLevel", ["EMERGENCY", "URGENT", "ROUTINE"]),
-  triggerSource: varchar("triggerSource", { length: 64 }), // 'triage', 'moderation'
+  triggerSource: varchar("triggerSource", { length: 64 }), // 'moderation'
   moderationOutcome: varchar("moderationOutcome", { length: 32 }), // 'safe', 'flagged'
   stateCode: varchar("stateCode", { length: 2 }),
   resourceType: varchar("resourceType", { length: 64 }),
@@ -314,25 +314,6 @@ export const stateCompliance = mysqlTable("state_compliance", {
 });
 
 export type StateCompliance = typeof stateCompliance.$inferSelect;
-
-// ─── Triage Sessions (no raw text stored) ─────────────────────────────────────
-
-export const triageSessions = mysqlTable("triage_sessions", {
-  id: int("id").autoincrement().primaryKey(),
-  sessionToken: varchar("sessionToken", { length: 64 }).notNull().unique(),
-  userId: int("userId"), // nullable for anonymous
-  riskLevel: mysqlEnum("riskLevel", ["EMERGENCY", "URGENT", "ROUTINE"]).notNull(),
-  // Store only boolean outcomes, never raw text
-  immediateDanger: boolean("immediateDanger").notNull().default(false),
-  harmSelf: boolean("harmSelf").notNull().default(false),
-  harmOthers: boolean("harmOthers").notNull().default(false),
-  needHelpSoon: boolean("needHelpSoon").notNull().default(false),
-  needHelpToday: boolean("needHelpToday").notNull().default(false),
-  stateCode: varchar("stateCode", { length: 2 }),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
-
-export type TriageSession = typeof triageSessions.$inferSelect;
 
 // ─── Clinician Profiles (NPI-gated) ────────────────────────────────────────────
 

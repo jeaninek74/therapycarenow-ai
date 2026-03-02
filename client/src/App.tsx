@@ -5,10 +5,6 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
-import Triage from "./pages/Triage";
-import CrisisMode from "./pages/CrisisMode";
-import UrgentOptions from "./pages/UrgentOptions";
-import RoutineOptions from "./pages/RoutineOptions";
 import FindTherapist from "./pages/FindTherapist";
 import ProviderProfile from "./pages/ProviderProfile";
 import BenefitsWallet from "./pages/BenefitsWallet";
@@ -35,16 +31,11 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ConsentBanner from "./components/ConsentBanner";
-import EmergencyFAB from "./components/EmergencyFAB";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/triage" component={Triage} />
-      <Route path="/crisis" component={CrisisMode} />
-      <Route path="/urgent" component={UrgentOptions} />
-      <Route path="/routine" component={RoutineOptions} />
       <Route path="/find-therapist" component={FindTherapist} />
       <Route path="/provider/:id" component={ProviderProfile} />
       <Route path="/benefits" component={BenefitsWallet} />
@@ -85,7 +76,6 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
-          <EmergencyFAB />
           <ConsentBanner />
         </TooltipProvider>
       </ThemeProvider>
