@@ -347,4 +347,4 @@
 - [x] Add risk disclosures (Data Risk, Privacy Risk, Misrepresentation Risk)
 - [x] TherapistsLanding.tsx: full dedicated /therapists landing page (hero, license types, comparison, 50-state directory, FAQ, CTA)
 - [x] Fix Railway deployment: add .node-version (22) and nodeVersion in railway.toml to fix import.meta.dirname crash on Node 18
-- [ ] Deploy latest code to Railway and verify therapycarenow.com shows all changes
+- [x] Deploy latest code to Railway and verify therapycarenow.com shows all changes
