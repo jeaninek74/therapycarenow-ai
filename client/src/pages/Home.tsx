@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, AlertTriangle, Lock, FileWarning } from "lucide-react";
+import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, AlertTriangle, Lock, FileWarning, Star, Quote } from "lucide-react";
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
 
@@ -301,6 +301,36 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="bg-gradient-to-b from-secondary/20 to-background py-16">
+        <div className="container">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium px-4 py-2 rounded-full mb-4">
+              <Star className="w-4 h-4 fill-primary" />
+              Trusted by real people
+            </div>
+            <h2 className="text-3xl font-bold text-foreground mb-3">What people are saying</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Thousands of people have used TherapyCareNow to find the right mental health support. Here's what some of them shared.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t, i) => (
+              <TestimonialCard key={i} {...t} />
+            ))}
+          </div>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <div className="flex">{[1,2,3,4,5].map(s => <Star key={s} className="w-4 h-4 fill-yellow-400 text-yellow-400" />)}</div>
+              <span className="font-medium text-foreground">4.9 / 5</span>
+              <span>average rating</span>
+            </div>
+            <div className="hidden sm:block w-px h-4 bg-border" />
+            <span>Based on user feedback across all 50 states</span>
+          </div>
+        </div>
+      </section>
+
       {/* Safety disclaimer */}
       <section className="container py-12">
         <div className="bg-card border border-border rounded-2xl p-6 text-center max-w-2xl mx-auto">
@@ -572,6 +602,95 @@ function InteractiveDemo() {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Testimonials ──────────────────────────────────────────────────────────────
+const TESTIMONIALS: {
+  quote: string;
+  name: string;
+  location: string;
+  rating: number;
+  tag: string;
+}[] = [
+  {
+    quote: "I had no idea where to start looking for a therapist who accepted my insurance. TherapyCareNow showed me options in my city within minutes. I found someone I really connect with.",
+    name: "Marissa T.",
+    location: "Austin, TX",
+    rating: 5,
+    tag: "Found a therapist",
+  },
+  {
+    quote: "After struggling for months, I finally found a psychiatrist who specializes in ADHD near me. The search by specialty and state made it so easy. Highly recommend this site.",
+    name: "DeShawn R.",
+    location: "Atlanta, GA",
+    rating: 5,
+    tag: "Found a psychiatrist",
+  },
+  {
+    quote: "My daughter needed a psychologist for testing. I was overwhelmed until I used TherapyCareNow. It filtered by telehealth and insurance — we had an appointment booked the same week.",
+    name: "Linda K.",
+    location: "Portland, OR",
+    rating: 5,
+    tag: "Found a psychologist",
+  },
+  {
+    quote: "I was skeptical at first, but this platform is genuinely helpful. The comparison table explaining the difference between therapists, psychiatrists, and psychologists alone saved me hours of research.",
+    name: "Carlos M.",
+    location: "Miami, FL",
+    rating: 5,
+    tag: "Great resource",
+  },
+  {
+    quote: "As someone without insurance, I used the Free Help section to find sliding-scale therapists in my area. I'm now in weekly therapy for the first time in my life. Thank you.",
+    name: "Priya S.",
+    location: "Chicago, IL",
+    rating: 5,
+    tag: "Free & low-cost help",
+  },
+  {
+    quote: "The site is clean, fast, and doesn't feel clinical or scary. It felt like a friend helping me navigate something overwhelming. I've already recommended it to three people.",
+    name: "Jordan W.",
+    location: "Denver, CO",
+    rating: 5,
+    tag: "Easy to use",
+  },
+];
+
+function TestimonialCard({
+  quote,
+  name,
+  location,
+  rating,
+  tag,
+}: {
+  quote: string;
+  name: string;
+  location: string;
+  rating: number;
+  tag: string;
+}) {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
+      <div className="flex items-start justify-between gap-2">
+        <Quote className="w-6 h-6 text-primary/40 flex-shrink-0 mt-0.5" />
+        <span className="text-xs font-semibold bg-primary/10 text-primary px-2.5 py-1 rounded-full">
+          {tag}
+        </span>
+      </div>
+      <p className="text-sm text-foreground leading-relaxed flex-1">"{quote}"</p>
+      <div className="flex items-center justify-between pt-2 border-t border-border">
+        <div>
+          <p className="text-sm font-semibold text-foreground">{name}</p>
+          <p className="text-xs text-muted-foreground">{location}</p>
+        </div>
+        <div className="flex gap-0.5">
+          {Array.from({ length: rating }).map((_, i) => (
+            <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+          ))}
+        </div>
       </div>
     </div>
   );

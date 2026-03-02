@@ -348,3 +348,24 @@
 - [x] TherapistsLanding.tsx: full dedicated /therapists landing page (hero, license types, comparison, 50-state directory, FAQ, CTA)
 - [x] Fix Railway deployment: add .node-version (22) and nodeVersion in railway.toml to fix import.meta.dirname crash on Node 18
 - [x] Deploy latest code to Railway and verify therapycarenow.com shows all changes
+
+## Testimonials / Social Proof (Mar 2026)
+- [ ] Add testimonials section to Home.tsx with user quotes and star ratings
+- [ ] Deploy to Railway
+
+## Testimonials / Social Proof (Mar 2026)
+- [x] Add testimonials section to Home.tsx with 6 user quotes and star ratings
+- [x] Deploy to Railway (deployment 02b7a98e ACTIVE)
+- [x] Create Cloudflare Cache Purge API token and purge cache on deploy
+
+## Landing Page — Psychotherapy & Psychiatry Detail Sections (Mar 2026)
+- [ ] Add detailed psychotherapy section: what it is, who it helps, modalities (CBT/DBT/EMDR), what to expect
+- [ ] Add detailed psychiatry section: what it is, medication management, evaluation process, who needs it
+- [ ] Expand provider cards with richer descriptions and sub-specialties
+- [ ] Deploy to Railway and purge Cloudflare cache
+
+## Landing Page Fixes (Mar 2026)
+- [ ] Remove Clinician Pro section from Home.tsx landing page
+- [ ] Add detailed psychotherapy section (what it is, modalities, who it helps, what to expect)
+- [ ] Add detailed psychiatry section (what it is, medication management, evaluation, who needs it)
+- [ ] Deploy to Railway and purge Cloudflare cache
