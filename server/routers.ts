@@ -37,7 +37,7 @@ import {
   dismissAlert,
 } from "./complianceSync";
 
-// ─── Rate limiting (in-memory, simple) ────────────────────────────────────────
+// - Rate limiting (in-memory, simple) -
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
@@ -53,7 +53,7 @@ function checkRateLimit(key: string, maxRequests: number, windowMs: number): boo
   return true;
 }
 
-// ─── Free Resources Router ─────────────────────────────────────────────────────
+// - Free Resources Router -
 
 const freeResourcesRouter = router({
   getResources: publicProcedure
@@ -72,7 +72,7 @@ const freeResourcesRouter = router({
     }),
 });
 
-// ─── Provider Search Router ────────────────────────────────────────────────────
+// - Provider Search Router -
 
 const providerRouter = router({
   search: publicProcedure
@@ -138,7 +138,7 @@ const providerRouter = router({
     }),
 });
 
-// ─── Benefits Wallet Router ────────────────────────────────────────────────────
+// - Benefits Wallet Router -
 
 const benefitsRouter = router({
   getProfile: protectedProcedure.query(async ({ ctx }) => {
@@ -215,7 +215,7 @@ const benefitsRouter = router({
     }),
 });
 
-// ─── AI Assistant Router ───────────────────────────────────────────────────────
+// - AI Assistant Router -
 
 const aiRouter = router({
   chat: publicProcedure
@@ -292,7 +292,7 @@ const aiRouter = router({
     }),
 });
 
-// ─── State Compliance Router ───────────────────────────────────────────────────
+// - State Compliance Router -
 
 const complianceRouter = router({
   getState: publicProcedure
@@ -305,7 +305,7 @@ const complianceRouter = router({
     return getAllStateCompliance();
   }),
 
-  // ─── Automated Monitoring ─────────────────────────────────────────────────
+  // - Automated Monitoring -
   getSummary: publicProcedure.query(async () => {
     return getComplianceSummary();
   }),
@@ -338,7 +338,7 @@ const complianceRouter = router({
   }),
 });
 
-// ─── Admin Router ─────────────────────────────────────────────────────────────
+// - Admin Router -
 
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.user.role !== "admin") {
@@ -384,7 +384,7 @@ const adminRouter = router({
     }),
 });
 
-// ─── App Router ────────────────────────────────────────────────────────────────
+// - App Router -
 
 export const appRouter = router({
   system: systemRouter,

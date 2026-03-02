@@ -7,14 +7,14 @@ import { providers, providerSubmissions } from "../../drizzle/schema";
 import { verifyProviderLicense } from "../licenseVerification";
 
 export const verificationRouter = router({
-  // ── Public: look up an NPI number ────────────────────────────────────────────
+  // - Public: look up an NPI number -
   lookupNpi: publicProcedure
     .input(z.object({ npiNumber: z.string().min(10).max(10) }))
     .query(async ({ input }) => {
       return verifyProviderLicense(input.npiNumber);
     }),
 
-  // ── Public: submit a provider for verification ────────────────────────────────
+  // - Public: submit a provider for verification -
   submitProvider: publicProcedure
     .input(
       z.object({
@@ -70,7 +70,7 @@ export const verificationRouter = router({
       };
     }),
 
-  // ── Admin: get all pending submissions ───────────────────────────────────────
+  // - Admin: get all pending submissions -
   getSubmissions: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.user.role !== "admin") {
       throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
@@ -81,7 +81,7 @@ export const verificationRouter = router({
     return db.select().from(providerSubmissions).orderBy(desc(providerSubmissions.createdAt));
   }),
 
-  // ── Admin: approve or reject a submission ────────────────────────────────────
+  // - Admin: approve or reject a submission -
   reviewSubmission: protectedProcedure
     .input(
       z.object({
@@ -165,7 +165,7 @@ export const verificationRouter = router({
       }
     }),
 
-  // ── Admin: get verification stats ────────────────────────────────────────────
+  // - Admin: get verification stats -
   getStats: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.user.role !== "admin") {
       throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });

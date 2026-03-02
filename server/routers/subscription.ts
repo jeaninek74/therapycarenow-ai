@@ -32,7 +32,7 @@ import {
 import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { logAuditEvent } from "../db";
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────
+// - Helpers -
 
 const clinicianOrAdminProcedure = protectedProcedure.use(({ ctx, next }) => {
   if (ctx.user.role !== "clinician" && ctx.user.role !== "admin") {
@@ -41,7 +41,7 @@ const clinicianOrAdminProcedure = protectedProcedure.use(({ ctx, next }) => {
   return next({ ctx });
 });
 
-// ─── Subscription Router ───────────────────────────────────────────────────────
+// - Subscription Router -
 
 export const subscriptionRouter = router({
   // Get current subscription status
@@ -161,7 +161,7 @@ export const subscriptionRouter = router({
   }),
 });
 
-// ─── Secure Messaging Router ───────────────────────────────────────────────────
+// - Secure Messaging Router -
 
 export const messagingRouter = router({
   // Get or create a thread between clinician and client
@@ -298,7 +298,7 @@ export const messagingRouter = router({
   }),
 });
 
-// ─── Stripe Webhook Handler (raw Express route, not tRPC) ─────────────────────
+// - Stripe Webhook Handler (raw Express route, not tRPC) -
 
 export async function handleStripeWebhook(
   rawBody: Buffer,

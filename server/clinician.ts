@@ -11,7 +11,7 @@
 
 import { invokeLLM } from "./_core/llm";
 
-// ─── NPI Verification (NPPES Public API) ──────────────────────────────────────
+// - NPI Verification (NPPES Public API) -
 
 export interface NpiLookupResult {
   valid: boolean;
@@ -125,7 +125,7 @@ export async function verifyNpi(npiNumber: string): Promise<NpiLookupResult> {
   }
 }
 
-// ─── SOAP / DAP Note Generation ───────────────────────────────────────────────
+// - SOAP / DAP Note Generation -
 
 export interface NoteGenerationInput {
   transcript: string;
@@ -245,7 +245,7 @@ export async function generateSessionNote(
   }
 }
 
-// ─── Smart Treatment Planning ─────────────────────────────────────────────────
+// - Smart Treatment Planning -
 
 export interface TreatmentPlanInput {
   diagnosisCodes: string[];
@@ -337,7 +337,7 @@ STRICT RULES:
   }
 }
 
-// ─── Risk Detection Engine ─────────────────────────────────────────────────────
+// - Risk Detection Engine -
 
 export interface RiskAnalysisInput {
   noteContent?: string;
@@ -446,7 +446,7 @@ export function analyzeRisk(input: RiskAnalysisInput): RiskAnalysisResult {
   return { riskLevel, flags, recommendedActions: actions };
 }
 
-// ─── Adaptive Intake Engine ───────────────────────────────────────────────────
+// - Adaptive Intake Engine -
 
 export interface IntakeQuestion {
   key: string;
@@ -605,7 +605,7 @@ export function getNextIntakeQuestions(
   return INTAKE_QUESTIONS.filter((q) => nextKeys.has(q.key));
 }
 
-// ─── HIPAA Compliance Checker ─────────────────────────────────────────────────
+// - HIPAA Compliance Checker -
 
 export interface ComplianceCheckInput {
   noteContent: string;
@@ -687,7 +687,7 @@ export function checkNoteCompliance(input: ComplianceCheckInput): ComplianceChec
   };
 }
 
-// ─── Revenue Optimization ─────────────────────────────────────────────────────
+// - Revenue Optimization -
 
 export interface BillingOptimizationInput {
   cptCode?: string;
@@ -754,7 +754,7 @@ export function optimizeBilling(input: BillingOptimizationInput): BillingOptimiz
   };
 }
 
-// ─── Practice Analytics ───────────────────────────────────────────────────────
+// - Practice Analytics -
 
 export interface BurnoutIndicators {
   score: number; // 0-100 (higher = more burnout risk)

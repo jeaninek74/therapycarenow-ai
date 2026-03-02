@@ -11,6 +11,7 @@ export default function NavBar() {
   const { user, logout } = useAuth();
 
   const links = [
+    { href: "/demo", label: "Demo" },
     { href: "/directory", label: "Directory" },
     { href: "/find-therapist", label: "Find a Therapist" },
     { href: "/free-resources", label: "Free Help" },

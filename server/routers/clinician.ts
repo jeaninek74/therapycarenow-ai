@@ -48,7 +48,7 @@ import {
   getPracticeAnalytics,
 } from "../clinicianDb";
 
-// ─── Clinician-gated middleware ───────────────────────────────────────────────
+// - Clinician-gated middleware -
 
 const clinicianProcedure = protectedProcedure.use(async ({ ctx, next }) => {
   if (ctx.user.role !== "clinician" && ctx.user.role !== "admin") {
@@ -68,11 +68,11 @@ const clinicianProcedure = protectedProcedure.use(async ({ ctx, next }) => {
   return next({ ctx: { ...ctx, clinicianProfile: profile } });
 });
 
-// ─── Clinician Router ─────────────────────────────────────────────────────────
+// - Clinician Router -
 
 export const clinicianRouter = router({
 
-  // ── Onboarding / NPI ──────────────────────────────────────────────────────
+  // - Onboarding / NPI -
 
   lookupNpi: publicProcedure
     .input(z.object({ npiNumber: z.string().min(10).max(10) }))
@@ -125,7 +125,7 @@ export const clinicianRouter = router({
     return getClinicianProfile(ctx.user.id);
   }),
 
-  // ── Clients ───────────────────────────────────────────────────────────────
+  // - Clients -
 
   getClients: clinicianProcedure.query(async ({ ctx }) => {
     return getClients(ctx.user.id);
@@ -185,7 +185,7 @@ export const clinicianRouter = router({
       return { success: true };
     }),
 
-  // ── Session Notes ─────────────────────────────────────────────────────────
+  // - Session Notes -
 
   getNotes: clinicianProcedure
     .input(z.object({ clientId: z.number().optional() }))
@@ -277,7 +277,7 @@ export const clinicianRouter = router({
       return { success: true };
     }),
 
-  // ── Treatment Plans ───────────────────────────────────────────────────────
+  // - Treatment Plans -
 
   getTreatmentPlan: clinicianProcedure
     .input(z.object({ clientId: z.number() }))
@@ -343,7 +343,7 @@ export const clinicianRouter = router({
       return { success: true };
     }),
 
-  // ── Risk Detection ────────────────────────────────────────────────────────
+  // - Risk Detection -
 
   getRiskFlags: clinicianProcedure
     .input(z.object({ clientId: z.number().optional() }))
@@ -410,7 +410,7 @@ export const clinicianRouter = router({
       return { success: true };
     }),
 
-  // ── Client Check-ins ──────────────────────────────────────────────────────
+  // - Client Check-ins -
 
   getCheckins: clinicianProcedure
     .input(z.object({ clientId: z.number() }))
@@ -468,7 +468,7 @@ export const clinicianRouter = router({
       return { success: true, riskResult };
     }),
 
-  // ── Homework ──────────────────────────────────────────────────────────────
+  // - Homework -
 
   getHomework: clinicianProcedure
     .input(z.object({ clientId: z.number() }))
@@ -503,7 +503,7 @@ export const clinicianRouter = router({
       return { success: true };
     }),
 
-  // ── Adaptive Intake ───────────────────────────────────────────────────────
+  // - Adaptive Intake -
 
   getIntakeQuestions: clinicianProcedure
     .input(
@@ -544,7 +544,7 @@ export const clinicianRouter = router({
       return getIntakeResponses(input.clientId, ctx.user.id);
     }),
 
-  // ── Compliance ────────────────────────────────────────────────────────────
+  // - Compliance -
 
   checkNoteCompliance: clinicianProcedure
     .input(
@@ -567,7 +567,7 @@ export const clinicianRouter = router({
       });
     }),
 
-  // ── Revenue Optimization ──────────────────────────────────────────────────
+  // - Revenue Optimization -
 
   optimizeBilling: clinicianProcedure
     .input(
@@ -623,7 +623,7 @@ export const clinicianRouter = router({
       return { success: true };
     }),
 
-  // ── Practice Analytics ────────────────────────────────────────────────────
+  // - Practice Analytics -
 
   getAnalytics: clinicianProcedure.query(async ({ ctx }) => {
     const [analytics, pendingNotes] = await Promise.all([

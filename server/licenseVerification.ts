@@ -1,4 +1,4 @@
-// ─── License Verification Engine ──────────────────────────────────────────────
+// - License Verification Engine -
 // Verifies therapist NPI numbers against the NPPES public registry and validates
 // that the provider's taxonomy code is a recognized mental health specialty.
 

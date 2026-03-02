@@ -31,7 +31,7 @@ export async function getDb() {
   return _db;
 }
 
-// ─── Users ─────────────────────────────────────────────────────────────────────
+// - Users -
 
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) throw new Error("User openId is required for upsert");
@@ -82,7 +82,7 @@ export async function getUserByEmail(email: string) {
   return result[0];
 }
 
-// ─── User Profiles ─────────────────────────────────────────────────────────────
+// - User Profiles -
 
 export async function getUserProfile(userId: number) {
   const db = await getDb();
@@ -105,7 +105,7 @@ export async function upsertUserProfile(
   }
 }
 
-// ─── Consents ──────────────────────────────────────────────────────────────────
+// - Consents -
 
 export async function recordConsent(userId: number, consentType: string, granted: boolean) {
   const db = await getDb();
@@ -113,7 +113,7 @@ export async function recordConsent(userId: number, consentType: string, granted
   await db.insert(consents).values({ userId, consentType, granted });
 }
 
-// ─── Audit Events (HIPAA-safe: no raw text) ────────────────────────────────────
+// - Audit Events (HIPAA-safe: no raw text) -
 
 export async function logAuditEvent(event: {
   userId?: number;
@@ -141,7 +141,7 @@ export async function logAuditEvent(event: {
   }
 }
 
-// ─── Crisis Resources ──────────────────────────────────────────────────────────
+// --- Crisis Resources ---
 
 export async function getCrisisResources(stateCode?: string) {
   const db = await getDb();
@@ -167,7 +167,7 @@ export async function getCrisisResources(stateCode?: string) {
     .orderBy(crisisResources.priority);
 }
 
-// ─── Free Resources ────────────────────────────────────────────────────────────
+// - Free Resources -
 
 export async function getFreeResources(stateCode?: string) {
   const db = await getDb();
@@ -193,7 +193,7 @@ export async function getFreeResources(stateCode?: string) {
     .orderBy(freeResources.category);
 }
 
-// ─── Provider Search ───────────────────────────────────────────────────────────
+// - Provider Search -
 
 export async function searchProviders(params: {
   stateCode?: string;
@@ -355,7 +355,7 @@ export async function getProviderById(id: number) {
   };
 }
 
-// ─── EAP / Employers ───────────────────────────────────────────────────────────
+// - EAP / Employers -
 
 export async function lookupEAP(employerName: string) {
   const db = await getDb();
@@ -378,7 +378,7 @@ export async function lookupEAP(employerName: string) {
   return { employer: result[0], resources };
 }
 
-// ─── State Compliance ──────────────────────────────────────────────────────────
+// - State Compliance -
 
 export async function getStateCompliance(stateCode: string) {
   const db = await getDb();
@@ -397,7 +397,7 @@ export async function getAllStateCompliance() {
   return db.select().from(stateCompliance).orderBy(stateCompliance.stateName);
 }
 
-// ─── Admin Analytics ───────────────────────────────────────────────────────────
+// - Admin Analytics -
 
 export async function getAuditEventStats() {
   const db = await getDb();

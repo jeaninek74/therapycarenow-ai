@@ -15,7 +15,7 @@ import {
 } from "../drizzle/schema";
 import { getDb } from "./db";
 
-// ─── Subscription Helpers ──────────────────────────────────────────────────────
+// - Subscription Helpers -
 
 export async function getSubscriptionByUserId(userId: number): Promise<ClinicianSubscription | null> {
   const db = await getDb();
@@ -68,7 +68,7 @@ export async function updateSubscriptionStatus(
     .where(eq(clinicianSubscriptions.stripeSubscriptionId, stripeSubscriptionId));
 }
 
-// ─── Stripe Event Idempotency ──────────────────────────────────────────────────
+// - Stripe Event Idempotency -
 
 export async function isStripeEventProcessed(stripeEventId: string): Promise<boolean> {
   const db = await getDb();
@@ -83,7 +83,7 @@ export async function markStripeEventProcessed(stripeEventId: string, eventType:
   await db.insert(stripeEvents).values({ stripeEventId, eventType }).onDuplicateKeyUpdate({ set: { eventType } });
 }
 
-// ─── Message Thread Helpers ────────────────────────────────────────────────────
+// - Message Thread Helpers -
 
 export async function getOrCreateThread(clinicianId: number, clientId: number) {
   const db = await getDb();
@@ -125,7 +125,7 @@ export async function getClinicianThreads(clinicianId: number) {
     .orderBy(desc(messageThreads.lastMessageAt));
 }
 
-// ─── Message Helpers ───────────────────────────────────────────────────────────
+// - Message Helpers -
 
 export async function insertMessage(data: InsertSecureMessage) {
   const db = await getDb();

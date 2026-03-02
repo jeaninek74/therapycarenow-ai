@@ -11,7 +11,7 @@ import { type Application, type Request, type Response, type NextFunction } from
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 
-// ─── Rate Limiters ────────────────────────────────────────────────────────────
+// - Rate Limiters -
 
 /**
  * Auth endpoint rate limiter: max 10 attempts per 15 minutes per IP.
@@ -52,7 +52,7 @@ export const aiRateLimiter = rateLimit({
   message: { error: "Too many AI requests. Please wait before trying again." },
 });
 
-// ─── Security Headers ─────────────────────────────────────────────────────────
+// - Security Headers -
 
 /**
  * Apply Helmet security headers.
@@ -78,7 +78,7 @@ export function applyHelmet(app: Application) {
   );
 }
 
-// ─── Request Sanitization ─────────────────────────────────────────────────────
+// - Request Sanitization -
 
 /**
  * Strip any keys that start with $ or contain . from request body.
@@ -102,7 +102,7 @@ export function sanitizeRequestBody(req: Request, _res: Response, next: NextFunc
   next();
 }
 
-// ─── PII Scrubber for Logging ─────────────────────────────────────────────────
+// - PII Scrubber for Logging -
 
 const PII_PATTERNS = [
   /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // Email

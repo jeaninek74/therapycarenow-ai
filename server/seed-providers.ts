@@ -9,7 +9,7 @@ dotenv.config();
 
 const db = drizzle(process.env.DATABASE_URL!);
 
-// ─── Specialty pools ──────────────────────────────────────────────────────────
+// - Specialty pools -
 const TRAUMA = ["trauma", "ptsd", "anxiety"];
 const DEPRESSION = ["depression", "anxiety", "grief"];
 const FAMILY = ["family", "couples", "child_adolescent"];
@@ -21,7 +21,7 @@ const BIPOLAR = ["bipolar", "depression", "anxiety"];
 const EATING = ["eating_disorders", "anxiety", "depression"];
 const WORKPLACE = ["workplace_stress", "anxiety", "depression"];
 
-// ─── Insurance pools ──────────────────────────────────────────────────────────
+// - Insurance pools -
 const MAJOR_INS = ["Aetna", "Blue Cross Blue Shield", "Cigna", "UnitedHealth", "Humana"];
 const MEDICAID_INS = ["Medicaid", "Medicare", "CHIP"];
 const SLIDING = ["Sliding Scale", "Self-Pay"];

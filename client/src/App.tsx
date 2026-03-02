@@ -31,6 +31,7 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ConsentBanner from "./components/ConsentBanner";
+import InteractiveDemo from "./pages/InteractiveDemo";
 
 function Router() {
   return (
@@ -51,6 +52,7 @@ function Router() {
       <Route path="/register" component={Login} />
       <Route path="/privacy" component={PrivacyPolicy} />
       <Route path="/terms" component={TermsOfService} />
+      <Route path="/demo" component={InteractiveDemo} />
       {/* Clinician Portal */}
       <Route path="/clinician/login" component={ClinicianLogin} />
       <Route path="/clinician/dashboard" component={ClinicianDashboard} />

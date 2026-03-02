@@ -27,7 +27,7 @@ import {
   type InsertBillingRecord,
 } from "../drizzle/schema";
 
-// ─── Clinician Profile ────────────────────────────────────────────────────────
+// - Clinician Profile -
 
 export async function getClinicianProfile(userId: number) {
   const db = await getDb();
@@ -69,7 +69,7 @@ export async function setClinicianRole(userId: number) {
     .where(eq(users.id, userId));
 }
 
-// ─── Clients ──────────────────────────────────────────────────────────────────
+// - Clients -
 
 export async function getClients(clinicianId: number) {
   const db = await getDb();
@@ -112,7 +112,7 @@ export async function updateClient(
     .where(and(eq(clients.id, id), eq(clients.clinicianId, clinicianId)));
 }
 
-// ─── Session Notes ────────────────────────────────────────────────────────────
+// - Session Notes -
 
 export async function getSessionNotes(clinicianId: number, clientId?: number) {
   const db = await getDb();
@@ -184,7 +184,7 @@ export async function getPendingNotesCount(clinicianId: number) {
   return result[0]?.count ?? 0;
 }
 
-// ─── Treatment Plans ──────────────────────────────────────────────────────────
+// - Treatment Plans -
 
 export async function getTreatmentPlan(clientId: number, clinicianId: number) {
   const db = await getDb();
@@ -220,7 +220,7 @@ export async function upsertTreatmentPlan(data: InsertTreatmentPlan) {
   });
 }
 
-// ─── Risk Flags ───────────────────────────────────────────────────────────────
+// - Risk Flags -
 
 export async function getRiskFlags(clinicianId: number, clientId?: number) {
   const db = await getDb();
@@ -254,7 +254,7 @@ export async function resolveRiskFlag(id: number, clinicianId: number) {
     .where(and(eq(riskFlags.id, id), eq(riskFlags.clinicianId, clinicianId)));
 }
 
-// ─── Client Check-ins ─────────────────────────────────────────────────────────
+// - Client Check-ins -
 
 export async function getClientCheckins(clientId: number, clinicianId: number, limit = 30) {
   const db = await getDb();
@@ -278,7 +278,7 @@ export async function createCheckin(data: InsertClientCheckin) {
   await db.insert(clientCheckins).values(data);
 }
 
-// ─── Homework Assignments ─────────────────────────────────────────────────────
+// - Homework Assignments -
 
 export async function getHomework(clientId: number, clinicianId: number) {
   const db = await getDb();
@@ -315,7 +315,7 @@ export async function completeHomework(id: number, clinicianId: number) {
     );
 }
 
-// ─── Intake Responses ─────────────────────────────────────────────────────────
+// - Intake Responses -
 
 export async function getIntakeResponses(clientId: number, clinicianId: number) {
   const db = await getDb();
@@ -338,7 +338,7 @@ export async function saveIntakeResponse(data: InsertIntakeResponse) {
   await db.insert(intakeResponses).values(data);
 }
 
-// ─── Billing Records ──────────────────────────────────────────────────────────
+// - Billing Records -
 
 export async function getBillingRecords(clinicianId: number) {
   const db = await getDb();
@@ -371,7 +371,7 @@ export async function updateBillingRecord(
     );
 }
 
-// ─── Practice Analytics ───────────────────────────────────────────────────────
+// - Practice Analytics -
 
 export async function getPracticeAnalytics(clinicianId: number) {
   const db = await getDb();

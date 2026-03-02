@@ -25,7 +25,7 @@ import {
 import { eq, desc, and, isNull } from "drizzle-orm";
 import { notifyOwner } from "./_core/notification";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// - Types -
 
 type SyncSource = "SAMHSA" | "CMS" | "LEXISNEXIS" | "WESTLAW" | "MANUAL";
 
@@ -39,7 +39,7 @@ interface SyncResult {
   errorMessage?: string;
 }
 
-// ─── CMS Public API Endpoints ─────────────────────────────────────────────────
+// - CMS Public API Endpoints -
 
 const CMS_BASE = "https://data.cms.gov/api/1";
 const CMS_RSS_BEHAVIORAL_HEALTH =
@@ -54,7 +54,7 @@ const CMS_DATASETS = {
   behavioralHealthVHA: "6qxe-iqz8", // VHA Behavioral Health Data
 };
 
-// ─── SAMHSA Public Endpoints ──────────────────────────────────────────────────
+// - SAMHSA Public Endpoints -
 
 const SAMHSA_BASE = "https://findtreatment.gov/locator/";
 const SAMHSA_STATS_BASE = "https://www.samhsa.gov/data/";
@@ -83,7 +83,7 @@ const MENTAL_HEALTH_CPT_CODES = [
   { code: "99494", description: "Initial/subsequent psychiatric collaborative care, each additional 30 min", category: "Collaborative Care", minDurationMin: 30, maxDurationMin: 30 },
 ];
 
-// ─── Database Helpers ─────────────────────────────────────────────────────────
+// - Database Helpers -
 
 async function logSync(result: SyncResult): Promise<void> {
   const db = await getDb();
@@ -112,7 +112,7 @@ async function createAlert(alert: InsertComplianceAlert): Promise<void> {
   }
 }
 
-// ─── RSS Feed Parser ──────────────────────────────────────────────────────────
+// - RSS Feed Parser -
 
 async function parseRSSFeed(url: string): Promise<Array<{ title: string; description: string; link: string; pubDate: string }>> {
   try {
@@ -144,7 +144,7 @@ async function parseRSSFeed(url: string): Promise<Array<{ title: string; descrip
   }
 }
 
-// ─── Behavioral Health Keyword Detection ─────────────────────────────────────
+// - Behavioral Health Keyword Detection -
 
 const BEHAVIORAL_HEALTH_KEYWORDS = [
   "behavioral health", "mental health", "substance use", "addiction",
@@ -166,7 +166,7 @@ function detectSeverity(text: string): "info" | "warning" | "critical" {
   return "info";
 }
 
-// ─── CMS RSS Feed Sync ────────────────────────────────────────────────────────
+// - CMS RSS Feed Sync -
 
 export async function syncCMSFeeds(): Promise<SyncResult> {
   const result: SyncResult = { source: "CMS", syncType: "rss_policy_feed", status: "success", recordsChecked: 0, recordsUpdated: 0, changesDetected: 0 };
@@ -235,7 +235,7 @@ export async function syncCMSFeeds(): Promise<SyncResult> {
   return result;
 }
 
-// ─── CMS CPT Code Verification ────────────────────────────────────────────────
+// - CMS CPT Code Verification -
 
 export async function syncCMSCPTCodes(): Promise<SyncResult> {
   const result: SyncResult = { source: "CMS", syncType: "cpt_codes", status: "success", recordsChecked: 0, recordsUpdated: 0, changesDetected: 0 };
@@ -304,7 +304,7 @@ export async function syncCMSCPTCodes(): Promise<SyncResult> {
   return result;
 }
 
-// ─── SAMHSA Behavioral Health Policy Feed ────────────────────────────────────
+// - SAMHSA Behavioral Health Policy Feed -
 
 export async function syncSAMHSAFeeds(): Promise<SyncResult> {
   const result: SyncResult = { source: "SAMHSA", syncType: "behavioral_health_policy", status: "success", recordsChecked: 0, recordsUpdated: 0, changesDetected: 0 };
@@ -397,7 +397,7 @@ export async function syncSAMHSAFeeds(): Promise<SyncResult> {
   return result;
 }
 
-// ─── LexisNexis Placeholder Integration ──────────────────────────────────────
+// - LexisNexis Placeholder Integration -
 
 export async function syncLexisNexis(): Promise<SyncResult> {
   const result: SyncResult = { source: "LEXISNEXIS", syncType: "regulatory_tracker", status: "failed", recordsChecked: 0, recordsUpdated: 0, changesDetected: 0 };
@@ -475,7 +475,7 @@ export async function syncLexisNexis(): Promise<SyncResult> {
   return result;
 }
 
-// ─── Westlaw Placeholder Integration ─────────────────────────────────────────
+// - Westlaw Placeholder Integration -
 
 export async function syncWestlaw(): Promise<SyncResult> {
   const result: SyncResult = { source: "WESTLAW", syncType: "case_law_regulatory", status: "failed", recordsChecked: 0, recordsUpdated: 0, changesDetected: 0 };
@@ -557,7 +557,7 @@ export async function syncWestlaw(): Promise<SyncResult> {
   return result;
 }
 
-// ─── Master Sync Runner ───────────────────────────────────────────────────────
+// - Master Sync Runner -
 
 export async function runFullComplianceSync(): Promise<SyncResult[]> {
   console.log("[ComplianceSync] Starting full compliance sync...");
@@ -583,7 +583,7 @@ export async function runFullComplianceSync(): Promise<SyncResult[]> {
   return results;
 }
 
-// ─── Query Helpers ────────────────────────────────────────────────────────────
+// - Query Helpers -
 
 export async function getActiveAlerts() {
   const db = await getDb();

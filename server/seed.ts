@@ -22,7 +22,7 @@ import {
 
 const db = drizzle(process.env.DATABASE_URL!);
 
-// ─── All 50 US States ──────────────────────────────────────────────────────────
+// - All 50 US States -
 
 const ALL_STATES = [
   { code: "AL", name: "Alabama" },
@@ -77,7 +77,7 @@ const ALL_STATES = [
   { code: "WY", name: "Wyoming" },
 ];
 
-// ─── State-Specific Crisis Hotlines ───────────────────────────────────────────
+// - State-Specific Crisis Hotlines -
 
 const STATE_CRISIS_HOTLINES: Record<string, { name: string; phone: string; description: string }[]> = {
   AL: [{ name: "Alabama Crisis Center", phone: "1-800-273-8255", description: "Alabama statewide crisis line" }],
@@ -132,7 +132,7 @@ const STATE_CRISIS_HOTLINES: Record<string, { name: string; phone: string; descr
   WY: [{ name: "WY Crisis Line", phone: "1-800-273-8255", description: "Wyoming statewide crisis line" }],
 };
 
-// ─── State Compliance Data ─────────────────────────────────────────────────────
+// - State Compliance Data -
 
 const STATE_COMPLIANCE_DATA: Record<string, {
   telehealthLaw: string;
@@ -265,7 +265,7 @@ const STATE_COMPLIANCE_DATA: Record<string, {
   WY: { telehealthLaw: "Wyoming allows telehealth with in-state license.", mandatoryReporting: "Standard mandatory reporting.", crisisNotes: "988 active statewide.", licensureReqs: "LCSW, LPC, LMFT required.", privacyNotes: "HIPAA applies." },
 };
 
-// ─── Sample EAP Employers ──────────────────────────────────────────────────────
+// - Sample EAP Employers -
 
 const SAMPLE_EMPLOYERS = [
   { name: "Amazon", eapProvider: "Lyra Health", eapPhone: "1-877-505-9972", eapUrl: "https://lyrahealth.com", eapSessions: 25 },
@@ -310,7 +310,7 @@ const SAMPLE_EMPLOYERS = [
   { name: "Disney", eapProvider: "Optum", eapPhone: "1-800-234-5465", eapUrl: "https://liveandworkwell.com", eapSessions: 8 },
 ];
 
-// ─── Sample Providers (multi-state) ───────────────────────────────────────────
+// - Sample Providers (multi-state) -
 
 const SAMPLE_PROVIDERS = [
   { name: "Dr. Sarah Chen, PhD", licenseState: "CA", licenseType: "PhD", telehealth: true, inPerson: true, city: "Los Angeles", stateCode: "CA", phone: "310-555-0100", costTag: "insurance" as const, urgency: "within_72h" as const, specialties: ["anxiety", "depression", "trauma"], insurance: ["Blue Cross", "Aetna", "Cigna", "United"] },
@@ -335,7 +335,7 @@ const SAMPLE_PROVIDERS = [
   { name: "Dr. Patricia Moore, PsyD", licenseState: "VA", licenseType: "PsyD", telehealth: true, inPerson: true, city: "Richmond", stateCode: "VA", phone: "804-555-0119", costTag: "insurance" as const, urgency: "this_week" as const, specialties: ["trauma", "ptsd", "child_adolescent"], insurance: ["Anthem VA", "Cigna", "United"] },
 ];
 
-// ─── National Free Resources ───────────────────────────────────────────────────
+// - National Free Resources -
 
 const NATIONAL_FREE_RESOURCES = [
   { name: "SAMHSA National Helpline", category: "hotline" as const, phone: "1-800-662-4357", website: "https://samhsa.gov", description: "Free, confidential, 24/7 treatment referral and information service for mental health and substance use disorders.", isNational: true },
@@ -350,7 +350,7 @@ const NATIONAL_FREE_RESOURCES = [
   { name: "Trans Lifeline", category: "hotline" as const, phone: "877-565-8860", website: "https://translifeline.org", description: "Peer support hotline for transgender people in crisis.", isNational: true },
 ];
 
-// ─── Main Seed Function ────────────────────────────────────────────────────────
+// - Main Seed Function -
 
 async function seed() {
   console.log("🌱 Starting TherapyCareNow AI seed...");

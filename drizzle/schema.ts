@@ -145,6 +145,12 @@ export const providers = mysqlTable(
     acceptsNewPatients: boolean("acceptsNewPatients").notNull().default(true),
     urgencyAvailability: mysqlEnum("urgencyAvailability", ["within_24h", "within_72h", "this_week", "flexible"]).default("flexible"),
     bio: text("bio"),
+    photoUrl: varchar("photoUrl", { length: 512 }),
+    education: text("education"), // JSON array of {degree, school, year}
+    yearsExperience: int("yearsExperience"),
+    sessionFee: int("sessionFee"), // USD per session
+    slidingScaleMin: int("slidingScaleMin"),
+    slidingScaleMax: int("slidingScaleMax"),
     isActive: boolean("isActive").notNull().default(true),
     createdAt: timestamp("createdAt").defaultNow().notNull(),
     updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

@@ -26,7 +26,7 @@ export function getStripe(): Stripe {
   return _stripe;
 }
 
-// ─── Customer Management ───────────────────────────────────────────────────────
+// - Customer Management -
 
 export async function createStripeCustomer(params: {
   email: string;
@@ -42,7 +42,7 @@ export async function createStripeCustomer(params: {
   });
 }
 
-// ─── Trial Subscription ────────────────────────────────────────────────────────
+// - Trial Subscription -
 
 export async function createTrialSubscription(customerId: string): Promise<Stripe.Subscription> {
   const stripe = getStripe();
@@ -70,7 +70,7 @@ export async function createTrialSubscription(customerId: string): Promise<Strip
   });
 }
 
-// ─── Billing Portal ────────────────────────────────────────────────────────────
+// - Billing Portal -
 
 export async function createBillingPortalSession(
   customerId: string,
@@ -84,7 +84,7 @@ export async function createBillingPortalSession(
   return session.url;
 }
 
-// ─── Checkout Session ──────────────────────────────────────────────────────────
+// - Checkout Session -
 
 export async function createCheckoutSession(params: {
   customerId: string;
@@ -108,7 +108,7 @@ export async function createCheckoutSession(params: {
   return session.url!;
 }
 
-// ─── Subscription Status Check ─────────────────────────────────────────────────
+// - Subscription Status Check -
 
 export type SubscriptionAccess = {
   hasAccess: boolean;
@@ -229,7 +229,7 @@ export function checkSubscriptionAccess(sub: {
   };
 }
 
-// ─── Webhook Verification ──────────────────────────────────────────────────────
+// - Webhook Verification -
 
 export function constructWebhookEvent(payload: Buffer, signature: string): Stripe.Event {
   const stripe = getStripe();
