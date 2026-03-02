@@ -201,43 +201,8 @@ const DEMO_STEPS = [
         },
       ],
     },
-    cta: "Next: Clinician Portal",
-    visual: "chat",
-  },
-  {
-    id: "clinician",
-    title: "Clinician Portal",
-    subtitle: "AI-Powered Tools for Mental Health Professionals",
-    description: "Licensed therapists, social workers, and psychiatrists get a dedicated portal with AI-assisted note creation, smart treatment planning, risk detection, and practice analytics.",
-    icon: Stethoscope,
-    color: "from-rose-500 to-red-600",
-    demoContent: {
-      type: "clinician",
-      features: [
-        {
-          icon: FileText,
-          title: "AI Note Creation",
-          desc: "Generate SOAP/DAP notes from session transcripts in seconds. Review and approve before saving.",
-        },
-        {
-          icon: Brain,
-          title: "Smart Treatment Planning",
-          desc: "AI-suggested interventions based on diagnosis, goals, and client progress.",
-        },
-        {
-          icon: Shield,
-          title: "Risk Detection",
-          desc: "Automatically flags crisis signals in notes and client check-ins for immediate attention.",
-        },
-        {
-          icon: Building2,
-          title: "Practice Analytics",
-          desc: "Burnout indicators, outcome dashboards, session metrics, and revenue optimization.",
-        },
-      ],
-    },
     cta: "Next: Security & Privacy",
-    visual: "clinician",
+    visual: "chat",
   },
   {
     id: "security",
@@ -530,7 +495,7 @@ export default function InteractiveDemo() {
             See TherapyCareNow in Action
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto mb-6">
-            Explore every feature of the platform — from finding a therapist to the clinician portal — in this guided walkthrough.
+            Explore every feature of the platform — from finding a therapist to benefits and free resources — in this guided walkthrough.
           </p>
           <div className="flex items-center justify-center gap-3">
             <Button
@@ -654,7 +619,7 @@ export default function InteractiveDemo() {
             { label: "Find a Therapist", href: "/find-therapist", icon: Search, color: "bg-blue-50 text-blue-700 border-blue-200" },
             { label: "Therapist Directory", href: "/directory", icon: Globe, color: "bg-green-50 text-green-700 border-green-200" },
             { label: "Benefits Wallet", href: "/benefits", icon: Shield, color: "bg-orange-50 text-orange-700 border-orange-200" },
-            { label: "Clinician Portal", href: "/clinician/login", icon: Stethoscope, color: "bg-rose-50 text-rose-700 border-rose-200" },
+            { label: "Free Resources", href: "/free-resources", icon: Shield, color: "bg-rose-50 text-rose-700 border-rose-200" },
           ].map((link, i) => {
             const LIcon = link.icon;
             return (

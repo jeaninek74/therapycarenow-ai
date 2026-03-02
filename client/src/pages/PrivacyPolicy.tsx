@@ -84,20 +84,8 @@ export default function PrivacyPolicy() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-slate-900 mb-3">4. Clinician Data</h2>
-            <p className="mb-3">Licensed clinicians who use the Clinician Portal are subject to additional data handling practices:</p>
-            <ul className="space-y-1 list-disc pl-5">
-              <li>NPI numbers are verified against the public NPPES registry and stored to confirm licensure.</li>
-              <li>Session notes and client records entered by clinicians are stored encrypted at rest.</li>
-              <li>Clinicians are solely responsible for obtaining appropriate patient consent before entering client information into the platform.</li>
-              <li>Client data entered by clinicians is isolated per clinician account and not accessible to other users.</li>
-              <li>AI-generated clinical notes are clearly labeled as AI-assisted and require clinician review and approval before use.</li>
-            </ul>
-          </section>
-
-          <section>
             <h2 className="text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
-              <Trash2 className="w-5 h-5 text-teal-600" /> 5. Your Rights
+              <Trash2 className="w-5 h-5 text-teal-600" /> 4. Your Rights
             </h2>
             <p className="mb-3">You have the right to:</p>
             <ul className="space-y-1 list-disc pl-5">
@@ -127,7 +115,7 @@ export default function PrivacyPolicy() {
             <p className="mb-2">We use the following third-party services, each with their own privacy policies:</p>
             <ul className="space-y-1 list-disc pl-5">
               <li><strong>NPPES NPI Registry</strong> (CMS/HHS) — public provider lookup, no personal data sent</li>
-              <li><strong>Stripe</strong> — payment processing for clinician subscriptions (subject to Stripe's Privacy Policy)</li>
+              <li><strong>Stripe</strong> — payment processing (subject to Stripe's Privacy Policy)</li>
             </ul>
             <p className="mt-3">We do not use Google Analytics, Facebook Pixel, or any advertising networks.</p>
           </section>

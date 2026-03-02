@@ -158,17 +158,6 @@ export default function NavBar() {
             </Link>
           ))}
 
-          {/* For Providers */}
-          <Link
-            href="/join-directory"
-            className={`text-sm font-medium transition-colors flex items-center gap-1 ${
-              location === "/join-directory" ? "text-primary" : "text-muted-foreground hover:text-primary"
-            }`}
-          >
-            <UserPlus className="w-4 h-4" />
-            For Providers
-          </Link>
-
           {/* Admin links */}
           {user?.role === "admin" && (
             <>
@@ -272,10 +261,6 @@ export default function NavBar() {
               {link.label}
             </Link>
           ))}
-
-          <Link href="/join-directory" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors flex items-center gap-2" onClick={() => setMenuOpen(false)}>
-            <UserPlus className="w-4 h-4" /> For Providers
-          </Link>
 
           {user?.role === "admin" && (
             <>
