@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { useState } from "react";
 import { Heart, Phone, Search, Shield, ChevronRight, Check, Brain, UserCheck, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
 import NavBar from "@/components/NavBar";
 
@@ -204,25 +205,17 @@ export default function Home() {
       </section>
 
 
-      {/* Interactive Demo CTA */}
+      {/* Interactive Demo */}
       <section className="container py-16">
-        <div className="bg-gradient-to-br from-teal-900 via-slate-900 to-indigo-900 rounded-3xl p-10 text-center text-white">
-          <div className="inline-flex items-center gap-2 bg-white/10 text-white/80 text-sm font-medium px-4 py-2 rounded-full mb-6">
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium px-4 py-2 rounded-full mb-4">
             <Play className="w-4 h-4" />
-            Interactive Demo
+            Try it yourself
           </div>
-          <h2 className="text-3xl font-bold mb-3">See TherapyCareNow in Action</h2>
-          <p className="text-white/70 text-lg max-w-2xl mx-auto mb-8">
-            Explore every feature — from finding a therapist to benefits and free resources — in a guided walkthrough. No account required.
-          </p>
-          <Link
-            href="/demo"
-            className="inline-flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold rounded-xl px-8 py-4 text-lg transition-all active:scale-95"
-          >
-            <Play className="w-5 h-5" />
-            Launch Demo
-          </Link>
+          <h2 className="text-3xl font-bold text-foreground mb-3">Find your provider in 3 steps</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">Answer a few quick questions and we'll show you the right type of provider for your needs.</p>
         </div>
+        <InteractiveDemo />
       </section>
 
 
@@ -423,6 +416,105 @@ function Step({ number, title, description }: { number: string; title: string; d
   );
 }
 
+
+// ── Interactive Demo ──────────────────────────────────────────────────────────
+function InteractiveDemo() {
+  const [step, setStep] = useState(0);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<string | null>(null);
+  const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
+
+  const providerTypes = [
+    { label: "Therapist", icon: "🧠", desc: "Talk therapy & counseling" },
+    { label: "Psychiatrist", icon: "💊", desc: "Medication management" },
+    { label: "Psychologist", icon: "📋", desc: "Testing & assessment" },
+  ];
+  const states = ["California", "Texas", "New York", "Florida", "Illinois", "Pennsylvania", "Ohio", "Georgia", "North Carolina", "Michigan", "New Jersey", "Virginia"];
+  const concerns = ["Anxiety", "Depression", "Trauma / PTSD", "ADHD", "Relationship issues", "Grief & loss"];
+  const reset = () => { setStep(0); setSelectedType(null); setSelectedState(null); setSelectedConcern(null); };
+
+  return (
+    <div className="bg-card border border-border rounded-2xl overflow-hidden max-w-3xl mx-auto shadow-sm">
+      <div className="h-1.5 bg-muted">
+        <div className="h-full bg-primary transition-all duration-500" style={{ width: `${(step / 3) * 100}%` }} />
+      </div>
+      <div className="p-8">
+        {step === 0 && (
+          <div>
+            <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 1 of 3</p>
+            <h3 className="text-xl font-bold text-foreground mb-2">What type of provider are you looking for?</h3>
+            <p className="text-sm text-muted-foreground mb-6">Choose the type that best matches your needs.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {providerTypes.map((t) => (
+                <button key={t.label} onClick={() => { setSelectedType(t.label); setStep(1); }}
+                  className="flex flex-col items-center gap-2 p-5 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-center group">
+                  <span className="text-3xl">{t.icon}</span>
+                  <span className="font-semibold text-foreground group-hover:text-primary transition-colors">{t.label}</span>
+                  <span className="text-xs text-muted-foreground">{t.desc}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+        {step === 1 && (
+          <div>
+            <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 2 of 3</p>
+            <h3 className="text-xl font-bold text-foreground mb-2">Which state are you in?</h3>
+            <p className="text-sm text-muted-foreground mb-6">We have verified {selectedType?.toLowerCase()}s in all 50 states.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {states.map((s) => (
+                <button key={s} onClick={() => { setSelectedState(s); setStep(2); }}
+                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary">{s}</button>
+              ))}
+            </div>
+            <button onClick={() => setStep(0)} className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
+          </div>
+        )}
+        {step === 2 && (
+          <div>
+            <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 3 of 3</p>
+            <h3 className="text-xl font-bold text-foreground mb-2">What are you dealing with?</h3>
+            <p className="text-sm text-muted-foreground mb-6">Select your primary concern to refine your results.</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {concerns.map((c) => (
+                <button key={c} onClick={() => { setSelectedConcern(c); setStep(3); }}
+                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary">{c}</button>
+              ))}
+            </div>
+            <button onClick={() => setStep(1)} className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
+          </div>
+        )}
+        {step === 3 && (
+          <div className="text-center">
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <Check className="w-8 h-8 text-primary" />
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-2">Your personalized results are ready</h3>
+            <p className="text-muted-foreground text-sm mb-2">
+              We found <span className="font-semibold text-foreground">{selectedType}s</span> in{" "}
+              <span className="font-semibold text-foreground">{selectedState}</span> who specialize in{" "}
+              <span className="font-semibold text-foreground">{selectedConcern}</span>.
+            </p>
+            <p className="text-xs text-muted-foreground mb-6">Click below to search real provider listings.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                href={`/find-therapist?category=${encodeURIComponent(selectedType ?? '')}&state=${encodeURIComponent(selectedState ?? '')}&concern=${encodeURIComponent(selectedConcern ?? '')}`}
+                className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-6 py-3 hover:opacity-90 transition-all"
+              >
+                <Search className="w-4 h-4" />
+                Search Real Providers
+              </Link>
+              <button onClick={reset}
+                className="inline-flex items-center justify-center gap-2 border border-border rounded-xl px-6 py-3 text-sm font-medium text-foreground hover:bg-muted/50 transition-all">
+                Try Again
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // ── Testimonials ──────────────────────────────────────────────────────────────
 const TESTIMONIALS: {

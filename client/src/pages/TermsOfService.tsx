@@ -35,7 +35,7 @@ export default function TermsOfService() {
               <div>
                 <p className="font-semibold text-amber-900 text-sm">Not a Medical Service — Critical Disclaimer</p>
                 <p className="text-amber-800 text-sm mt-1">
-                  TherapyCareNow is an <strong>informational and referral platform only</strong>. It is not a licensed healthcare provider, does not provide medical advice, diagnosis, or treatment, and does not establish a patient-provider relationship. The AI assistant on this platform is a general wellness tool and is <strong>not a substitute for professional mental health care</strong>. If you are experiencing a mental health emergency, call <strong>911</strong> or the <strong>988 Suicide and Crisis Lifeline</strong> immediately.
+                  TherapyCareNow is an <strong>informational and referral platform only</strong>. It is not a licensed healthcare provider, does not provide medical advice, diagnosis, or treatment, and does not establish a patient-provider relationship. The assistant on this platform is a general wellness tool and is <strong>not a substitute for professional mental health care</strong>. If you are experiencing a mental health emergency, call <strong>911</strong> or the <strong>988 Suicide and Crisis Lifeline</strong> immediately.
                 </p>
               </div>
             </div>
@@ -57,7 +57,7 @@ export default function TermsOfService() {
             <ul className="space-y-1 list-disc pl-5">
               <li>A searchable directory of licensed mental health providers (for informational purposes only)</li>
               <li>General mental health resources and crisis hotline information</li>
-              <li>An AI-powered wellness assistant for general guidance (not clinical advice)</li>
+              <li>An wellness assistant for general guidance (not clinical advice)</li>
               <li>A triage tool to help users identify appropriate levels of care (not a clinical assessment)</li>
             </ul>
             <p className="mt-3"><strong>The Platform does not provide medical advice, diagnosis, treatment, or therapy.</strong> Provider listings are for informational purposes and do not constitute endorsement or recommendation of any specific provider.</p>
@@ -76,8 +76,8 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-slate-900 mb-3">4. AI Assistant Limitations</h2>
-            <p className="mb-3">The AI assistant on this Platform:</p>
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">4. Assistant Limitations</h2>
+            <p className="mb-3">The assistant on this Platform:</p>
             <ul className="space-y-1 list-disc pl-5">
               <li>Is powered by large language model technology and may produce inaccurate or incomplete responses.</li>
               <li>Is <strong>not a licensed therapist, counselor, psychologist, or medical professional</strong>.</li>
@@ -102,7 +102,7 @@ export default function TermsOfService() {
 
           <section>
             <h2 className="text-xl font-semibold text-slate-900 mb-3">6. Limitation of Liability</h2>
-            <p>To the maximum extent permitted by law, TherapyCareNow and its operators shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from your use of the Platform, including but not limited to: reliance on provider listings, AI assistant responses, triage outcomes, or any interruption of service.</p>
+            <p>To the maximum extent permitted by law, TherapyCareNow and its operators shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from your use of the Platform, including but not limited to: reliance on provider listings, assistant responses, triage outcomes, or any interruption of service.</p>
           </section>
 
           <section>

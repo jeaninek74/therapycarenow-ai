@@ -139,7 +139,7 @@ export default function Settings() {
               <strong className="text-foreground">HIPAA compliance:</strong> TherapyCareNow is designed with HIPAA principles in mind. We do not store protected health information (PHI) beyond what is necessary for navigation.
             </p>
             <p>
-              <strong className="text-foreground">AI moderation:</strong> All messages to the AI assistant are screened for safety before processing. If a safety concern is detected, you are routed to crisis resources and the message is not processed by AI.
+              <strong className="text-foreground">Safety moderation:</strong> All messages to the assistant are screened for safety before processing. If a safety concern is detected, you are routed to crisis resources and the message is not processed.
             </p>
             <p>
               <strong className="text-foreground">Your rights:</strong> You can delete your saved benefits information at any time from the Benefits Wallet page. You can request account deletion by contacting us.
@@ -164,7 +164,7 @@ export default function Settings() {
               <strong className="text-foreground">Provider information:</strong> Provider listings are for informational purposes only. We do not endorse specific providers. Always verify provider credentials, availability, and insurance acceptance directly.
             </p>
             <p>
-              <strong className="text-foreground">AI limitations:</strong> The AI assistant provides general navigation information only. It cannot provide clinical recommendations and is not a substitute for professional mental health care.
+              <strong className="text-foreground">Assistant limitations:</strong> The assistant provides general navigation information only. It cannot provide clinical recommendations and is not a substitute for professional mental health care.
             </p>
           </div>
         </section>
