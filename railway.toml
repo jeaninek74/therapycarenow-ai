@@ -10,3 +10,4 @@ restartPolicyType = "on_failure"
 
 [nixpacks]
 providers = ["node"]
+nodeVersion = "22"

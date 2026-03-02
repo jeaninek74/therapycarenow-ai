@@ -341,3 +341,10 @@
 - [x] Restore minimal licenseVerification.ts for public provider submission NPI lookup
 - [x] Update ProviderSubmission.tsx to use trpc.verification.lookupNpi
 - [x] 20/20 tests passing, 0 TypeScript errors after removal
+
+## Landing Page Enhancements (Mar 2026)
+- [x] Add interactive demo (3-step wizard: provider type → state → concern → results)
+- [x] Add risk disclosures (Data Risk, Privacy Risk, Misrepresentation Risk)
+- [x] TherapistsLanding.tsx: full dedicated /therapists landing page (hero, license types, comparison, 50-state directory, FAQ, CTA)
+- [x] Fix Railway deployment: add .node-version (22) and nodeVersion in railway.toml to fix import.meta.dirname crash on Node 18
+- [ ] Deploy latest code to Railway and verify therapycarenow.com shows all changes
