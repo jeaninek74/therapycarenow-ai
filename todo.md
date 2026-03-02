@@ -369,3 +369,8 @@
 - [ ] Add detailed psychotherapy section (what it is, modalities, who it helps, what to expect)
 - [ ] Add detailed psychiatry section (what it is, medication management, evaluation, who needs it)
 - [ ] Deploy to Railway and purge Cloudflare cache
+
+## Demo & Deployment Fix (Mar 2026)
+- [ ] Fix interactive demo on landing page (restore + fix useState bug)
+- [ ] Fix Railway config to point to correct project (b0661af4) and service (069f2c21)
+- [ ] Deploy to correct Railway project and verify therapycarenow.com
