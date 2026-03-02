@@ -15,17 +15,6 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminVerificationQueue from "./pages/AdminVerificationQueue";
 import ComplianceMonitor from "./pages/admin/ComplianceMonitor";
 import ProviderSubmission from "./pages/ProviderSubmission";
-import ClinicianLogin from "./pages/clinician/ClinicianLogin";
-import ClinicianDashboard from "./pages/clinician/ClinicianDashboard";
-import ClientRoster from "./pages/clinician/ClientRoster";
-import ClientDetail from "./pages/clinician/ClientDetail";
-import NoteCreator from "./pages/clinician/NoteCreator";
-import PracticeAnalytics from "./pages/clinician/PracticeAnalytics";
-import RiskPanel from "./pages/clinician/RiskPanel";
-import AdaptiveIntake from "./pages/clinician/AdaptiveIntake";
-import ClinicianCompliance from "./pages/clinician/ClinicianCompliance";
-import ClinicianRevenue from "./pages/clinician/ClinicianRevenue";
-import ClinicianSubscription from "./pages/clinician/ClinicianSubscription";
 import TherapistDirectory from "./pages/TherapistDirectory";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -34,6 +23,7 @@ import ConsentBanner from "./components/ConsentBanner";
 import InteractiveDemo from "./pages/InteractiveDemo";
 import PsychiatristsLanding from "./pages/PsychiatristsLanding";
 import PsychologistsLanding from "./pages/PsychologistsLanding";
+import TherapistsLanding from "./pages/TherapistsLanding";
 
 function Router() {
   return (
@@ -58,19 +48,7 @@ function Router() {
       {/* Provider type landing pages */}
       <Route path="/psychiatrists" component={PsychiatristsLanding} />
       <Route path="/psychologists" component={PsychologistsLanding} />
-      <Route path="/therapists" component={FindTherapist} />
-      {/* Clinician Portal */}
-      <Route path="/clinician/login" component={ClinicianLogin} />
-      <Route path="/clinician/dashboard" component={ClinicianDashboard} />
-      <Route path="/clinician/clients" component={ClientRoster} />
-      <Route path="/clinician/clients/:id" component={ClientDetail} />
-      <Route path="/clinician/notes/new" component={NoteCreator} />
-      <Route path="/clinician/analytics" component={PracticeAnalytics} />
-      <Route path="/clinician/risk" component={RiskPanel} />
-      <Route path="/clinician/intake/:clientId" component={AdaptiveIntake} />
-      <Route path="/clinician/compliance" component={ClinicianCompliance} />
-      <Route path="/clinician/revenue" component={ClinicianRevenue} />
-      <Route path="/clinician/subscribe" component={ClinicianSubscription} />
+      <Route path="/therapists" component={TherapistsLanding} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>

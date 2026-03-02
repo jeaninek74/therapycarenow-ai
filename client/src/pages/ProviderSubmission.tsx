@@ -56,7 +56,7 @@ export default function ProviderSubmission() {
   });
 
   const [npiQuery, setNpiQuery] = useState("");
-  const { data: npiResult, isLoading: npiLoading, refetch: refetchNpi } = trpc.clinician.lookupNpi.useQuery(
+  const { data: npiResult, isLoading: npiLoading, refetch: refetchNpi } = trpc.verification.lookupNpi.useQuery(
     { npiNumber: npiQuery },
     { enabled: false }
   );

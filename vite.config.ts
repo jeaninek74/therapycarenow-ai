@@ -155,7 +155,7 @@ const pwaPlugin = VitePWA({
   registerType: "autoUpdate",
   includeAssets: ["favicon.ico", "apple-touch-icon.png", "icons/*.png"],
   manifest: {
-    name: "TherapyCareNow AI",
+    name: "TherapyCareNow",
     short_name: "CareNow",
     description: "Mental health navigation — find crisis support, therapists, and free resources across all 50 states.",
     theme_color: "#0d9488",

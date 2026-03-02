@@ -169,17 +169,6 @@ export default function NavBar() {
             For Providers
           </Link>
 
-          {/* Clinician Portal */}
-          <Link
-            href="/clinician/login"
-            className={`text-sm font-medium transition-colors flex items-center gap-1 ${
-              location.startsWith("/clinician") ? "text-primary" : "text-muted-foreground hover:text-primary"
-            }`}
-          >
-            <Stethoscope className="w-4 h-4" />
-            Clinician Portal
-          </Link>
-
           {/* Admin links */}
           {user?.role === "admin" && (
             <>
@@ -286,9 +275,6 @@ export default function NavBar() {
 
           <Link href="/join-directory" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors flex items-center gap-2" onClick={() => setMenuOpen(false)}>
             <UserPlus className="w-4 h-4" /> For Providers
-          </Link>
-          <Link href="/clinician/login" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors flex items-center gap-2" onClick={() => setMenuOpen(false)}>
-            <Stethoscope className="w-4 h-4" /> Clinician Portal
           </Link>
 
           {user?.role === "admin" && (

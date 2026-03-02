@@ -688,3 +688,92 @@ export async function getCitiesByStateAndCategory(stateCode: string) {
     .sort((a, b) => b.total - a.total)
     .slice(0, 60);
 }
+
+// --- City-Level Provider Pages ---
+
+export async function getProvidersByStateAndCity(params: {
+  stateCode: string;
+  city: string;
+  category?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  const db = await getDb();
+  if (!db) return { providers: [], total: 0, cityDisplay: params.city };
+  const { stateCode, city, category, limit = 24, offset = 0 } = params;
+
+  // Normalize city slug back to display name: "new-york" -> "New York"
+  const cityDisplay = city
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+
+  const conditions: ReturnType<typeof eq>[] = [
+    eq(providers.isActive, true),
+    eq(providers.licenseState, stateCode.toUpperCase()),
+    sql`LOWER(${providers.city}) = LOWER(${cityDisplay})` as any,
+  ];
+
+  if (category) {
+    const licenseMap: Record<string, string[]> = {
+      Therapist: ["LCSW", "LPC", "LMFT", "LMHC", "LCPC", "LAC", "LPCC", "MFT", "LICSW", "LSW", "LADC", "CADC", "LMHP", "LCP"],
+      Psychiatrist: ["MD", "DO", "PMHNP", "APRN", "NP", "PA"],
+      Psychologist: ["PhD", "PsyD"],
+    };
+    const types = licenseMap[category];
+    if (types && types.length > 0) {
+      conditions.push(inArray(providers.licenseType, types) as any);
+    }
+  }
+
+  const [rows, countRows] = await Promise.all([
+    db
+      .select()
+      .from(providers)
+      .where(and(...conditions))
+      .limit(limit)
+      .offset(offset),
+    db
+      .select({ count: sql<number>`count(*)` })
+      .from(providers)
+      .where(and(...conditions)),
+  ]);
+
+  return {
+    providers: rows,
+    total: Number(countRows[0]?.count ?? 0),
+    cityDisplay,
+  };
+}
+
+export async function getCityStats(stateCode: string, city: string) {
+  const db = await getDb();
+  if (!db) return { therapists: 0, psychiatrists: 0, psychologists: 0, total: 0, cityDisplay: city };
+
+  const cityDisplay = city
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+
+  const rows = await db
+    .select({ licenseType: providers.licenseType, count: sql<number>`count(*)` })
+    .from(providers)
+    .where(
+      and(
+        eq(providers.isActive, true),
+        eq(providers.licenseState, stateCode.toUpperCase()),
+        sql`LOWER(${providers.city}) = LOWER(${cityDisplay})` as any
+      )
+    )
+    .groupBy(providers.licenseType);
+
+  let therapists = 0, psychiatrists = 0, psychologists = 0;
+  for (const row of rows) {
+    const cat = getProviderCategory(row.licenseType ?? "");
+    const n = Number(row.count);
+    if (cat === "Therapist") therapists += n;
+    else if (cat === "Psychiatrist") psychiatrists += n;
+    else if (cat === "Psychologist") psychologists += n;
+  }
+  return { therapists, psychiatrists, psychologists, total: therapists + psychiatrists + psychologists, cityDisplay };
+}

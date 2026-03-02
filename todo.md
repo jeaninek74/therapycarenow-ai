@@ -1,4 +1,4 @@
-# TherapyCareNow AI — Project TODO
+# TherapyCareNow — Project TODO
 
 ## Phase 1: Database Schema & Design System
 - [x] Design system: color palette, typography, global CSS (calm/reassuring theme)
@@ -316,3 +316,28 @@
 - [x] Create /psychologists SEO landing page
 - [x] Update NavBar with dropdown "Find a Provider" menu showing all three types
 - [x] Register new routes in App.tsx
+
+## Next Steps (Mar 2026)
+- [x] Fix site name — remove "AI" from title, meta tags, Home.tsx, vite.config.ts
+- [ ] Build /therapists dedicated landing page (like /psychiatrists and /psychologists)
+- [ ] Build city-level sub-pages: /psychiatrists/:state/:city, /psychologists/:state/:city, /therapists/:state/:city
+- [ ] Add "Which provider is right for me?" quiz to home page
+
+## Next Steps (Mar 2026)
+- [x] Fix site name — remove "AI" from title, meta tags, Home.tsx, vite.config.ts
+- [ ] Build /therapists dedicated landing page (like /psychiatrists and /psychologists)
+- [ ] Build city-level sub-pages: /psychiatrists/:state/:city, /psychologists/:state/:city, /therapists/:state/:city
+- [ ] Add "Which provider is right for me?" quiz to home page
+
+## Clinician Portal Extraction (Mar 2026)
+- [x] Audit all clinician files, routes, DB tables, and procedures
+- [x] Write comprehensive technical documentation (TECHNICAL_DOCUMENTATION.md)
+- [x] Bundle all clinician source files into downloadable zip package
+- [x] Remove all clinician pages (ClinicianLogin, Dashboard, ClientRoster, ClientDetail, NoteCreator, PracticeAnalytics, RiskPanel, AdaptiveIntake, ClinicianCompliance, ClinicianRevenue, ClinicianSubscription, SecureMessaging)
+- [x] Remove clinician server files (clinician.ts, clinicianDb.ts, encryption.ts, stripe.ts, subscriptionDb.ts, routers/clinician.ts, routers/subscription.ts)
+- [x] Remove clinician routes from App.tsx
+- [x] Remove Clinician Pro pricing card from Home.tsx landing page
+- [x] Remove Clinician Portal link from NavBar (desktop + mobile)
+- [x] Restore minimal licenseVerification.ts for public provider submission NPI lookup
+- [x] Update ProviderSubmission.tsx to use trpc.verification.lookupNpi
+- [x] 20/20 tests passing, 0 TypeScript errors after removal
