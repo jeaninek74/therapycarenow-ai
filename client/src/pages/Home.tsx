@@ -51,7 +51,7 @@ export default function Home() {
             Browse by Provider Type
           </h2>
           <p className="text-muted-foreground text-lg">
-            We list <strong className="text-foreground">52,500+</strong> verified mental health providers across all 50 states.
+            We list verified mental health providers across all 50 states.
             Each type of provider offers different services — choose the right fit for your needs.
           </p>
         </div>
@@ -65,7 +65,6 @@ export default function Home() {
             accentColor="border-[oklch(0.55_0.18_200)]/30 hover:border-[oklch(0.55_0.18_200)]/60"
             badgeColor="bg-[oklch(0.55_0.18_200)]/10 text-[oklch(0.45_0.18_200)]"
             category="Therapists"
-            providerCount="37,388+"
             licenses={["LCSW", "LPC", "LMFT", "LMHC", "LCPC", "MSW", "and more"]}
             description="Licensed counselors and therapists who provide talk therapy, behavioral therapy, and emotional support for a wide range of mental health concerns."
             services={[
@@ -85,7 +84,6 @@ export default function Home() {
             accentColor="border-[oklch(0.55_0.18_30)]/30 hover:border-[oklch(0.55_0.18_30)]/60"
             badgeColor="bg-[oklch(0.55_0.18_30)]/10 text-[oklch(0.45_0.18_30)]"
             category="Psychiatrists"
-            providerCount="10,398+"
             licenses={["MD", "DO", "PMHNP", "APRN", "NP"]}
             description="Medical doctors and advanced practice nurses who specialize in diagnosing and treating mental health conditions, including prescribing medication."
             services={[
@@ -106,7 +104,6 @@ export default function Home() {
             accentColor="border-[oklch(0.55_0.18_280)]/30 hover:border-[oklch(0.55_0.18_280)]/60"
             badgeColor="bg-[oklch(0.55_0.18_280)]/10 text-[oklch(0.45_0.18_280)]"
             category="Psychologists"
-            providerCount="4,714+"
             licenses={["PhD", "PsyD"]}
             description="Doctoral-level clinicians who specialize in psychological assessment, testing, and evidence-based psychotherapy for complex mental health conditions."
             services={[
