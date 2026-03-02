@@ -1,8 +1,16 @@
 import { Link } from "wouter";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Stethoscope, FileText, TrendingUp, Lock } from "lucide-react";
+import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Stethoscope, FileText, TrendingUp, Lock, Brain, UserCheck, FlaskConical, ArrowRight } from "lucide-react";
 import NavBar from "@/components/NavBar";
+import { trpc } from "@/lib/trpc";
 
 export default function Home() {
+  const { data: categoryCounts } = trpc.providers.getCategoryCounts.useQuery();
+
+  const therapistCount  = categoryCounts?.therapists   ?? 38000;
+  const psychiatristCount = categoryCounts?.psychiatrists ?? 9400;
+  const psychologistCount = categoryCounts?.psychologists ?? 4700;
+  const totalCount = categoryCounts?.total ?? 52000;
+
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
@@ -21,7 +29,7 @@ export default function Home() {
               <span className="text-primary">right now.</span>
             </h1>
             <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
-              TherapyCareNow helps you quickly find crisis resources, therapists, insurance coverage, and free support — without providing clinical advice. Your safety comes first, always.
+              TherapyCareNow connects you with licensed therapists, psychiatrists, and psychologists across all 50 states — by city, specialty, and insurance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -36,45 +44,123 @@ export default function Home() {
                 className="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-8 py-4 text-lg shadow-sm hover:opacity-90 active:scale-95 transition-all"
               >
                 <Search className="w-5 h-5" />
-                Find a Therapist
+                Find a Provider
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Quick access cards */}
+      {/* ── Three Provider Category Cards ─────────────────────────────────── */}
       <section className="container py-16">
-        <h2 className="text-2xl font-semibold text-foreground mb-8">What do you need?</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <QuickCard
-            href="/triage"
-            icon={<Phone className="w-6 h-6 text-destructive" />}
-            title="Get Help Now"
-            description="Answer 5 quick questions to find the right support level for your situation."
-            color="destructive"
+        <div className="mb-10">
+          <h2 className="text-3xl font-bold text-foreground mb-3">
+            Browse by Provider Type
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            We list <strong className="text-foreground">{totalCount.toLocaleString()}+</strong> verified mental health providers across all 50 states.
+            Each type of provider offers different services — choose the right fit for your needs.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Therapists */}
+          <ProviderCategoryCard
+            href="/find-therapist?category=Therapist"
+            icon={<UserCheck className="w-8 h-8 text-[oklch(0.55_0.18_200)]" />}
+            iconBg="bg-[oklch(0.55_0.18_200)]/10"
+            accentColor="border-[oklch(0.55_0.18_200)]/30 hover:border-[oklch(0.55_0.18_200)]/60"
+            badgeColor="bg-[oklch(0.55_0.18_200)]/10 text-[oklch(0.45_0.18_200)]"
+            category="Therapists"
+            count={therapistCount}
+            licenses={["LCSW", "LPC", "LMFT", "LMHC", "LCPC", "MSW", "and more"]}
+            description="Licensed counselors and therapists who provide talk therapy, behavioral therapy, and emotional support for a wide range of mental health concerns."
+            services={[
+              "Individual & couples therapy",
+              "CBT, DBT, EMDR, and more",
+              "Anxiety, depression, trauma",
+              "Grief, life transitions, stress",
+            ]}
+            note="Therapists cannot prescribe medication. They focus on psychotherapy and behavioral interventions."
           />
-          <QuickCard
-            href="/find-therapist"
-            icon={<Search className="w-6 h-6 text-primary" />}
-            title="Find a Therapist"
-            description="Search providers by insurance, specialty, telehealth, and availability."
-            color="primary"
+
+          {/* Psychiatrists */}
+          <ProviderCategoryCard
+            href="/find-therapist?category=Psychiatrist"
+            icon={<Stethoscope className="w-8 h-8 text-[oklch(0.55_0.18_30)]" />}
+            iconBg="bg-[oklch(0.55_0.18_30)]/10"
+            accentColor="border-[oklch(0.55_0.18_30)]/30 hover:border-[oklch(0.55_0.18_30)]/60"
+            badgeColor="bg-[oklch(0.55_0.18_30)]/10 text-[oklch(0.45_0.18_30)]"
+            category="Psychiatrists"
+            count={psychiatristCount}
+            licenses={["MD", "DO", "PMHNP", "APRN", "NP"]}
+            description="Medical doctors and advanced practice nurses who specialize in diagnosing and treating mental health conditions, including prescribing medication."
+            services={[
+              "Psychiatric evaluation & diagnosis",
+              "Medication management",
+              "Bipolar, schizophrenia, ADHD",
+              "Dual diagnosis & complex cases",
+            ]}
+            note="Psychiatrists (MD/DO) and psychiatric nurse practitioners (PMHNP/APRN/NP) can prescribe psychiatric medications."
+            featured
           />
-          <QuickCard
-            href="/benefits"
-            icon={<Briefcase className="w-6 h-6 text-[oklch(0.58_0.12_155)]" />}
-            title="Benefits Wallet"
-            description="Save your insurance and employer EAP info to speed up matching."
-            color="secondary"
+
+          {/* Psychologists */}
+          <ProviderCategoryCard
+            href="/find-therapist?category=Psychologist"
+            icon={<Brain className="w-8 h-8 text-[oklch(0.55_0.18_280)]" />}
+            iconBg="bg-[oklch(0.55_0.18_280)]/10"
+            accentColor="border-[oklch(0.55_0.18_280)]/30 hover:border-[oklch(0.55_0.18_280)]/60"
+            badgeColor="bg-[oklch(0.55_0.18_280)]/10 text-[oklch(0.45_0.18_280)]"
+            category="Psychologists"
+            count={psychologistCount}
+            licenses={["PhD", "PsyD"]}
+            description="Doctoral-level clinicians who specialize in psychological assessment, testing, and evidence-based psychotherapy for complex mental health conditions."
+            services={[
+              "Psychological testing & assessment",
+              "Neuropsychological evaluation",
+              "Trauma-focused therapy",
+              "Research-based interventions",
+            ]}
+            note="Psychologists hold doctoral degrees (PhD or PsyD) and are trained in both assessment and advanced psychotherapy."
           />
-          <QuickCard
-            href="/free-resources"
-            icon={<BookOpen className="w-6 h-6 text-[oklch(0.68_0.10_280)]" />}
-            title="Free & Low-Cost Help"
-            description="Community clinics, hotlines, and sliding scale providers near you."
-            color="accent"
-          />
+        </div>
+
+        {/* Comparison table */}
+        <div className="mt-10 bg-card border border-border rounded-2xl overflow-hidden">
+          <div className="px-6 py-4 border-b border-border">
+            <h3 className="font-semibold text-foreground">Quick Comparison</h3>
+            <p className="text-sm text-muted-foreground">Understanding the difference between provider types</p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border bg-muted/30">
+                  <th className="text-left px-6 py-3 font-medium text-foreground">Feature</th>
+                  <th className="text-center px-4 py-3 font-medium text-[oklch(0.45_0.18_200)]">Therapist</th>
+                  <th className="text-center px-4 py-3 font-medium text-[oklch(0.45_0.18_30)]">Psychiatrist</th>
+                  <th className="text-center px-4 py-3 font-medium text-[oklch(0.45_0.18_280)]">Psychologist</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {[
+                  ["Can prescribe medication", "✗", "✓", "✗ (most states)"],
+                  ["Provides talk therapy", "✓", "Some", "✓"],
+                  ["Psychological testing", "✗", "✗", "✓"],
+                  ["Doctoral degree required", "✗", "✓", "✓"],
+                  ["Typical session focus", "Therapy & coping", "Medication & diagnosis", "Assessment & therapy"],
+                  ["Insurance coverage", "Widely covered", "Widely covered", "Widely covered"],
+                ].map(([feature, therapist, psychiatrist, psychologist]) => (
+                  <tr key={feature} className="hover:bg-muted/20 transition-colors">
+                    <td className="px-6 py-3 text-foreground font-medium">{feature}</td>
+                    <td className="px-4 py-3 text-center text-muted-foreground">{therapist}</td>
+                    <td className="px-4 py-3 text-center text-muted-foreground">{psychiatrist}</td>
+                    <td className="px-4 py-3 text-center text-muted-foreground">{psychologist}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -104,113 +190,145 @@ export default function Home() {
         </div>
       </section>
 
-      {/* How it works */}
+      {/* Quick access cards */}
       <section className="bg-muted/40 py-16">
         <div className="container">
-          <h2 className="text-2xl font-semibold text-foreground mb-10 text-center">How it works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Step
-              number="1"
-              title="Tell us your situation"
-              description="Answer 5 simple yes/no questions. Our system — not AI — determines your urgency level."
+          <h2 className="text-2xl font-semibold text-foreground mb-8">More ways we can help</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <QuickCard
+              href="/triage"
+              icon={<Phone className="w-6 h-6 text-destructive" />}
+              title="Get Help Now"
+              description="Answer 5 quick questions to find the right support level for your situation."
             />
-            <Step
-              number="2"
-              title="Get routed to the right help"
-              description="Crisis resources, urgent support, or therapist search — based on your answers."
+            <QuickCard
+              href="/directory"
+              icon={<Search className="w-6 h-6 text-primary" />}
+              title="Browse by State"
+              description="Explore therapists, psychiatrists, and psychologists in every state and city."
             />
-            <Step
-              number="3"
-              title="Connect with real support"
-              description="Call, text, or book directly with providers. We never replace professional care."
+            <QuickCard
+              href="/benefits"
+              icon={<Briefcase className="w-6 h-6 text-[oklch(0.58_0.12_155)]" />}
+              title="Benefits Wallet"
+              description="Save your insurance and employer EAP info to speed up matching."
+            />
+            <QuickCard
+              href="/free-resources"
+              icon={<BookOpen className="w-6 h-6 text-[oklch(0.68_0.10_280)]" />}
+              title="Free & Low-Cost Help"
+              description="Community clinics, hotlines, and sliding scale providers near you."
             />
           </div>
         </div>
       </section>
 
+      {/* How it works */}
+      <section className="container py-16">
+        <h2 className="text-2xl font-semibold text-foreground mb-10 text-center">How it works</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <Step
+            number="1"
+            title="Choose your provider type"
+            description="Decide whether you need a therapist for talk therapy, a psychiatrist for medication, or a psychologist for assessment."
+          />
+          <Step
+            number="2"
+            title="Search by state and city"
+            description="Browse 52,500+ providers across all 50 states. Filter by insurance, telehealth, specialty, and availability."
+          />
+          <Step
+            number="3"
+            title="Connect with real support"
+            description="Call, text, or book directly with providers. We never replace professional care."
+          />
+        </div>
+      </section>
+
       {/* ── Clinician Portal Pricing ─────────────────────────────────────── */}
-      <section className="container py-20">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-semibold px-4 py-2 rounded-full mb-4">
-            <Stethoscope className="w-4 h-4" />
-            For Mental Health Clinicians
-          </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            AI-powered tools built for your practice
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Reduce documentation time, improve client outcomes, and stay HIPAA-compliant — all in one clinician portal designed specifically for mental health professionals.
-          </p>
-        </div>
-
-        {/* Feature highlights */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
-          <ClinicianFeature
-            icon={<FileText className="w-6 h-6 text-primary" />}
-            title="AI SOAP & DAP Notes"
-            description="Generate clinical notes from session transcripts in seconds. Review, edit, and approve before saving."
-          />
-          <ClinicianFeature
-            icon={<TrendingUp className="w-6 h-6 text-primary" />}
-            title="Treatment Planning"
-            description="AI-assisted treatment plans with diagnosis-aligned goals and evidence-based interventions."
-          />
-          <ClinicianFeature
-            icon={<Lock className="w-6 h-6 text-primary" />}
-            title="HIPAA-Compliant Messaging"
-            description="Encrypted client-clinician messaging with audit logging and 90-day retention policy."
-          />
-        </div>
-
-        {/* Pricing card */}
-        <div className="max-w-md mx-auto">
-          <div className="relative bg-card border-2 border-primary rounded-3xl p-8 shadow-xl">
-            {/* Popular badge */}
-            <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
-                14-DAY FREE TRIAL
-              </span>
+      <section className="bg-muted/40 py-20">
+        <div className="container">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-semibold px-4 py-2 rounded-full mb-4">
+              <Stethoscope className="w-4 h-4" />
+              For Mental Health Clinicians
             </div>
-
-            <div className="text-center mb-8 pt-2">
-              <h3 className="text-xl font-bold text-foreground mb-1">Clinician Pro</h3>
-              <p className="text-muted-foreground text-sm mb-4">Everything you need to run a modern practice</p>
-              <div className="flex items-end justify-center gap-1">
-                <span className="text-5xl font-extrabold text-foreground">$49</span>
-                <span className="text-muted-foreground text-lg mb-2">/month</span>
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">per clinician · cancel anytime</p>
-            </div>
-
-            <ul className="space-y-3 mb-8">
-              {[
-                "NPI-verified clinician login",
-                "AI SOAP & DAP note generation",
-                "Smart treatment plan builder",
-                "Risk detection & alerts",
-                "Adaptive intake questionnaires",
-                "HIPAA compliance auto-checker",
-                "CPT code optimizer",
-                "Practice analytics dashboard",
-                "Encrypted client messaging",
-                "14-day free trial — no credit card required",
-              ].map((feature) => (
-                <li key={feature} className="flex items-start gap-3 text-sm text-foreground">
-                  <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              href="/clinician/login"
-              className="block w-full text-center bg-primary text-primary-foreground font-semibold rounded-xl px-6 py-4 text-base hover:opacity-90 active:scale-95 transition-all shadow-md"
-            >
-              Start Free Trial
-            </Link>
-            <p className="text-center text-xs text-muted-foreground mt-3">
-              NPI number required · Verified clinicians only
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              AI-powered tools built for your practice
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Reduce documentation time, improve client outcomes, and stay HIPAA-compliant — all in one clinician portal designed specifically for mental health professionals.
             </p>
+          </div>
+
+          {/* Feature highlights */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+            <ClinicianFeature
+              icon={<FileText className="w-6 h-6 text-primary" />}
+              title="AI SOAP & DAP Notes"
+              description="Generate clinical notes from session transcripts in seconds. Review, edit, and approve before saving."
+            />
+            <ClinicianFeature
+              icon={<TrendingUp className="w-6 h-6 text-primary" />}
+              title="Treatment Planning"
+              description="AI-assisted treatment plans with diagnosis-aligned goals and evidence-based interventions."
+            />
+            <ClinicianFeature
+              icon={<Lock className="w-6 h-6 text-primary" />}
+              title="HIPAA-Compliant Messaging"
+              description="Encrypted client-clinician messaging with audit logging and 90-day retention policy."
+            />
+          </div>
+
+          {/* Pricing card */}
+          <div className="max-w-md mx-auto">
+            <div className="relative bg-card border-2 border-primary rounded-3xl p-8 shadow-xl">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span className="bg-primary text-primary-foreground text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
+                  14-DAY FREE TRIAL
+                </span>
+              </div>
+
+              <div className="text-center mb-8 pt-2">
+                <h3 className="text-xl font-bold text-foreground mb-1">Clinician Pro</h3>
+                <p className="text-muted-foreground text-sm mb-4">Everything you need to run a modern practice</p>
+                <div className="flex items-end justify-center gap-1">
+                  <span className="text-5xl font-extrabold text-foreground">$49</span>
+                  <span className="text-muted-foreground text-lg mb-2">/month</span>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">per clinician · cancel anytime</p>
+              </div>
+
+              <ul className="space-y-3 mb-8">
+                {[
+                  "NPI-verified clinician login",
+                  "AI SOAP & DAP note generation",
+                  "Smart treatment plan builder",
+                  "Risk detection & alerts",
+                  "Adaptive intake questionnaires",
+                  "HIPAA compliance auto-checker",
+                  "CPT code optimizer",
+                  "Practice analytics dashboard",
+                  "Encrypted client messaging",
+                  "14-day free trial — no credit card required",
+                ].map((feature) => (
+                  <li key={feature} className="flex items-start gap-3 text-sm text-foreground">
+                    <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href="/clinician/login"
+                className="block w-full text-center bg-primary text-primary-foreground font-semibold rounded-xl px-6 py-4 text-base hover:opacity-90 active:scale-95 transition-all shadow-md"
+              >
+                Start Free Trial
+              </Link>
+              <p className="text-center text-xs text-muted-foreground mt-3">
+                NPI number required · Verified clinicians only
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -234,8 +352,8 @@ export default function Home() {
             <span>TherapyCareNow AI · All 50 states</span>
           </div>
           <div className="flex gap-6">
-            <Link href="/settings" className="hover:text-foreground transition-colors">Privacy Policy</Link>
-            <Link href="/settings" className="hover:text-foreground transition-colors">Terms of Use</Link>
+            <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Use</Link>
             <Link href="/settings" className="hover:text-foreground transition-colors">Settings</Link>
           </div>
         </div>
@@ -244,18 +362,103 @@ export default function Home() {
   );
 }
 
+// ── Provider Category Card ────────────────────────────────────────────────────
+function ProviderCategoryCard({
+  href,
+  icon,
+  iconBg,
+  accentColor,
+  badgeColor,
+  category,
+  count,
+  licenses,
+  description,
+  services,
+  note,
+  featured = false,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  iconBg: string;
+  accentColor: string;
+  badgeColor: string;
+  category: string;
+  count: number;
+  licenses: string[];
+  description: string;
+  services: string[];
+  note: string;
+  featured?: boolean;
+}) {
+  return (
+    <div className={`relative bg-card border-2 rounded-2xl p-6 flex flex-col transition-all hover:shadow-lg ${accentColor} ${featured ? 'ring-2 ring-primary/20' : ''}`}>
+      {featured && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span className="bg-primary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full shadow">
+            Includes Prescribers
+          </span>
+        </div>
+      )}
+
+      {/* Header */}
+      <div className="flex items-start gap-4 mb-4">
+        <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
+          {icon}
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-foreground">{category}</h3>
+          <p className="text-2xl font-extrabold text-foreground">{count.toLocaleString()}<span className="text-base font-normal text-muted-foreground">+ providers</span></p>
+        </div>
+      </div>
+
+      {/* License badges */}
+      <div className="flex flex-wrap gap-1.5 mb-4">
+        {licenses.map((lic) => (
+          <span key={lic} className={`text-xs font-semibold px-2 py-0.5 rounded-full ${badgeColor}`}>
+            {lic}
+          </span>
+        ))}
+      </div>
+
+      {/* Description */}
+      <p className="text-sm text-muted-foreground mb-4 leading-relaxed flex-1">{description}</p>
+
+      {/* Services */}
+      <ul className="space-y-1.5 mb-4">
+        {services.map((s) => (
+          <li key={s} className="flex items-start gap-2 text-sm text-foreground">
+            <Check className="w-3.5 h-3.5 text-primary flex-shrink-0 mt-0.5" />
+            <span>{s}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* Note */}
+      <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2 mb-5 leading-relaxed">{note}</p>
+
+      {/* CTA */}
+      <Link
+        href={href}
+        className="flex items-center justify-center gap-2 w-full bg-primary text-primary-foreground font-semibold rounded-xl px-4 py-3 text-sm hover:opacity-90 active:scale-95 transition-all"
+      >
+        Find {category}
+        <ArrowRight className="w-4 h-4" />
+      </Link>
+    </div>
+  );
+}
+
+// ── Quick Card ────────────────────────────────────────────────────────────────
 function QuickCard({
   href,
   icon,
   title,
   description,
-  color,
 }: {
   href: string;
   icon: React.ReactNode;
   title: string;
   description: string;
-  color: string;
 }) {
   return (
     <Link href={href} className="group block bg-card rounded-2xl border border-border p-6 hover:shadow-md hover:border-primary/30 transition-all">

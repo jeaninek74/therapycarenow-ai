@@ -22,6 +22,10 @@ import {
   bulkImportProviders,
   getProviderCountByState,
   getCitiesByState,
+  getProviderCategoryCounts,
+  getProviderCountByStateAndCategory,
+  getCitiesByStateAndCategory,
+  getProviderCategory,
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "./_core/notification";
@@ -135,6 +139,44 @@ const providerRouter = router({
     .input(z.object({ stateCode: z.string().length(2) }))
     .query(async ({ input }) => {
       return getCitiesByState(input.stateCode);
+    }),
+
+  // Category-aware endpoints
+  getCategoryCounts: publicProcedure.query(async () => {
+    return getProviderCategoryCounts();
+  }),
+
+  getStateDirectoryByCategory: publicProcedure.query(async () => {
+    return getProviderCountByStateAndCategory();
+  }),
+
+  getCitiesForStateByCategory: publicProcedure
+    .input(z.object({ stateCode: z.string().length(2) }))
+    .query(async ({ input }) => {
+      return getCitiesByStateAndCategory(input.stateCode);
+    }),
+
+  searchByCategory: publicProcedure
+    .input(
+      z.object({
+        category: z.enum(['Therapist', 'Psychiatrist', 'Psychologist']).optional(),
+        stateCode: z.string().length(2).optional(),
+        city: z.string().optional(),
+        telehealth: z.boolean().optional(),
+        specialty: z.string().optional(),
+        insurance: z.string().optional(),
+        costTag: z.enum(['free', 'sliding_scale', 'insurance', 'self_pay']).optional(),
+        limit: z.number().min(1).max(100).optional(),
+        offset: z.number().min(0).optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { category, ...rest } = input;
+      const results = await searchProviders({ ...rest, limit: input.limit ?? 50 });
+      if (!category) return results.map(p => ({ ...p, category: getProviderCategory(p.licenseType ?? '') }));
+      return results
+        .filter(p => getProviderCategory(p.licenseType ?? '') === category)
+        .map(p => ({ ...p, category }));
     }),
 });
 

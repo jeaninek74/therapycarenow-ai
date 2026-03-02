@@ -592,3 +592,99 @@ export async function bulkImportProviders(providerList: Array<{
 
   return { imported, errors };
 }
+
+// -- Provider Category Helpers --
+export const PSYCHIATRIST_TYPES = ['MD','DO','PMHNP','APRN','NP','RN-BC'];
+export const PSYCHOLOGIST_TYPES = ['PhD','PsyD'];
+
+export function getProviderCategory(licenseType: string): 'Psychiatrist' | 'Psychologist' | 'Therapist' {
+  if (PSYCHIATRIST_TYPES.includes(licenseType)) return 'Psychiatrist';
+  if (PSYCHOLOGIST_TYPES.includes(licenseType)) return 'Psychologist';
+  return 'Therapist';
+}
+
+export async function getProviderCategoryCounts() {
+  const db = await getDb();
+  if (!db) return { therapists: 0, psychiatrists: 0, psychologists: 0, total: 0 };
+  const raw = await db
+    .select({
+      licenseType: providers.licenseType,
+      count: sql<number>`count(*)`,
+    })
+    .from(providers)
+    .where(eq(providers.isActive, true))
+    .groupBy(providers.licenseType);
+  let therapists = 0, psychiatrists = 0, psychologists = 0;
+  for (const row of raw) {
+    const cat = getProviderCategory(row.licenseType ?? '');
+    const n = Number(row.count);
+    if (cat === 'Psychiatrist') psychiatrists += n;
+    else if (cat === 'Psychologist') psychologists += n;
+    else therapists += n;
+  }
+  return { therapists, psychiatrists, psychologists, total: therapists + psychiatrists + psychologists };
+}
+
+export async function getProviderCountByStateAndCategory() {
+  const db = await getDb();
+  if (!db) return [];
+  const raw = await db
+    .select({
+      stateCode: providers.licenseState,
+      licenseType: providers.licenseType,
+      count: sql<number>`count(*)`,
+    })
+    .from(providers)
+    .where(eq(providers.isActive, true))
+    .groupBy(providers.licenseState, providers.licenseType);
+  // Aggregate per state
+  const stateMap = new Map<string, { therapists: number; psychiatrists: number; psychologists: number; total: number }>();
+  for (const row of raw) {
+    const sc = row.stateCode ?? '';
+    if (!sc) continue;
+    if (!stateMap.has(sc)) stateMap.set(sc, { therapists: 0, psychiatrists: 0, psychologists: 0, total: 0 });
+    const entry = stateMap.get(sc)!;
+    const cat = getProviderCategory(row.licenseType ?? '');
+    const n = Number(row.count);
+    entry.total += n;
+    if (cat === 'Psychiatrist') entry.psychiatrists += n;
+    else if (cat === 'Psychologist') entry.psychologists += n;
+    else entry.therapists += n;
+  }
+  return Array.from(stateMap.entries())
+    .map(([stateCode, counts]) => ({ stateCode, ...counts }))
+    .sort((a, b) => a.stateCode.localeCompare(b.stateCode));
+}
+
+export async function getCitiesByStateAndCategory(stateCode: string) {
+  const db = await getDb();
+  if (!db) return [];
+  const raw = await db
+    .select({
+      city: providers.city,
+      licenseType: providers.licenseType,
+      count: sql<number>`count(*)`,
+    })
+    .from(providers)
+    .where(and(eq(providers.isActive, true), eq(providers.licenseState, stateCode)))
+    .groupBy(providers.city, providers.licenseType)
+    .orderBy(sql`count(*) desc`);
+  // Aggregate per city
+  const cityMap = new Map<string, { therapists: number; psychiatrists: number; psychologists: number; total: number }>();
+  for (const row of raw) {
+    const c = row.city ?? '';
+    if (!c) continue;
+    if (!cityMap.has(c)) cityMap.set(c, { therapists: 0, psychiatrists: 0, psychologists: 0, total: 0 });
+    const entry = cityMap.get(c)!;
+    const cat = getProviderCategory(row.licenseType ?? '');
+    const n = Number(row.count);
+    entry.total += n;
+    if (cat === 'Psychiatrist') entry.psychiatrists += n;
+    else if (cat === 'Psychologist') entry.psychologists += n;
+    else entry.therapists += n;
+  }
+  return Array.from(cityMap.entries())
+    .map(([city, counts]) => ({ city, ...counts }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 60);
+}

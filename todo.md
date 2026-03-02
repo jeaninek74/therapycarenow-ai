@@ -291,3 +291,22 @@
 - [x] Total: 52,500 providers across all 50 states (1,050 per state)
 - [x] Psychiatrists/prescribers: 9,494 total (MD/DO/PMHNP/APRN/NP)
 - [x] All 20 tests passing, zero TypeScript errors
+
+## Provider Category Separation (Therapists / Psychiatrists / Psychologists)
+- [ ] Define category mapping: Psychiatrist = MD/DO/PMHNP/APRN/NP; Psychologist = PhD/PsyD; Therapist = all others
+- [ ] Add providerCategory computed field/helper in db.ts
+- [ ] Update landing page: three distinct hero cards (Therapists, Psychiatrists, Psychologists) with counts per category
+- [ ] Update Directory page: three tabs (Therapists | Psychiatrists | Psychologists), each with state/city breakdown
+- [ ] Update Find a Provider search: category selector as primary filter (not mixed with license type)
+- [ ] Update search results: show category badge on each provider card
+- [ ] Update provider profile page: show category prominently
+- [ ] Add category-specific counts to state directory pages
+- [ ] Ensure all 50 states have Psychiatrists and Psychologists listed (not just therapists)
+
+## Provider Category Separation (Mar 2026)
+- [x] Add category helper functions to db.ts (getProviderCategory, getProviderCategoryCounts, getProviderCountByStateAndCategory, getCitiesByStateAndCategory)
+- [x] Add category-aware tRPC procedures to routers.ts (getCategoryCounts, getStateDirectoryByCategory, getCitiesForStateByCategory, searchByCategory)
+- [x] Rebuild Home.tsx with three distinct provider category cards (Therapists, Psychiatrists, Psychologists) with comparison table
+- [x] Rebuild TherapistDirectory.tsx with three category tabs and per-city breakdown showing all three types
+- [x] Rebuild FindTherapist.tsx with category tab switcher and category-filtered search results
+- [x] All 20 tests passing, 0 TypeScript errors
