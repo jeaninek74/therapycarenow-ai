@@ -100,9 +100,9 @@ export default function ProviderProfile() {
           <div className="bg-card border border-border rounded-2xl p-6 mb-6">
             <h2 className="font-semibold text-foreground mb-3">Specialties</h2>
             <div className="flex flex-wrap gap-2">
-              {provider.specialties.map((s: any) => (
-                <span key={s.specialty} className="text-sm bg-muted text-muted-foreground px-3 py-1 rounded-full capitalize">
-                  {s.specialty.replace("_", " ")}
+              {(provider.specialties as string[]).map((s: string) => (
+                <span key={s} className="text-sm bg-muted text-muted-foreground px-3 py-1 rounded-full capitalize">
+                  {(s || "").replace(/_/g, " ")}
                 </span>
               ))}
             </div>

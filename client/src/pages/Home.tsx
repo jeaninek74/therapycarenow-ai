@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, AlertTriangle, Lock, FileWarning } from "lucide-react";
+import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play } from "lucide-react";
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
 
@@ -233,16 +233,28 @@ export default function Home() {
             description="Call, text, or book directly with providers. We never replace professional care."
           />
         </div>
+        <div className="mt-10 text-center">
+          <Link
+            href="/demo"
+            className="inline-flex items-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-8 py-4 text-base shadow-sm hover:opacity-90 active:scale-95 transition-all"
+          >
+            <Play className="w-5 h-5" />
+            Try it yourself
+          </Link>
+        </div>
       </section>
 
 
       {/* Interactive Demo */}
       <section className="container py-16">
         <div className="mb-8 text-center">
-          <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium px-4 py-2 rounded-full mb-4">
+          <Link
+            href="/demo"
+            className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium px-4 py-2 rounded-full mb-4 hover:bg-primary/20 transition-colors cursor-pointer"
+          >
             <Play className="w-4 h-4" />
-            Interactive Demo
-          </div>
+            Try it yourself
+          </Link>
           <h2 className="text-3xl font-bold text-foreground mb-3">See how it works</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
             Try a live walkthrough of the provider search — no account required.
@@ -251,55 +263,6 @@ export default function Home() {
         <InteractiveDemo />
       </section>
 
-      {/* Risk Disclosures */}
-      <section className="bg-muted/30 py-16">
-        <div className="container">
-          <div className="mb-8 text-center">
-            <h2 className="text-2xl font-semibold text-foreground mb-2">Important Disclosures</h2>
-            <p className="text-muted-foreground">Please read before using TherapyCareNow</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Data Risk */}
-            <div className="bg-card border border-amber-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-                  <AlertTriangle className="w-5 h-5 text-amber-600" />
-                </div>
-                <h3 className="font-semibold text-foreground">Data Risk</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                TherapyCareNow aggregates provider information from publicly available sources including the National Provider Identifier (NPI) registry, state licensing boards, and provider self-submissions. While we strive for accuracy, provider data may be incomplete, outdated, or contain errors. We do not independently verify every credential, insurance panel, or availability listing. Always confirm provider details directly before booking an appointment.
-              </p>
-            </div>
-
-            {/* Privacy Risk */}
-            <div className="bg-card border border-blue-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                  <Lock className="w-5 h-5 text-blue-600" />
-                </div>
-                <h3 className="font-semibold text-foreground">Privacy Risk</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Any information you enter on TherapyCareNow — including your location, insurance details, or mental health concerns — is used solely to match you with appropriate providers. We do not sell your personal data to third parties. However, no digital platform can guarantee absolute security. Do not enter sensitive clinical information (such as diagnoses or treatment history) into search fields or public-facing forms. Review our Privacy Policy for full details on data handling and your rights.
-              </p>
-            </div>
-
-            {/* Misrepresentation Risk */}
-            <div className="bg-card border border-rose-500/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0">
-                  <FileWarning className="w-5 h-5 text-rose-600" />
-                </div>
-                <h3 className="font-semibold text-foreground">Misrepresentation Risk</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Provider profiles on TherapyCareNow may include self-reported information that has not been independently audited. Credentials, specialties, and insurance acceptance are subject to change. TherapyCareNow is not responsible for misrepresentations made by listed providers. If you encounter a provider whose credentials appear fraudulent or whose conduct is inappropriate, please report them using the flag feature on their profile or contact us directly. Always verify a provider's license status with your state licensing board before beginning treatment.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Safety disclaimer */}
       <section className="container py-12">
@@ -319,10 +282,14 @@ export default function Home() {
             <Heart className="w-4 h-4 text-primary" />
             <span>TherapyCareNow · All 50 states</span>
           </div>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Use</Link>
             <Link href="/settings" className="hover:text-foreground transition-colors">Settings</Link>
+            <span className="text-border">|</span>
+            <Link href="/disclosures#data-risk" className="hover:text-foreground transition-colors">Data Risk Disclosure</Link>
+            <Link href="/disclosures#privacy-risk" className="hover:text-foreground transition-colors">Privacy Risk Disclosure</Link>
+            <Link href="/disclosures#misrepresentation" className="hover:text-foreground transition-colors">Misrepresentation Risk</Link>
           </div>
         </div>
       </footer>

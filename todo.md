@@ -348,3 +348,23 @@
 - [x] TherapistsLanding.tsx: full dedicated /therapists landing page (hero, license types, comparison, 50-state directory, FAQ, CTA)
 - [x] Fix Railway deployment: add .node-version (22) and nodeVersion in railway.toml to fix import.meta.dirname crash on Node 18
 - [x] Deploy latest code to Railway and verify therapycarenow.com shows all changes
+
+## Follow-up Fixes & End-to-End Testing (Mar 2026 - Session 3)
+- [ ] Move Risk Disclosures from full page-body cards to footer links only
+- [ ] Make "Try it yourself" badge a real clickable link to /demo
+- [ ] Add "Try it yourself" button at bottom of "How it works" section
+- [ ] Rename "AI Assistant" to "Assistant" in NavBar mobile menu
+- [ ] End-to-end test all routes, buttons, forms, triage, AI assistant, provider search, free resources, demo
+- [ ] Fix all issues found during testing
+- [ ] Deploy all changes to production via Manus checkpoint + publish
+
+## Follow-up Fixes & End-to-End Testing (Mar 12, 2026)
+
+- [x] Risk Disclosures moved from page body cards to footer links only
+- [x] "Try it yourself" badge made clickable (links to /demo)
+- [x] "Try it yourself" button added at bottom of "How it works" section
+- [x] NavBar "AI Assistant" renamed to "Assistant"
+- [x] Created /triage page with 3-step questionnaire (urgency → provider type → insurance → result)
+- [x] Fixed state filter bug in searchProviders (telehealth OR was returning wrong-state providers)
+- [x] Fixed ProviderProfile.tsx crash (specialties is string[] not {specialty: string}[])
+- [x] All 20 vitest tests pass

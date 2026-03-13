@@ -24,6 +24,7 @@ import InteractiveDemo from "./pages/InteractiveDemo";
 import PsychiatristsLanding from "./pages/PsychiatristsLanding";
 import PsychologistsLanding from "./pages/PsychologistsLanding";
 import TherapistsLanding from "./pages/TherapistsLanding";
+import Triage from "./pages/Triage";
 
 function Router() {
   return (
@@ -45,6 +46,7 @@ function Router() {
       <Route path="/privacy" component={PrivacyPolicy} />
       <Route path="/terms" component={TermsOfService} />
       <Route path="/demo" component={InteractiveDemo} />
+      <Route path="/triage" component={Triage} />
       {/* Provider type landing pages */}
       <Route path="/psychiatrists" component={PsychiatristsLanding} />
       <Route path="/psychologists" component={PsychologistsLanding} />

@@ -145,7 +145,7 @@ export default function NavBar() {
           {[
             { href: "/free-resources", label: "Free Help" },
             { href: "/benefits", label: "Benefits Wallet" },
-            { href: "/ai-assistant", label: "AI Assistant" },
+            { href: "/ai-assistant", label: "Assistant" },
           ].map((link) => (
             <Link
               key={link.href}
@@ -261,7 +261,7 @@ export default function NavBar() {
           {[
             { href: "/free-resources", label: "Free Help" },
             { href: "/benefits", label: "Benefits Wallet" },
-            { href: "/ai-assistant", label: "AI Assistant" },
+            { href: "/ai-assistant", label: "Assistant" },
           ].map((link) => (
             <Link
               key={link.href}

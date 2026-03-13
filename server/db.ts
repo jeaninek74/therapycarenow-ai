@@ -212,12 +212,11 @@ export async function searchProviders(params: {
   const conditions = [eq(providers.isActive, true)];
 
   if (params.stateCode) {
-    // Match providers licensed in the state OR practicing in the state OR offering telehealth
+    // Match providers licensed in the state OR practicing in the state
     conditions.push(
       or(
         eq(providers.licenseState, params.stateCode),
-        eq(providers.stateCode, params.stateCode),
-        eq(providers.telehealthAvailable, true)
+        eq(providers.stateCode, params.stateCode)
       )!
     );
   }
