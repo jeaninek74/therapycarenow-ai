@@ -368,3 +368,28 @@
 - [x] Fixed state filter bug in searchProviders (telehealth OR was returning wrong-state providers)
 - [x] Fixed ProviderProfile.tsx crash (specialties is string[] not {specialty: string}[])
 - [x] All 20 vitest tests pass
+
+## PWA Implementation (Mar 12, 2026)
+
+- [ ] Install vite-plugin-pwa
+- [ ] Configure vite.config.ts with PWA plugin (manifest, workbox)
+- [ ] Create public/manifest.json with TherapyCareNow branding
+- [ ] Generate PWA icons (192x192, 512x512, maskable)
+- [ ] Add iOS meta tags to index.html (apple-touch-icon, apple-mobile-web-app-*)
+- [ ] Create offline fallback page
+- [ ] Add PWA install prompt component
+- [ ] Register service worker
+
+## Stripe Clinician Subscriptions (Mar 12, 2026)
+
+- [ ] Add clinician_subscriptions and stripe_events tables to schema
+- [ ] Run db:push for new tables
+- [ ] Create Stripe products.ts with clinician plan price IDs
+- [ ] Stripe webhook handler at /api/stripe/webhook
+- [ ] 14-day free trial logic on clinician NPI registration
+- [ ] Paywall middleware: block clinicianProcedure if subscription lapsed
+- [ ] Subscription status banner in ClinicianDashboard
+- [ ] Billing portal redirect (Stripe Customer Portal)
+- [ ] ClinicianSubscription page (/clinician/subscription) with plan details and upgrade CTA
+- [ ] Trial countdown display
+- [ ] Grace period handling (3-day grace after trial/subscription expiry)

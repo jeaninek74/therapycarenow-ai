@@ -31,6 +31,8 @@ async function findAvailablePort(startPort: number = 3000): Promise<number> {
 async function startServer() {
   const app = express();
   const server = createServer(app);
+  // Trust Railway's proxy so rate-limiter can read real client IPs
+  app.set("trust proxy", 1);
   // Redirect apex domain to www
   app.use((req, res, next) => {
     const host = req.headers.host || '';

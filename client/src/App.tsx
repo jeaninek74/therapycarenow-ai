@@ -20,6 +20,7 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ConsentBanner from "./components/ConsentBanner";
+import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import InteractiveDemo from "./pages/InteractiveDemo";
 import PsychiatristsLanding from "./pages/PsychiatristsLanding";
 import PsychologistsLanding from "./pages/PsychologistsLanding";
@@ -65,6 +66,7 @@ function App() {
           <Toaster />
           <Router />
           <ConsentBanner />
+          <PWAInstallPrompt />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
