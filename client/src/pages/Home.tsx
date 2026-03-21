@@ -264,6 +264,28 @@ export default function Home() {
       </section>
 
 
+      {/* Demo Video */}
+      <section className="container py-16">
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-3">Watch a quick demo</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            See TherapyCareNow in action — from triage to provider search to free resources.
+          </p>
+        </div>
+        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border">
+          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
+            <iframe
+              src="https://www.loom.com/embed/5fd8e4f2de2d4a27957629344487690d?sid=therapycarenow-demo"
+              frameBorder="0"
+              allowFullScreen
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+              title="TherapyCareNow Demo"
+            />
+          </div>
+        </div>
+      </section>
+
+
       {/* Safety disclaimer */}
       <section className="container py-12">
         <div className="bg-card border border-border rounded-2xl p-6 text-center max-w-2xl mx-auto">

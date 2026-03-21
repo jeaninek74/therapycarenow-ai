@@ -393,3 +393,7 @@
 - [ ] ClinicianSubscription page (/clinician/subscription) with plan details and upgrade CTA
 - [ ] Trial countdown display
 - [ ] Grace period handling (3-day grace after trial/subscription expiry)
+
+## Loom Demo Video
+- [x] Upload therapycarenow_demo.mp4 to Loom (jeaninek74@gmail.com) — share link: https://www.loom.com/share/5fd8e4f2de2d4a27957629344487690d
+- [x] Embed Loom video on Home.tsx "Watch a quick demo" section
