@@ -124,7 +124,7 @@ async function parseRSSFeed(url: string): Promise<Array<{ title: string; descrip
     const items: Array<{ title: string; description: string; link: string; pubDate: string }> = [];
 
     // Simple XML parser for RSS items
-    const itemRegex = /<item>([\/\s\S]*?)<\/item>/g;
+    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match: RegExpExecArray | null;
     while ((match = itemRegex.exec(xml)) !== null) {
       const itemXml = match[1];

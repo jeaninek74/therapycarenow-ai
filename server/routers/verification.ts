@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { eq, desc } from "drizzle-orm";
-import { protectedProcedure, publicProcedure, router } from "../_core/trpc";
+import { adminProcedure, publicProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
 import { providers, providerSubmissions } from "../../drizzle/schema";
 import { verifyProviderLicense } from "../licenseVerification";
@@ -71,10 +71,7 @@ export const verificationRouter = router({
     }),
 
   // - Admin: get all pending submissions -
-  getSubmissions: protectedProcedure.query(async ({ ctx }) => {
-    if (ctx.user.role !== "admin") {
-      throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-    }
+  getSubmissions: adminProcedure.query(async () => {
     const db = await getDb();
     if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
 
@@ -82,7 +79,7 @@ export const verificationRouter = router({
   }),
 
   // - Admin: approve or reject a submission -
-  reviewSubmission: protectedProcedure
+  reviewSubmission: adminProcedure
     .input(
       z.object({
         submissionId: z.number(),
@@ -91,9 +88,6 @@ export const verificationRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      if (ctx.user.role !== "admin") {
-        throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-      }
       const db = await getDb();
       if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
 
@@ -166,10 +160,7 @@ export const verificationRouter = router({
     }),
 
   // - Admin: get verification stats -
-  getStats: protectedProcedure.query(async ({ ctx }) => {
-    if (ctx.user.role !== "admin") {
-      throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-    }
+  getStats: adminProcedure.query(async () => {
     const db = await getDb();
     if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
 

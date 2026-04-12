@@ -9,6 +9,7 @@
  */
 
 import { invokeLLM } from "./_core/llm";
+import { safeLog } from "./_core/security";
 
 export interface ModerationResult {
   safe: boolean;
@@ -107,9 +108,10 @@ Be conservative — when in doubt, flag it. User safety is the top priority.`,
       categories: parsed.categories,
     };
   } catch (err) {
-    console.error("[Moderation] Failed, defaulting to safe:", err);
-    // On moderation failure, allow but log — do not block navigation
-    return { safe: true, flagged: false, triggersCrisisMode: false };
+    safeLog.error("[Moderation] Failed, defaulting to blocked for safety:", err);
+    // On moderation failure, block AI responses — user safety is the priority.
+    // Navigation and non-AI features remain available.
+    return { safe: false, flagged: true, triggersCrisisMode: false };
   }
 }
 
@@ -190,7 +192,7 @@ ${contextInfo} ${insuranceInfo}`,
 
     return { content: content as string, safe: true, blocked: false };
   } catch (err) {
-    console.error("[AI Assistant] Failed:", err);
+    safeLog.error("[AI Assistant] Failed:", err);
     return {
       content: "I'm having trouble right now. Please use the search tools to find resources.",
       safe: true,

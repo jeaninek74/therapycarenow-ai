@@ -29,6 +29,7 @@ import {
 } from "./db";
 import { TRPCError } from "@trpc/server";
 import { notifyOwner } from "./_core/notification";
+import { safeLog } from "./_core/security";
 import { verificationRouter } from "./routers/verification";
 import {
   runFullComplianceSync,
@@ -307,13 +308,23 @@ const aiRouter = router({
             "User has been redirected to Crisis Mode with 911/988 resources.",
             "No personal health information or message content is included in this alert.",
           ].join("\n"),
-        }).catch((err) => console.warn("[Notification] Crisis moderation notify failed:", err));
+        }).catch((err) => safeLog.warn("[Notification] Crisis moderation notify failed:", err));
 
         return {
           content: null,
           crisisMode: true,
           blocked: true,
           blockReason: "Safety concern detected. Please use crisis resources.",
+        };
+      }
+
+      // Step 2b: If moderation flagged but not crisis (e.g., service failure fallback), block AI
+      if (modResult.flagged && !modResult.safe) {
+        return {
+          content: "I'm unable to process that right now. Please use the search tools to find resources, or call 988 if you need immediate support.",
+          crisisMode: false,
+          blocked: true,
+          blockReason: "Moderation could not verify safety. AI response withheld.",
         };
       }
 
@@ -332,6 +343,15 @@ const aiRouter = router({
     }),
 });
 
+// - Admin Procedure (shared by compliance + admin routers) -
+
+const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.user.role !== "admin") {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+  }
+  return next({ ctx });
+});
+
 // - State Compliance Router -
 
 const complianceRouter = router({
@@ -345,47 +365,37 @@ const complianceRouter = router({
     return getAllStateCompliance();
   }),
 
-  // - Automated Monitoring -
-  getSummary: publicProcedure.query(async () => {
+  // - Automated Monitoring (admin-only) -
+  getSummary: adminProcedure.query(async () => {
     return getComplianceSummary();
   }),
 
-  getAlerts: publicProcedure.query(async () => {
+  getAlerts: adminProcedure.query(async () => {
     return getActiveAlerts();
   }),
 
-  getSyncLogs: publicProcedure.query(async () => {
+  getSyncLogs: adminProcedure.query(async () => {
     return getRecentSyncLogs(20);
   }),
 
-  getPolicyUpdates: publicProcedure.query(async () => {
+  getPolicyUpdates: adminProcedure.query(async () => {
     return getRecentPolicyUpdates(30);
   }),
 
-  dismissAlert: protectedProcedure
+  dismissAlert: adminProcedure
     .input(z.object({ alertId: z.number() }))
     .mutation(async ({ input, ctx }) => {
       await dismissAlert(input.alertId, ctx.user.id);
       return { success: true };
     }),
 
-  triggerSync: protectedProcedure.mutation(async ({ ctx }) => {
-    if (ctx.user.role !== "admin") {
-      throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-    }
+  triggerSync: adminProcedure.mutation(async () => {
     const results = await runFullComplianceSync();
     return { results };
   }),
 });
 
 // - Admin Router -
-
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== "admin") {
-    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-  }
-  return next({ ctx });
-});
 
 const adminRouter = router({
   getStats: adminProcedure.query(async () => {
