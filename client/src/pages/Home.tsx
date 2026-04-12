@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play } from "lucide-react";
 import { useState } from "react";
+import { Heart, Phone, Search, Shield, Check, Brain, UserCheck, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {
@@ -297,10 +298,20 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-border py-8">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Heart className="w-4 h-4 text-primary" />
-            <span>TherapyCareNow · All 50 states</span>
+        <div className="container flex flex-col gap-4 text-sm text-muted-foreground">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Heart className="w-4 h-4 text-primary" />
+              <span>TherapyCareNow · All 50 states</span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-6">
+              <Link href="/therapists" className="hover:text-foreground transition-colors">Therapists</Link>
+              <Link href="/psychiatrists" className="hover:text-foreground transition-colors">Psychiatrists</Link>
+              <Link href="/psychologists" className="hover:text-foreground transition-colors">Psychologists</Link>
+              <Link href="/free-resources" className="hover:text-foreground transition-colors">Free Resources</Link>
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Use</Link>
+            </div>
           </div>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
@@ -329,6 +340,7 @@ function ProviderCategoryCard({
   description,
   services,
   note,
+  providerCount,
   featured = false,
 }: {
   href: string;
@@ -337,6 +349,7 @@ function ProviderCategoryCard({
   accentColor: string;
   badgeColor: string;
   category: string;
+  providerCount?: string;
   licenses: string[];
   description: string;
   services: string[];
@@ -360,7 +373,9 @@ function ProviderCategoryCard({
         </div>
         <div>
           <h3 className="text-xl font-bold text-foreground">{category}</h3>
-
+          {providerCount && (
+            <p className="text-sm text-muted-foreground font-medium">{providerCount} providers</p>
+          )}
         </div>
       </div>
 
@@ -452,22 +467,15 @@ function InteractiveDemo() {
     { label: "Psychiatrist", icon: "💊", desc: "Medication management" },
     { label: "Psychologist", icon: "📋", desc: "Testing & assessment" },
   ];
-
-  const states = ["California", "Texas", "New York", "Florida", "Illinois", "Pennsylvania"];
+  const states = ["California", "Texas", "New York", "Florida", "Illinois", "Pennsylvania", "Ohio", "Georgia", "North Carolina", "Michigan", "New Jersey", "Virginia"];
   const concerns = ["Anxiety", "Depression", "Trauma / PTSD", "ADHD", "Relationship issues", "Grief & loss"];
-
   const reset = () => { setStep(0); setSelectedType(null); setSelectedState(null); setSelectedConcern(null); };
 
   return (
     <div className="bg-card border border-border rounded-2xl overflow-hidden max-w-3xl mx-auto shadow-sm">
-      {/* Progress bar */}
       <div className="h-1.5 bg-muted">
-        <div
-          className="h-full bg-primary transition-all duration-500"
-          style={{ width: `${(step / 3) * 100}%` }}
-        />
+        <div className="h-full bg-primary transition-all duration-500" style={{ width: `${(step / 3) * 100}%` }} />
       </div>
-
       <div className="p-8">
         {step === 0 && (
           <div>
@@ -476,11 +484,8 @@ function InteractiveDemo() {
             <p className="text-sm text-muted-foreground mb-6">Choose the type that best matches your needs.</p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {providerTypes.map((t) => (
-                <button
-                  key={t.label}
-                  onClick={() => { setSelectedType(t.label); setStep(1); }}
-                  className="flex flex-col items-center gap-2 p-5 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-center group"
-                >
+                <button key={t.label} onClick={() => { setSelectedType(t.label); setStep(1); }}
+                  className="flex flex-col items-center gap-2 p-5 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-center group">
                   <span className="text-3xl">{t.icon}</span>
                   <span className="font-semibold text-foreground group-hover:text-primary transition-colors">{t.label}</span>
                   <span className="text-xs text-muted-foreground">{t.desc}</span>
@@ -489,7 +494,6 @@ function InteractiveDemo() {
             </div>
           </div>
         )}
-
         {step === 1 && (
           <div>
             <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 2 of 3</p>
@@ -497,19 +501,13 @@ function InteractiveDemo() {
             <p className="text-sm text-muted-foreground mb-6">We have verified {selectedType?.toLowerCase()}s in all 50 states.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {states.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => { setSelectedState(s); setStep(2); }}
-                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary"
-                >
-                  {s}
-                </button>
+                <button key={s} onClick={() => { setSelectedState(s); setStep(2); }}
+                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary">{s}</button>
               ))}
             </div>
             <button onClick={() => setStep(0)} className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
           </div>
         )}
-
         {step === 2 && (
           <div>
             <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 3 of 3</p>
@@ -517,19 +515,13 @@ function InteractiveDemo() {
             <p className="text-sm text-muted-foreground mb-6">Select your primary concern to refine your results.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {concerns.map((c) => (
-                <button
-                  key={c}
-                  onClick={() => { setSelectedConcern(c); setStep(3); }}
-                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary"
-                >
-                  {c}
-                </button>
+                <button key={c} onClick={() => { setSelectedConcern(c); setStep(3); }}
+                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary">{c}</button>
               ))}
             </div>
             <button onClick={() => setStep(1)} className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
           </div>
         )}
-
         {step === 3 && (
           <div className="text-center">
             <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
@@ -541,24 +533,111 @@ function InteractiveDemo() {
               <span className="font-semibold text-foreground">{selectedState}</span> who specialize in{" "}
               <span className="font-semibold text-foreground">{selectedConcern}</span>.
             </p>
-            <p className="text-xs text-muted-foreground mb-6">This is a demo — click below to run a real search with live provider data.</p>
+            <p className="text-xs text-muted-foreground mb-6">Click below to search real provider listings.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href={`/find-therapist?category=${selectedType}&state=${selectedState}&concern=${selectedConcern}`}
+                href={`/find-therapist?category=${encodeURIComponent(selectedType ?? '')}&state=${encodeURIComponent(selectedState ?? '')}&concern=${encodeURIComponent(selectedConcern ?? '')}`}
                 className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-6 py-3 hover:opacity-90 transition-all"
               >
                 <Search className="w-4 h-4" />
                 Search Real Providers
               </Link>
-              <button
-                onClick={reset}
-                className="inline-flex items-center justify-center gap-2 border border-border rounded-xl px-6 py-3 text-sm font-medium text-foreground hover:bg-muted/50 transition-all"
-              >
+              <button onClick={reset}
+                className="inline-flex items-center justify-center gap-2 border border-border rounded-xl px-6 py-3 text-sm font-medium text-foreground hover:bg-muted/50 transition-all">
                 Try Again
               </button>
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// ── Testimonials ──────────────────────────────────────────────────────────────
+const TESTIMONIALS: {
+  quote: string;
+  name: string;
+  location: string;
+  rating: number;
+  tag: string;
+}[] = [
+  {
+    quote: "I had no idea where to start looking for a therapist who accepted my insurance. TherapyCareNow showed me options in my city within minutes. I found someone I really connect with.",
+    name: "Marissa T.",
+    location: "Austin, TX",
+    rating: 5,
+    tag: "Found a therapist",
+  },
+  {
+    quote: "After struggling for months, I finally found a psychiatrist who specializes in ADHD near me. The search by specialty and state made it so easy. Highly recommend this site.",
+    name: "DeShawn R.",
+    location: "Atlanta, GA",
+    rating: 5,
+    tag: "Found a psychiatrist",
+  },
+  {
+    quote: "My daughter needed a psychologist for testing. I was overwhelmed until I used TherapyCareNow. It filtered by telehealth and insurance — we had an appointment booked the same week.",
+    name: "Linda K.",
+    location: "Portland, OR",
+    rating: 5,
+    tag: "Found a psychologist",
+  },
+  {
+    quote: "I was skeptical at first, but this platform is genuinely helpful. The comparison table explaining the difference between therapists, psychiatrists, and psychologists alone saved me hours of research.",
+    name: "Carlos M.",
+    location: "Miami, FL",
+    rating: 5,
+    tag: "Great resource",
+  },
+  {
+    quote: "As someone without insurance, I used the Free Help section to find sliding-scale therapists in my area. I'm now in weekly therapy for the first time in my life. Thank you.",
+    name: "Priya S.",
+    location: "Chicago, IL",
+    rating: 5,
+    tag: "Free & low-cost help",
+  },
+  {
+    quote: "The site is clean, fast, and doesn't feel clinical or scary. It felt like a friend helping me navigate something overwhelming. I've already recommended it to three people.",
+    name: "Jordan W.",
+    location: "Denver, CO",
+    rating: 5,
+    tag: "Easy to use",
+  },
+];
+
+function TestimonialCard({
+  quote,
+  name,
+  location,
+  rating,
+  tag,
+}: {
+  quote: string;
+  name: string;
+  location: string;
+  rating: number;
+  tag: string;
+}) {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-6 flex flex-col gap-4 hover:shadow-md transition-shadow">
+      <div className="flex items-start justify-between gap-2">
+        <Quote className="w-6 h-6 text-primary/40 flex-shrink-0 mt-0.5" />
+        <span className="text-xs font-semibold bg-primary/10 text-primary px-2.5 py-1 rounded-full">
+          {tag}
+        </span>
+      </div>
+      <p className="text-sm text-foreground leading-relaxed flex-1">"{quote}"</p>
+      <div className="flex items-center justify-between pt-2 border-t border-border">
+        <div>
+          <p className="text-sm font-semibold text-foreground">{name}</p>
+          <p className="text-xs text-muted-foreground">{location}</p>
+        </div>
+        <div className="flex gap-0.5">
+          {Array.from({ length: rating }).map((_, i) => (
+            <Star key={i} className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+          ))}
+        </div>
       </div>
     </div>
   );

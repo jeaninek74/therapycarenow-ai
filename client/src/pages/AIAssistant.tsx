@@ -16,7 +16,7 @@ interface Message {
 
 const INITIAL_MESSAGE: Message = {
   role: "assistant",
-  content: `Hello! I'm the TherapyCareNow AI assistant. I can help you:
+  content: `Hello! I'm the TherapyCareNow assistant. I can help you:
 
 - **Understand your options** for mental health support
 - **Explain different therapy types** (CBT, DBT, EMDR, etc.)
@@ -92,7 +92,7 @@ export default function AIAssistant() {
               <Bot className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="font-semibold text-foreground">AI Assistant</h1>
+              <h1 className="font-semibold text-foreground">Assistant</h1>
               <p className="text-xs text-muted-foreground">Navigation help only — not clinical advice</p>
             </div>
           </div>

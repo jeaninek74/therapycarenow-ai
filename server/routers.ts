@@ -318,6 +318,16 @@ const aiRouter = router({
         };
       }
 
+      // Step 2b: If moderation flagged but not crisis (e.g., service failure fallback), block AI
+      if (modResult.flagged && !modResult.safe) {
+        return {
+          content: "I'm unable to process that right now. Please use the search tools to find resources, or call 988 if you need immediate support.",
+          crisisMode: false,
+          blocked: true,
+          blockReason: "Moderation could not verify safety. AI response withheld.",
+        };
+      }
+
       // Step 3: AI response (only if moderation passed)
       const aiResponse = await getSupportAssistantResponse(input.message, {
         stateCode: input.stateCode,
@@ -331,6 +341,15 @@ const aiRouter = router({
         blockReason: aiResponse.blockReason,
       };
     }),
+});
+
+// - Admin Procedure (shared by compliance + admin routers) -
+
+const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.user.role !== "admin") {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
+  }
+  return next({ ctx });
 });
 
 // - State Compliance Router -

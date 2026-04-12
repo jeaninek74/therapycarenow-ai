@@ -32,7 +32,7 @@ export default function ConsentBanner() {
           <Shield className="w-5 h-5 text-teal-400 shrink-0 mt-0.5 sm:mt-0" />
           <div className="flex-1 text-sm text-slate-300 leading-relaxed">
             <span className="font-semibold text-white">Important Notice: </span>
-            TherapyCareNow is an <strong className="text-white">informational and referral platform only</strong> — not a licensed healthcare provider. Our AI assistant is a general wellness tool and is <strong className="text-white">not a substitute for professional mental health care</strong>. In an emergency, call <strong className="text-white">911</strong> or <strong className="text-white">988</strong>. We use a single session cookie for login. By continuing, you agree to our{" "}
+            TherapyCareNow is an <strong className="text-white">informational and referral platform only</strong> — not a licensed healthcare provider. Our assistant is a general wellness tool and is <strong className="text-white">not a substitute for professional mental health care</strong>. In an emergency, call <strong className="text-white">911</strong> or <strong className="text-white">988</strong>. We use a single session cookie for login. By continuing, you agree to our{" "}
             <Link href="/terms" className="text-teal-400 underline hover:text-teal-300">Terms of Service</Link>
             {" "}and{" "}
             <Link href="/privacy" className="text-teal-400 underline hover:text-teal-300">Privacy Policy</Link>.

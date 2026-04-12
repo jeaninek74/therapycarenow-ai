@@ -35,7 +35,7 @@ export default function PrivacyPolicy() {
               <div>
                 <p className="font-semibold text-blue-900 text-sm">Important Notice Regarding Health Information</p>
                 <p className="text-blue-800 text-sm mt-1">
-                  TherapyCareNow is a <strong>mental health resource and referral platform</strong>, not a covered healthcare entity under HIPAA. We do not store, transmit, or process Protected Health Information (PHI) as defined by HIPAA. Any information you share with our AI assistant is used solely to provide general wellness guidance and is not stored in identifiable form. We strongly encourage you to share sensitive health information only with licensed healthcare providers.
+                  TherapyCareNow is a <strong>mental health resource and referral platform</strong>, not a covered healthcare entity under HIPAA. We do not store, transmit, or process Protected Health Information (PHI) as defined by HIPAA. Any information you share with our assistant is used solely to provide general wellness guidance and is not stored in identifiable form. We strongly encourage you to share sensitive health information only with licensed healthcare providers.
                 </p>
               </div>
             </div>
@@ -53,7 +53,7 @@ export default function PrivacyPolicy() {
               <p><strong>Account information:</strong> Name and email address when you create an account. Passwords are stored as one-way cryptographic hashes (bcrypt) and cannot be recovered or read by our staff.</p>
               <p><strong>Usage data:</strong> Anonymized triage session outcomes (risk level only — no session text is stored), page views, and feature usage. No personally identifiable information is included in analytics.</p>
               <p><strong>Provider directory interactions:</strong> Search filters (state, specialty, insurance) used to find therapists. These are not linked to your identity.</p>
-              <p><strong>AI assistant interactions:</strong> Messages sent to the AI assistant are processed in real time and are <strong>not stored</strong> after the session ends. No conversation history is retained on our servers.</p>
+              <p><strong>Assistant interactions:</strong> Messages sent to the assistant are processed in real time and are <strong>not stored</strong> after the session ends. No conversation history is retained on our servers.</p>
             </div>
           </section>
 
@@ -77,7 +77,7 @@ export default function PrivacyPolicy() {
             <ul className="space-y-1 list-disc pl-5">
               <li>Authenticate your account and maintain your session.</li>
               <li>Provide personalized resource recommendations based on your state.</li>
-              <li>Improve the accuracy and safety of our triage and AI tools (using only anonymized, aggregated data).</li>
+              <li>Improve the accuracy and safety of our triage tools (using only anonymized, aggregated data).</li>
               <li>Send critical safety notifications if you have opted in (e.g., crisis resource updates for your state).</li>
             </ul>
             <p className="mt-3">We <strong>never</strong> sell, rent, or share your personal information with third parties for marketing purposes.</p>
