@@ -272,19 +272,14 @@ export default function Home() {
             See TherapyCareNow in action — from triage to provider search to free resources.
           </p>
         </div>
-        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border">
-          <video
-            controls
-            width="100%"
-            style={{ display: "block" }}
-            preload="metadata"
-          >
-            <source
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663052240744/NReUutbzXJkGRJ3cRyQ7r7/therapycarenow_demo_narrated_4d2a5449.mp4"
-              type="video/mp4"
-            />
-            Your browser does not support the video tag.
-          </video>
+        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border" style={{ position: "relative", paddingBottom: "75%", height: 0 }}>
+          <iframe
+            src="https://www.loom.com/embed/5fd8e4f2de2d4a27957629344487690d"
+            frameBorder={0}
+            allowFullScreen
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+            title="TherapyCareNow Demo"
+          />
         </div>
       </section>
 

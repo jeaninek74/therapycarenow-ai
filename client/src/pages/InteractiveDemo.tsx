@@ -7,7 +7,7 @@ import NavBar from "@/components/NavBar";
 import {
   ChevronRight, ChevronLeft, Play, Search, Heart, Brain,
   Shield, MapPin, Phone, Star, CheckCircle, Users, FileText,
-  Stethoscope, Lock, Globe, ArrowRight, X, Sparkles, Building2
+  Lock, Globe, ArrowRight, X, Sparkles
 } from "lucide-react";
 
 const DEMO_STEPS = [
@@ -201,43 +201,8 @@ const DEMO_STEPS = [
         },
       ],
     },
-    cta: "Next: Clinician Portal",
-    visual: "chat",
-  },
-  {
-    id: "clinician",
-    title: "Clinician Portal",
-    subtitle: "AI-Powered Tools for Mental Health Professionals",
-    description: "Licensed therapists, social workers, and psychiatrists get a dedicated portal with AI-assisted note creation, smart treatment planning, risk detection, and practice analytics.",
-    icon: Stethoscope,
-    color: "from-rose-500 to-red-600",
-    demoContent: {
-      type: "clinician",
-      features: [
-        {
-          icon: FileText,
-          title: "AI Note Creation",
-          desc: "Generate SOAP/DAP notes from session transcripts in seconds. Review and approve before saving.",
-        },
-        {
-          icon: Brain,
-          title: "Smart Treatment Planning",
-          desc: "AI-suggested interventions based on diagnosis, goals, and client progress.",
-        },
-        {
-          icon: Shield,
-          title: "Risk Detection",
-          desc: "Automatically flags crisis signals in notes and client check-ins for immediate attention.",
-        },
-        {
-          icon: Building2,
-          title: "Practice Analytics",
-          desc: "Burnout indicators, outcome dashboards, session metrics, and revenue optimization.",
-        },
-      ],
-    },
     cta: "Next: Security & Privacy",
-    visual: "clinician",
+    visual: "chat",
   },
   {
     id: "security",
@@ -394,7 +359,7 @@ function BenefitsVisual({ content }: { content: any }) {
       </div>
       <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
         <div className="flex items-center gap-2 mb-2">
-          <Building2 className="w-4 h-4 text-amber-300" />
+          <Shield className="w-4 h-4 text-amber-300" />
           <span className="text-white font-medium text-sm">EAP: {content.eap.employer}</span>
         </div>
         <div className="text-white/80 text-sm">
@@ -439,22 +404,7 @@ function ChatVisual({ content }: { content: any }) {
   );
 }
 
-function ClinicianVisual({ content }: { content: any }) {
-  return (
-    <div className="grid grid-cols-2 gap-2">
-      {content.features.map((f: any, i: number) => {
-        const Icon = f.icon;
-        return (
-          <div key={i} className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
-            <Icon className="w-5 h-5 text-rose-300 mb-1.5" />
-            <div className="text-white font-medium text-xs mb-1">{f.title}</div>
-            <div className="text-white/60 text-xs leading-relaxed">{f.desc}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
+
 
 function SecurityVisual({ content }: { content: any }) {
   return (
@@ -481,7 +431,6 @@ function StepVisual({ step }: { step: typeof DEMO_STEPS[0] }) {
     case "directory": return <DirectoryVisual content={content} />;
     case "benefits": return <BenefitsVisual content={content} />;
     case "chat": return <ChatVisual content={content} />;
-    case "clinician": return <ClinicianVisual content={content} />;
     case "security": return <SecurityVisual content={content} />;
     default: return null;
   }
@@ -530,7 +479,7 @@ export default function InteractiveDemo() {
             See TherapyCareNow in Action
           </h1>
           <p className="text-white/70 text-lg max-w-2xl mx-auto mb-6">
-            Explore every feature of the platform — from finding a therapist to the clinician portal — in this guided walkthrough.
+            Explore every feature of the platform — from finding a therapist to benefits, AI assistance, and security — in this guided walkthrough.
           </p>
           <div className="flex items-center justify-center gap-3">
             <Button
@@ -654,7 +603,7 @@ export default function InteractiveDemo() {
             { label: "Find a Therapist", href: "/find-therapist", icon: Search, color: "bg-blue-50 text-blue-700 border-blue-200" },
             { label: "Therapist Directory", href: "/directory", icon: Globe, color: "bg-green-50 text-green-700 border-green-200" },
             { label: "Benefits Wallet", href: "/benefits", icon: Shield, color: "bg-orange-50 text-orange-700 border-orange-200" },
-            { label: "Clinician Portal", href: "/clinician/login", icon: Stethoscope, color: "bg-rose-50 text-rose-700 border-rose-200" },
+            { label: "Free Resources", href: "/free-resources", icon: Heart, color: "bg-teal-50 text-teal-700 border-teal-200" },
           ].map((link, i) => {
             const LIcon = link.icon;
             return (

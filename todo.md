@@ -413,3 +413,9 @@
 - [x] Fix Loom video: replaced Loom embed with native HTML5 video player using narrated CDN video
 - [x] Push all changes to Railway therapycarenow-web service (bundle index-CoXHzXvw.js live)
 - [x] Verified live site: tRPC API responding, providers search working, all key changes confirmed in bundle
+
+## Current Session Fixes
+- [x] Remove all Clinician Portal references from InteractiveDemo.tsx (step, CTA, quick link, ClinicianVisual component)
+- [x] Remove Clinician Portal section from PrivacyPolicy.tsx (Section 4 and Stripe subscription reference)
+- [x] Remove Clinician Portal section from TermsOfService.tsx (Section 6 and service description bullet)
+- [x] Fix demo video on homepage — replaced native HTML5 player with Loom iframe embed (5fd8e4f2de2d4a27957629344487690d)

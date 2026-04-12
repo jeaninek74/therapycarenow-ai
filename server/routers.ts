@@ -2,7 +2,7 @@ import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { registerUser, loginUser, createSessionToken } from "./_core/auth";
 import { systemRouter } from "./_core/systemRouter";
-import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
+import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { moderateInput, getSupportAssistantResponse } from "./aiGuardrails";
 import { searchLiveProviders } from "./liveProviderSearch";
@@ -331,15 +331,6 @@ const aiRouter = router({
         blockReason: aiResponse.blockReason,
       };
     }),
-});
-
-// - Admin Procedure (must be defined before complianceRouter) -
-
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== "admin") {
-    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-  }
-  return next({ ctx });
 });
 
 // - State Compliance Router -

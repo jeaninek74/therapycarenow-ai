@@ -59,7 +59,6 @@ export default function TermsOfService() {
               <li>General mental health resources and crisis hotline information</li>
               <li>An AI-powered wellness assistant for general guidance (not clinical advice)</li>
               <li>A triage tool to help users identify appropriate levels of care (not a clinical assessment)</li>
-              <li>A clinician portal for licensed providers to manage their practice (subject to separate clinician terms)</li>
             </ul>
             <p className="mt-3"><strong>The Platform does not provide medical advice, diagnosis, treatment, or therapy.</strong> Provider listings are for informational purposes and do not constitute endorsement or recommendation of any specific provider.</p>
           </section>
@@ -102,19 +101,7 @@ export default function TermsOfService() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-slate-900 mb-3">6. Clinician Terms</h2>
-            <p>Licensed clinicians using the Clinician Portal additionally agree to:</p>
-            <ul className="space-y-1 list-disc pl-5 mt-2">
-              <li>Maintain a valid, active professional license in their jurisdiction.</li>
-              <li>Obtain appropriate patient consent before entering client information into the Platform.</li>
-              <li>Review and take clinical responsibility for all AI-generated notes before use in any clinical context.</li>
-              <li>Comply with all applicable laws including HIPAA, state licensing regulations, and professional ethics codes.</li>
-              <li>Not use the Platform as a sole basis for clinical decision-making.</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-semibold text-slate-900 mb-3">7. Limitation of Liability</h2>
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">6. Limitation of Liability</h2>
             <p>To the maximum extent permitted by law, TherapyCareNow and its operators shall not be liable for any direct, indirect, incidental, special, or consequential damages arising from your use of the Platform, including but not limited to: reliance on provider listings, AI assistant responses, triage outcomes, or any interruption of service.</p>
           </section>
 
