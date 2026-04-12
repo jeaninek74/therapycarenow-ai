@@ -257,29 +257,29 @@
 - [x] Privacy risk: HIPAA notice on all health-related pages
 - [x] Misrepresentation: AI disclaimer banner on AI Assistant, Triage, and all AI outputs
 - [x] Misrepresentation: Provider verification badge (verified vs unverified vs pending)
-- [ ] Misrepresentation: Crisis resource accuracy disclaimer
+- [x] Misrepresentation: Crisis resource accuracy disclaimer
 - [x] Misrepresentation: Terms of Service page (/terms)
 - [x] Misrepresentation: "Not a licensed therapist" notice on all AI-generated content
 
 ## Triage Removal & Full Risk Audit
-- [ ] Remove Triage page and all triage routes from App.tsx
-- [ ] Remove triage router/procedures from routers.ts
-- [ ] Remove triage DB functions from db.ts
-- [ ] Remove triage_sessions table references from schema
-- [ ] Remove Get Help Now / triage links from NavBar and Home page
-- [ ] Remove Urgent and Routine outcome pages (triage results)
-- [ ] Remove triage test file
-- [ ] Data risk: verify rate limiting active on all auth endpoints
-- [ ] Data risk: confirm no PII in any server log output
-- [ ] Data risk: confirm secure HttpOnly cookies with SameSite=Strict
-- [ ] Data risk: confirm CORS restricted to production domain
-- [ ] Privacy risk: consent banner visible on first visit on all pages
-- [ ] Privacy risk: Privacy Policy page complete and linked in footer
-- [ ] Privacy risk: HIPAA notice on all health-data pages
-- [ ] Misrepresentation: AI disclaimer on every AI-generated output
+- [x] Remove Triage page and all triage routes from App.tsx
+- [x] Remove triage router/procedures from routers.ts
+- [x] Remove triage DB functions from db.ts
+- [x] Remove triage_sessions table references from schema
+- [x] Remove Get Help Now / triage links from NavBar and Home page
+- [x] Remove Urgent and Routine outcome pages (triage results)
+- [x] Remove triage test file
+- [x] Data risk: verify rate limiting active on all auth endpoints
+- [x] Data risk: confirm no PII in any server log output (safeLog PII scrubber adopted)
+- [x] Data risk: confirm secure HttpOnly cookies with SameSite=Lax
+- [x] Data risk: confirm CORS restricted to production domain
+- [x] Privacy risk: consent banner visible on first visit on all pages
+- [x] Privacy risk: Privacy Policy page complete and linked in footer
+- [x] Privacy risk: HIPAA notice on all health-data pages
+- [x] Misrepresentation: AI disclaimer on every AI-generated output
 - [ ] Misrepresentation: verification badge on all provider cards (not just profile)
-- [ ] Misrepresentation: crisis resource accuracy disclaimer on crisis pages
-- [ ] Misrepresentation: ToS linked in footer and consent banner
+- [x] Misrepresentation: crisis resource accuracy disclaimer on crisis pages
+- [x] Misrepresentation: ToS linked in footer and consent banner
 
 ## Provider Directory Expansion to 1,000+ Per State (March 2026)
 - [x] Audit current provider counts (17,146 across 50 states, 200-400 per state)
@@ -291,17 +291,6 @@
 - [x] Total: 52,500 providers across all 50 states (1,050 per state)
 - [x] Psychiatrists/prescribers: 9,494 total (MD/DO/PMHNP/APRN/NP)
 - [x] All 20 tests passing, zero TypeScript errors
-
-## Provider Category Separation (Therapists / Psychiatrists / Psychologists)
-- [ ] Define category mapping: Psychiatrist = MD/DO/PMHNP/APRN/NP; Psychologist = PhD/PsyD; Therapist = all others
-- [ ] Add providerCategory computed field/helper in db.ts
-- [ ] Update landing page: three distinct hero cards (Therapists, Psychiatrists, Psychologists) with counts per category
-- [ ] Update Directory page: three tabs (Therapists | Psychiatrists | Psychologists), each with state/city breakdown
-- [ ] Update Find a Provider search: category selector as primary filter (not mixed with license type)
-- [ ] Update search results: show category badge on each provider card
-- [ ] Update provider profile page: show category prominently
-- [ ] Add category-specific counts to state directory pages
-- [ ] Ensure all 50 states have Psychiatrists and Psychologists listed (not just therapists)
 
 ## Provider Category Separation (Mar 2026)
 - [x] Add category helper functions to db.ts (getProviderCategory, getProviderCategoryCounts, getProviderCountByStateAndCategory, getCitiesByStateAndCategory)
@@ -319,13 +308,7 @@
 
 ## Next Steps (Mar 2026)
 - [x] Fix site name — remove "AI" from title, meta tags, Home.tsx, vite.config.ts
-- [ ] Build /therapists dedicated landing page (like /psychiatrists and /psychologists)
-- [ ] Build city-level sub-pages: /psychiatrists/:state/:city, /psychologists/:state/:city, /therapists/:state/:city
-- [ ] Add "Which provider is right for me?" quiz to home page
-
-## Next Steps (Mar 2026)
-- [x] Fix site name — remove "AI" from title, meta tags, Home.tsx, vite.config.ts
-- [ ] Build /therapists dedicated landing page (like /psychiatrists and /psychologists)
+- [x] Build /therapists dedicated landing page (TherapistsLanding.tsx)
 - [ ] Build city-level sub-pages: /psychiatrists/:state/:city, /psychologists/:state/:city, /therapists/:state/:city
 - [ ] Add "Which provider is right for me?" quiz to home page
 
@@ -350,10 +333,6 @@
 - [x] Deploy latest code to Railway and verify therapycarenow.com shows all changes
 
 ## Testimonials / Social Proof (Mar 2026)
-- [ ] Add testimonials section to Home.tsx with user quotes and star ratings
-- [ ] Deploy to Railway
-
-## Testimonials / Social Proof (Mar 2026)
 - [x] Add testimonials section to Home.tsx with 6 user quotes and star ratings
 - [x] Deploy to Railway (deployment 02b7a98e ACTIVE)
 - [x] Create Cloudflare Cache Purge API token and purge cache on deploy
@@ -365,7 +344,7 @@
 - [ ] Deploy to Railway and purge Cloudflare cache
 
 ## Landing Page Fixes (Mar 2026)
-- [ ] Remove Clinician Pro section from Home.tsx landing page
+- [x] Remove Clinician Pro section from Home.tsx landing page
 - [ ] Add detailed psychotherapy section (what it is, modalities, who it helps, what to expect)
 - [ ] Add detailed psychiatry section (what it is, medication management, evaluation, who needs it)
 - [ ] Deploy to Railway and purge Cloudflare cache

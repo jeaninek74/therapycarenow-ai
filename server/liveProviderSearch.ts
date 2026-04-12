@@ -134,9 +134,9 @@ export async function searchLiveProviders(params: {
           : `${firstName} ${lastName}`.trim();
 
         // Get practice location address (prefer LOCATION over MAILING)
-        const addresses: any[] = r.addresses ?? [];
+        const addresses: Array<{ address_purpose?: string; city?: string; state?: string; postal_code?: string; telephone_number?: string }> = r.addresses ?? [];
         const locationAddr =
-          addresses.find((a: any) => a.address_purpose === "LOCATION") ||
+          addresses.find((a) => a.address_purpose === "LOCATION") ||
           addresses[0] ||
           {};
 
@@ -149,9 +149,9 @@ export async function searchLiveProviders(params: {
         const phone = locationAddr.telephone_number ?? null;
 
         // Get primary taxonomy
-        const taxonomies: any[] = r.taxonomies ?? [];
+        const taxonomies: Array<{ primary?: boolean; desc?: string }> = r.taxonomies ?? [];
         const primaryTax =
-          taxonomies.find((t: any) => t.primary) || taxonomies[0] || {};
+          taxonomies.find((t) => t.primary) || taxonomies[0] || {};
         const specialty = mapTaxonomyToSpecialty(primaryTax.desc ?? "");
 
         results.push({

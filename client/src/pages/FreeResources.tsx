@@ -49,6 +49,15 @@ export default function FreeResources() {
           Community clinics, hotlines, and sliding scale providers — available in all 50 states.
         </p>
 
+        {/* Crisis resource accuracy disclaimer */}
+        <div className="bg-muted/50 border border-border rounded-lg p-4 mb-8 text-sm text-muted-foreground">
+          <p>
+            <strong>Disclaimer:</strong> Crisis resource information is maintained for accuracy but may change without notice.
+            Always verify phone numbers and availability directly with the provider. If you are in immediate danger,
+            call <strong>911</strong> or the <strong>988 Suicide & Crisis Lifeline</strong> (call or text 988).
+          </p>
+        </div>
+
         {/* State picker */}
         <div className="mb-8">
           <label className="block text-sm font-medium text-foreground mb-2">

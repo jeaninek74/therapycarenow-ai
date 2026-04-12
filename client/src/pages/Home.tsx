@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { useState } from "react";
-import { Heart, Phone, Search, Shield, ChevronRight, Check, Brain, UserCheck, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
+import { Heart, Phone, Search, Shield, Check, Brain, UserCheck, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {
@@ -25,13 +25,13 @@ export default function Home() {
               TherapyCareNow connects you with licensed therapists, psychiatrists, and psychologists across all 50 states — by city, specialty, and insurance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/triage"
+              <a
+                href="tel:988"
                 className="flex items-center justify-center gap-2 bg-destructive text-destructive-foreground font-semibold rounded-xl px-8 py-4 text-lg shadow-md hover:opacity-90 active:scale-95 transition-all"
               >
                 <Phone className="w-5 h-5" />
-                Get Help Now
-              </Link>
+                Get Help Now — Call 988
+              </a>
               <Link
                 href="/find-therapist"
                 className="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-8 py-4 text-lg shadow-sm hover:opacity-90 active:scale-95 transition-all"
@@ -378,31 +378,6 @@ function ProviderCategoryCard({
   );
 }
 
-// ── Quick Card ────────────────────────────────────────────────────────────────
-function QuickCard({
-  href,
-  icon,
-  title,
-  description,
-}: {
-  href: string;
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
-  return (
-    <Link href={href} className="group block bg-card rounded-2xl border border-border p-6 hover:shadow-md hover:border-primary/30 transition-all">
-      <div className="mb-4">{icon}</div>
-      <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-        {title}
-      </h3>
-      <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
-      <div className="mt-4 flex items-center gap-1 text-primary text-sm font-medium">
-        Get started <ChevronRight className="w-4 h-4" />
-      </div>
-    </Link>
-  );
-}
 
 function Step({ number, title, description }: { number: string; title: string; description: string }) {
   return (
