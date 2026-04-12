@@ -16,6 +16,7 @@ import {
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
+import { safeLog } from "./_core/security";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -24,7 +25,7 @@ export async function getDb() {
     try {
       _db = drizzle(process.env.DATABASE_URL);
     } catch (error) {
-      console.warn("[Database] Failed to connect:", error);
+      safeLog.warn("[Database] Failed to connect:", error);
       _db = null;
     }
   }
@@ -137,7 +138,7 @@ export async function logAuditEvent(event: {
       resourceType: event.resourceType ?? null,
     });
   } catch (err) {
-    console.error("[Audit] Failed to log event:", err);
+    safeLog.error("[Audit] Failed to log event:", err);
   }
 }
 
@@ -584,7 +585,7 @@ export async function bulkImportProviders(providerList: Array<{
       }
       imported++;
     } catch (err) {
-      console.error(`[BulkImport] Failed to import provider ${p.name}:`, err);
+      safeLog.error(`[BulkImport] Failed to import provider ${p.name}:`, err);
       errors++;
     }
   }

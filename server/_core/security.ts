@@ -41,7 +41,7 @@ export const apiRateLimiter = rateLimit({
 });
 
 /**
- * Triage/AI rate limiter: max 30 requests per 10 minutes per IP.
+ * AI rate limiter: max 30 requests per 10 minutes per IP.
  * Prevents AI cost abuse and ensures fair access.
  */
 export const aiRateLimiter = rateLimit({

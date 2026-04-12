@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, ChevronRight, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play } from "lucide-react";
+import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play } from "lucide-react";
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
 
@@ -25,13 +25,13 @@ export default function Home() {
               TherapyCareNow connects you with licensed therapists, psychiatrists, and psychologists across all 50 states — by city, specialty, and insurance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/triage"
+              <a
+                href="tel:988"
                 className="flex items-center justify-center gap-2 bg-destructive text-destructive-foreground font-semibold rounded-xl px-8 py-4 text-lg shadow-md hover:opacity-90 active:scale-95 transition-all"
               >
                 <Phone className="w-5 h-5" />
-                Get Help Now
-              </Link>
+                Get Help Now (988)
+              </a>
               <Link
                 href="/find-therapist"
                 className="flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-8 py-4 text-lg shadow-sm hover:opacity-90 active:scale-95 transition-all"
@@ -186,10 +186,10 @@ export default function Home() {
           <h2 className="text-2xl font-semibold text-foreground mb-8">More ways we can help</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <QuickCard
-              href="/triage"
+              href="tel:988"
               icon={<Phone className="w-6 h-6 text-destructive" />}
-              title="Get Help Now"
-              description="Answer 5 quick questions to find the right support level for your situation."
+              title="Get Help Now (988)"
+              description="Call or text 988 to reach the Suicide & Crisis Lifeline — free, confidential, 24/7."
             />
             <QuickCard
               href="/directory"
@@ -273,15 +273,18 @@ export default function Home() {
           </p>
         </div>
         <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border">
-          <div style={{ position: "relative", paddingBottom: "56.25%", height: 0 }}>
-            <iframe
-              src="https://www.loom.com/embed/5fd8e4f2de2d4a27957629344487690d?sid=therapycarenow-demo"
-              frameBorder="0"
-              allowFullScreen
-              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-              title="TherapyCareNow Demo"
+          <video
+            controls
+            width="100%"
+            style={{ display: "block" }}
+            preload="metadata"
+          >
+            <source
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663052240744/NReUutbzXJkGRJ3cRyQ7r7/therapycarenow_demo_narrated_4d2a5449.mp4"
+              type="video/mp4"
             />
-          </div>
+            Your browser does not support the video tag.
+          </video>
         </div>
       </section>
 
@@ -423,7 +426,7 @@ function QuickCard({
       </h3>
       <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
       <div className="mt-4 flex items-center gap-1 text-primary text-sm font-medium">
-        Get started <ChevronRight className="w-4 h-4" />
+        Get started →
       </div>
     </Link>
   );

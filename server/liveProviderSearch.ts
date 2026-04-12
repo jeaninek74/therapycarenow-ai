@@ -8,6 +8,21 @@
  */
 
 import axios from "axios";
+import { safeLog } from "./_core/security";
+
+// NPPES API response types
+interface NppesAddress {
+  address_purpose: string;
+  city?: string;
+  state?: string;
+  postal_code?: string;
+  telephone_number?: string;
+}
+
+interface NppesTaxonomy {
+  primary: boolean;
+  desc?: string;
+}
 
 const NPPES_BASE = "https://npiregistry.cms.hhs.gov/api/";
 
@@ -134,9 +149,9 @@ export async function searchLiveProviders(params: {
           : `${firstName} ${lastName}`.trim();
 
         // Get practice location address (prefer LOCATION over MAILING)
-        const addresses: any[] = r.addresses ?? [];
+        const addresses: NppesAddress[] = r.addresses ?? [];
         const locationAddr =
-          addresses.find((a: any) => a.address_purpose === "LOCATION") ||
+          addresses.find((a) => a.address_purpose === "LOCATION") ||
           addresses[0] ||
           {};
 
@@ -149,9 +164,9 @@ export async function searchLiveProviders(params: {
         const phone = locationAddr.telephone_number ?? null;
 
         // Get primary taxonomy
-        const taxonomies: any[] = r.taxonomies ?? [];
+        const taxonomies: NppesTaxonomy[] = r.taxonomies ?? [];
         const primaryTax =
-          taxonomies.find((t: any) => t.primary) || taxonomies[0] || {};
+          taxonomies.find((t) => t.primary) || taxonomies[0] || {};
         const specialty = mapTaxonomyToSpecialty(primaryTax.desc ?? "");
 
         results.push({
@@ -172,8 +187,8 @@ export async function searchLiveProviders(params: {
           verificationStatus: "verified",
         });
       }
-    } catch (err: any) {
-      console.error(`[LiveProviderSearch] NPPES query failed for taxonomy "${taxonomy}":`, err.message);
+    } catch (err: unknown) {
+      safeLog.error(`[LiveProviderSearch] NPPES query failed for taxonomy "${taxonomy}":`, err instanceof Error ? err.message : err);
       // Continue with other taxonomies
     }
   }

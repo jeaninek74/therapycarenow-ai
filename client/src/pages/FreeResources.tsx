@@ -45,9 +45,22 @@ export default function FreeResources() {
           <BookOpen className="w-7 h-7 text-primary" />
           <h1 className="text-3xl font-bold text-foreground">Free & Low-Cost Resources</h1>
         </div>
-        <p className="text-muted-foreground mb-8">
+        <p className="text-muted-foreground mb-4">
           Community clinics, hotlines, and sliding scale providers — available in all 50 states.
         </p>
+
+        {/* Crisis disclaimer */}
+        <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 mb-8 flex gap-3">
+          <span className="text-destructive text-lg mt-0.5">⚠️</span>
+          <div>
+            <p className="text-sm font-semibold text-destructive mb-1">If you are in immediate danger or crisis</p>
+            <p className="text-sm text-foreground">
+              Call <a href="tel:911" className="font-bold underline">911</a> or the{" "}
+              <a href="tel:988" className="font-bold underline">988 Suicide &amp; Crisis Lifeline</a> (call or text 988).
+              These resources are for informational purposes only and are not a substitute for emergency services.
+            </p>
+          </div>
+        </div>
 
         {/* State picker */}
         <div className="mb-8">
