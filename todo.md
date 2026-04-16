@@ -402,3 +402,9 @@
 - [x] Remove Clinician Portal section from PrivacyPolicy.tsx (Section 4 and Stripe subscription reference)
 - [x] Remove Clinician Portal section from TermsOfService.tsx (Section 6 and service description bullet)
 - [x] Fix demo video on homepage — replaced native HTML5 player with Loom iframe embed (5fd8e4f2de2d4a27957629344487690d)
+
+## Session 3 Fixes
+- [ ] Add Blue Cross Blue Shield, Kaiser Permanente, Aetna, United Healthcare to insurance filter options in provider search
+- [ ] Ensure insurance filters are linked to correct provider types (therapists, psychiatrists, psychologists)
+- [ ] Deploy all changes to Railway (login + new token + railway up)
+- [ ] Add comprehensive list of all major US health insurances across all insurance-related pages

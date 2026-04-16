@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { INSURANCE_OPTIONS } from "@shared/insurances";
 
 export default function BenefitsWallet() {
   const { user, isAuthenticated, loading } = useAuth();
@@ -160,11 +161,17 @@ export default function BenefitsWallet() {
                 <Label htmlFor="carrier">Insurance carrier *</Label>
                 <Input
                   id="carrier"
+                  list="insurance-carriers"
                   value={insuranceCarrier}
                   onChange={(e) => setInsuranceCarrier(e.target.value)}
                   placeholder="e.g., Blue Cross Blue Shield"
                   className="mt-1"
                 />
+                <datalist id="insurance-carriers">
+                  {INSURANCE_OPTIONS.map((ins) => (
+                    <option key={ins} value={ins} />
+                  ))}
+                </datalist>
               </div>
               <div>
                 <Label htmlFor="plan">Plan name (optional)</Label>

@@ -13,17 +13,13 @@ import NavBar from "@/components/NavBar";
 import { CheckCircle2, Loader2, Shield, AlertCircle, UserCheck } from "lucide-react";
 import { toast } from "sonner";
 import { US_STATES } from "@shared/states";
+import { INSURANCE_OPTIONS } from "@shared/insurances";
 
 const SPECIALTIES = [
   "Anxiety & Stress", "Depression", "Trauma & PTSD", "LGBTQ+", "Couples & Relationships",
   "Child & Adolescent", "Addiction & Substance Use", "Eating Disorders", "Grief & Loss",
   "Veterans & Military", "Bipolar Disorder", "OCD", "ADHD", "Autism Spectrum",
   "Anger Management", "Life Transitions", "Career & Work Stress", "Chronic Illness",
-];
-
-const INSURANCE_OPTIONS = [
-  "Aetna", "Anthem", "Blue Cross Blue Shield", "Cigna", "Humana", "Kaiser Permanente",
-  "Medicaid", "Medicare", "Optum/UnitedHealthcare", "Tricare", "WellCare", "Self-Pay/Sliding Scale",
 ];
 
 export default function ProviderSubmission() {

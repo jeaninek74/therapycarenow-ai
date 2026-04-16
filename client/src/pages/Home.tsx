@@ -1,7 +1,6 @@
 import { Link } from "wouter";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play } from "lucide-react";
+import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
 import { useState } from "react";
-import { Heart, Phone, Search, Shield, Check, Brain, UserCheck, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {

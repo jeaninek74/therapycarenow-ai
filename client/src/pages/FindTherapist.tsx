@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
+import { INSURANCE_OPTIONS } from "@shared/insurances";
 import { trpc } from "@/lib/trpc";
 import {
   Search, Filter, Phone, Video, MapPin, DollarSign, ChevronRight,
@@ -77,11 +78,6 @@ const COST_OPTIONS = [
   { value: "sliding_scale", label: "Sliding Scale" },
   { value: "insurance", label: "Insurance Accepted" },
   { value: "self_pay", label: "Self-Pay" },
-];
-
-const INSURANCE_OPTIONS = [
-  "Aetna", "Blue Cross", "Blue Shield", "Cigna", "Humana", "Medicaid",
-  "Medicare", "Tricare", "United", "Anthem", "Optum", "Magellan",
 ];
 
 export default function FindTherapist() {

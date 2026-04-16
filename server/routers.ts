@@ -343,15 +343,6 @@ const aiRouter = router({
     }),
 });
 
-// - Admin Procedure (shared by compliance + admin routers) -
-
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.user.role !== "admin") {
-    throw new TRPCError({ code: "FORBIDDEN", message: "Admin access required" });
-  }
-  return next({ ctx });
-});
-
 // - State Compliance Router -
 
 const complianceRouter = router({
