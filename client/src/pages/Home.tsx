@@ -41,6 +41,16 @@ export default function Home() {
             <p className="text-sm text-muted-foreground mb-6">
               We're a navigation tool, not a clinic. We don't provide therapy or diagnosis. We connect you with the people and programs who do.
             </p>
+            <p className="flex items-start gap-2 text-sm text-foreground mb-6">
+              <Check className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+              <span>
+                Every clinician we list is verified through the{" "}
+                <a href="https://npiregistry.cms.hhs.gov/" target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                  federal NPI Registry
+                </a>{" "}
+                (run by CMS). We confirm each clinician has an active National Provider Identifier and a California practice location.
+              </span>
+            </p>
             <div className="bg-card/80 border border-border rounded-2xl p-5 mb-10">
               <h2 className="font-semibold text-foreground mb-3">Therapist, psychiatrist, or psychologist?</h2>
               <dl className="space-y-3 text-sm">
