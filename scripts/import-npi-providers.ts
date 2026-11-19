@@ -81,7 +81,7 @@ async function main() {
         if (!loc || loc.state !== SERVICE_STATE_CODE || normalizeCity(loc.city ?? "") !== normalizeCity(city) || !isSoCalCity(loc.city)) continue;
         const tax = (r.taxonomies ?? []).find((t: any) => t.primary) ?? r.taxonomies?.[0] ?? {};
         const desc: string = tax.desc ?? "";
-        if (!/psych|counsel|social worker|marriage|behavior/i.test(desc)) continue;
+        if (!MENTAL_HEALTH_PRIMARY.test(desc)) continue;
         const credential: string = basic.credential ?? "";
         const name = [basic.first_name, basic.last_name].filter(Boolean).map((n: string) => titleCase(n)).join(" ");
         if (!name) continue;
