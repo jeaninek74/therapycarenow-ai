@@ -15,7 +15,7 @@ const DEMO_STEPS = [
   {
     id: "welcome",
     title: "Welcome to TherapyCareNow",
-    subtitle: "Your National Mental Health Navigation Platform",
+    subtitle: "Your Southern California Mental Health Navigation Platform",
     description: "TherapyCareNow connects Southern Californians to mental health support — from county crisis lines to licensed therapists across all eight Southern California counties. Let's walk through the key features.",
     icon: Heart,
     color: "from-teal-500 to-cyan-600",
@@ -117,12 +117,12 @@ const DEMO_STEPS = [
         acceptsNew: true,
       },
     },
-    cta: "Next: National Directory",
+    cta: "Next: SoCal Directory",
     visual: "profile",
   },
   {
     id: "directory",
-    title: "National Therapist Directory",
+    title: "Southern California Therapist Directory",
     subtitle: "Browse 8 Counties & Hundreds of Cities",
     description: "Our directory is organized by county and city, making it easy to find providers near you across Southern California.",
     icon: Globe,
