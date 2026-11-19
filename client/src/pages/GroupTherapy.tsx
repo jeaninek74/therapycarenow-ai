@@ -53,7 +53,8 @@ export default function GroupTherapy() {
           </div>
         </section>
 
-        <h2 className="text-2xl font-semibold text-foreground mb-4">Types of group therapy</h2>
+        <h2 className="text-2xl font-semibold text-foreground mb-2">Types of group therapy</h2>
+        <div className="mb-4"><CountyPicker value={countySlug} onChange={setCountySlug} /></div>
         <div className="grid gap-4 mb-12">
           {GROUP_THERAPY_TYPES.map((t) => (
             <section key={t.slug} id={t.slug} className="bg-card border border-border rounded-xl p-5">
@@ -78,6 +79,20 @@ export default function GroupTherapy() {
                   <dd className="text-muted-foreground">{t.insurance}</dd>
                 </div>
               </dl>
+              <div className="mt-4 border-t border-border pt-3">
+                <p className="text-sm font-semibold text-foreground mb-2">Groups to join</p>
+                <ul className="grid gap-2 text-sm">
+                  {programsForCounty(GROUP_THERAPY_PROGRAMS, countySlug)
+                    .filter((p) => p.groupTypes?.includes(t.slug))
+                    .map((p) => (
+                      <li key={p.name} className="flex flex-wrap gap-x-3 gap-y-1">
+                        <a href={p.website} target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">{p.name}</a>
+                        {p.phone && <a href={`tel:${p.phone}`} className="text-muted-foreground hover:underline">{p.phone}</a>}
+                        <span className="text-muted-foreground">Cost: {p.cost}</span>
+                      </li>
+                    ))}
+                </ul>
+              </div>
             </section>
           ))}
         </div>
