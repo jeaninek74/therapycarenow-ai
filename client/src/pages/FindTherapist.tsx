@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { milesBetweenZips } from "@shared/socalZips";
 import { Link } from "wouter";
 import { INSURANCE_OPTIONS } from "@shared/insurances";
 import { trpc } from "@/lib/trpc";
@@ -85,6 +86,8 @@ export default function FindTherapist() {
   const [activeCategory, setActiveCategory] = useState<Category>("Therapist");
   const [county, setCounty] = useState<string | undefined>(undefined);
   const [cityInput, setCityInput] = useState<string>("");
+  const [zip, setZip] = useState("");
+  const userZip = /^\d{5}$/.test(zip) ? zip : undefined;
   const [city, setCity] = useState<string | undefined>(undefined);
   const [telehealth, setTelehealth] = useState<boolean | undefined>(undefined);
   const [specialty, setSpecialty] = useState<string | undefined>(undefined);
@@ -121,7 +124,9 @@ export default function FindTherapist() {
     limit,
   });
 
-  const results = searchData ?? [];
+  const results = (searchData ?? [])
+    .map((p: any) => ({ ...p, milesAway: userZip ? milesBetweenZips(userZip, p.zipCode) : null }))
+    .sort((a: any, b: any) => (userZip ? (a.milesAway ?? 1e9) - (b.milesAway ?? 1e9) : 0));
   const meta = CATEGORY_META[activeCategory];
 
   function clearFilters() {
@@ -208,6 +213,21 @@ export default function FindTherapist() {
                     Go
                   </button>
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Your ZIP code (sort by distance)</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={5}
+                  placeholder="e.g. 91101"
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
+                  className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                {zip.length === 5 && !milesBetweenZips(zip, zip) && (
+                  <p className="text-xs text-destructive mt-1">That ZIP code isn't in Southern California.</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">Specialty</label>
@@ -300,6 +320,7 @@ export default function FindTherapist() {
                 Showing <strong className="text-foreground">{results.length}</strong> {meta.plural.toLowerCase()}
                 {` in ${getSoCalCounty(county)?.name ?? SERVICE_REGION_NAME}`}
                 {city && ` · ${city}`}
+                {userZip && ` · nearest to ${userZip} first`}
               </p>
               <div className="flex flex-col gap-4">
                 {results.map((p: any) => (
@@ -379,6 +400,10 @@ function ProviderCard({ provider, category }: { provider: any; category: Categor
             <span className="font-medium">{provider.licenseType}</span>
             {provider.city && ` · ${provider.city}`}
             {provider.stateCode && `, ${provider.stateCode}`}
+            {provider.zipCode && ` ${String(provider.zipCode).slice(0, 5)}`}
+            {provider.milesAway != null && (
+              <span className="ml-2 font-semibold text-primary">{provider.milesAway.toFixed(1)} mi away</span>
+            )}
           </p>
           {provider.detailsConfirmed === false ? (
             <p className="text-xs text-muted-foreground mb-2">
