@@ -13,8 +13,11 @@ function locate(r: { name: string; address?: string | null }) {
   const zip = r.address?.match(/\b(9\d{4})\b/)?.[1];
   const parts = (r.address ?? "").split(",").map((s) => s.trim());
   const cityCounty = parts.length >= 2 ? getCountyForCity(parts[parts.length - 2]) : undefined;
-  const nameCounty = SOCAL_COUNTIES.find((c) => r.name.includes(c.name.replace(" County", "")) && /count(y|ies)/i.test(r.name));
-  return { zip, countySlug: (cityCounty ?? nameCounty)?.slug };
+  const nameCounties = /count(y|ies)/i.test(r.name)
+    ? SOCAL_COUNTIES.filter((c) => r.name.includes(c.name.replace(" County", "")))
+    : [];
+  const counties = cityCounty ? [cityCounty] : nameCounties;
+  return { zip, countySlugs: counties.map((c) => c.slug) };
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -47,9 +50,9 @@ export default function FreeResources() {
   const located = (resources ?? [])
     .map((r) => {
       const loc = locate(r);
-      return { ...r, zip: loc.zip, countySlug: loc.countySlug, milesAway: userZip ? milesBetweenZips(userZip, loc.zip) : null };
+      return { ...r, zip: loc.zip, countySlugs: loc.countySlugs, milesAway: userZip ? milesBetweenZips(userZip, loc.zip) : null };
     })
-    .filter((r) => !countySlug || !r.countySlug || r.countySlug === countySlug)
+    .filter((r) => !countySlug || r.countySlugs.length === 0 || r.countySlugs.includes(countySlug))
     .sort((a, b) => (a.milesAway ?? 1e9) - (b.milesAway ?? 1e9));
   const grouped = located.reduce((acc, r) => {
     const cat = r.category ?? "other";
@@ -179,7 +182,7 @@ function ResourceCard({ resource }: { resource: any }) {
             </p>
           ) : (
             <p className="text-xs text-muted-foreground mb-3">
-              {resource.countySlug ? `Serves ${getSoCalCounty(resource.countySlug)?.name}` : "Phone or online, available anywhere in Southern California"}
+              {resource.countySlugs?.length ? `Serves ${resource.countySlugs.map((s: string) => getSoCalCounty(s)?.name).join(" and ")}` : "Phone or online, available anywhere in Southern California"}
             </p>
           )}
           <div className="flex flex-wrap gap-3">
