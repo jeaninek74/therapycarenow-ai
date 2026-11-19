@@ -111,7 +111,7 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
     crisisLine: { name: "Santa Barbara County Behavioral Wellness Access Line", phone: "1-888-868-1649" },
     cities: [
       "Santa Maria", "Santa Barbara", "Lompoc", "Goleta", "Carpinteria", "Guadalupe", "Solvang",
-      "Buellton", "Montecito", "Isla Vista", "Orcutt", "Los Olivos", "Summerland", "Santa Ynez", "Los Alamos", "Vandenberg Village", "Mission Hills", "Ballard",
+      "Buellton", "Montecito", "Isla Vista", "Orcutt", "Los Olivos", "Summerland", "Santa Ynez", "Los Alamos", "Vandenberg Village", "Ballard",
     ],
   },
   {
