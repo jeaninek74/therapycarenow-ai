@@ -134,7 +134,7 @@ export default function NavBar() {
                     className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-medium text-foreground hover:bg-muted/60 transition-colors"
                   >
                     <LayoutDashboard className="w-4 h-4 text-primary" />
-                    Browse by state
+                    Browse by county
                   </Link>
                 </div>
               </div>
@@ -241,7 +241,7 @@ export default function NavBar() {
               <Search className="w-4 h-4" /> Search all providers
             </Link>
             <Link href="/directory" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
-              <LayoutDashboard className="w-4 h-4" /> Browse by state
+              <LayoutDashboard className="w-4 h-4" /> Browse by county
             </Link>
           </div>
 

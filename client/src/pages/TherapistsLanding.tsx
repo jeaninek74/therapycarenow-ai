@@ -6,13 +6,14 @@ import {
   UserCheck, Search, MapPin, ChevronRight, Check, Users,
   ArrowRight, Loader2, Heart, MessageCircle, Shield,
 } from "lucide-react";
-import { US_STATES } from "@shared/states";
+import { SOCAL_COUNTIES } from "@shared/region";
+import { useCountyDirectory } from "@/hooks/useCountyDirectory";
 
 const LICENSE_TYPES = [
   { code: "LCSW", label: "Licensed Clinical Social Worker", detail: "Master's-level clinician trained in therapy, case management, and social systems. One of the most common therapy licenses." },
   { code: "LPC", label: "Licensed Professional Counselor", detail: "Provides individual, group, and family counseling. License name varies by state (LPC, LPCC, LCPC, LPCA)." },
   { code: "LMFT", label: "Licensed Marriage & Family Therapist", detail: "Specializes in relationship dynamics, couples therapy, and family systems. Trained in systemic and relational approaches." },
-  { code: "LMHC", label: "Licensed Mental Health Counselor", detail: "Provides mental health counseling for individuals and groups. Common in New York, Florida, and other states." },
+  { code: "LMHC", label: "Licensed Mental Health Counselor", detail: "Provides mental health counseling for individuals and groups. California's equivalent is the LPCC." },
   { code: "LCPC", label: "Licensed Clinical Professional Counselor", detail: "Clinical counseling license used in Illinois, Montana, and several other states. Equivalent to LPC in most respects." },
   { code: "LAC", label: "Licensed Addiction Counselor", detail: "Specializes in substance use disorders, co-occurring conditions, and recovery support." },
 ];
@@ -40,21 +41,19 @@ export default function TherapistsLanding() {
   const [, navigate] = useLocation();
   const [stateSearch, setStateSearch] = useState("");
 
-  const { data: stateDirectory, isLoading } = trpc.providers.getStateDirectoryByCategory.useQuery();
+  const { countyMap, isLoading } = useCountyDirectory();
   const { data: categoryCounts } = trpc.providers.getCategoryCounts.useQuery();
 
-  const stateMap = new Map<string, number>();
-  (stateDirectory ?? []).forEach((s) => stateMap.set(s.stateCode, s.therapists));
 
-  const filteredStates = US_STATES.filter(
-    (s) =>
+  const filteredStates = SOCAL_COUNTIES.filter(
+    (c) =>
       stateSearch === "" ||
-      s.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
-      s.code.toLowerCase().includes(stateSearch.toLowerCase())
+      c.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
+      c.cities.some((city) => city.toLowerCase().includes(stateSearch.toLowerCase()))
   );
 
-  function goSearch(stateCode: string) {
-    sessionStorage.setItem("tcn_state", stateCode);
+  function goSearch(countySlug: string) {
+    sessionStorage.setItem("tcn_county", countySlug);
     sessionStorage.setItem("tcn_category", "Therapist");
     navigate("/find-therapist");
   }
@@ -70,13 +69,13 @@ export default function TherapistsLanding() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-[oklch(0.55_0.18_200)]/10 text-[oklch(0.45_0.18_200)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
               <UserCheck className="w-4 h-4" />
-              {(categoryCounts?.therapists ?? 38000).toLocaleString()}+ Verified Therapists · All 50 States
+              {categoryCounts ? `${categoryCounts.therapists.toLocaleString()}+ ` : ""}Verified Therapists · Southern California
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
               Find a <span className="text-[oklch(0.45_0.18_200)]">Therapist</span> near you
             </h1>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Licensed therapists provide talk therapy, counseling, and evidence-based treatment for anxiety, depression, trauma, relationships, and more. Browse verified therapists in every state and city — searchable by specialty, insurance, and telehealth availability.
+              Licensed therapists provide talk therapy, counseling, and evidence-based treatment for anxiety, depression, trauma, relationships, and more. Browse verified therapists in every Southern California county and city — searchable by specialty, insurance, and telehealth availability.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -91,7 +90,7 @@ export default function TherapistsLanding() {
                 className="flex items-center justify-center gap-2 bg-card border-2 border-[oklch(0.55_0.18_200)]/30 text-foreground font-semibold rounded-xl px-8 py-4 text-lg hover:border-[oklch(0.55_0.18_200)]/60 active:scale-95 transition-all"
               >
                 <MapPin className="w-5 h-5" />
-                Browse by State
+                Browse by County
               </Link>
             </div>
           </div>
@@ -144,7 +143,7 @@ export default function TherapistsLanding() {
       <section className="bg-[oklch(0.55_0.18_200)]/5 py-16">
         <div className="container">
           <h2 className="text-2xl font-bold text-foreground mb-2 text-center">License types in our directory</h2>
-          <p className="text-muted-foreground text-center mb-8 text-sm">All therapists hold active state licenses. License names vary by state.</p>
+          <p className="text-muted-foreground text-center mb-8 text-sm">All therapists hold active California licenses (issued by the Board of Behavioral Sciences, Board of Psychology, or Medical Board of California).</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
             {LICENSE_TYPES.map(({ code, label, detail }) => (
               <div key={code} className="bg-card border-2 border-[oklch(0.55_0.18_200)]/20 rounded-2xl p-5 hover:border-[oklch(0.55_0.18_200)]/50 transition-colors">
@@ -181,7 +180,7 @@ export default function TherapistsLanding() {
             <tbody className="divide-y divide-border">
               {[
                 ["Degree required", "Master's (MSW/MA/MEd)", "Medical (MD/DO)", "Doctoral (PhD/PsyD)"],
-                ["Can prescribe medication", "✗", "✓", "✗ (most states)"],
+                ["Can prescribe medication", "✗", "✓", "✗"],
                 ["Psychological testing", "✗", "✗", "✓"],
                 ["Provides talk therapy", "✓", "Some", "✓"],
                 ["Typical session focus", "Therapy & coping skills", "Medication & diagnosis", "Assessment & therapy"],
@@ -207,21 +206,21 @@ export default function TherapistsLanding() {
         </div>
       </section>
 
-      {/* State directory */}
+      {/* County directory */}
       <section className="bg-muted/40 py-16">
         <div className="container">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">Find Therapists by State</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-1">Find Therapists by County</h2>
               <p className="text-muted-foreground text-sm">
-                {(categoryCounts?.therapists ?? 38000).toLocaleString()}+ therapists across all 50 states
+                {categoryCounts ? `${categoryCounts.therapists.toLocaleString()}+ ` : ""}therapists across Southern California
               </p>
             </div>
             <div className="relative max-w-xs w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search state..."
+                placeholder="Search county or city..."
                 value={stateSearch}
                 onChange={(e) => setStateSearch(e.target.value)}
                 className="w-full pl-9 pr-4 h-10 rounded-xl border border-input bg-background text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -236,16 +235,16 @@ export default function TherapistsLanding() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
               {filteredStates.map((state) => {
-                const count = stateMap.get(state.code) ?? 0;
+                const count = countyMap.get(state.slug)?.therapists ?? 0;
                 return (
                   <button
-                    key={state.code}
-                    onClick={() => goSearch(state.code)}
+                    key={state.slug}
+                    onClick={() => goSearch(state.slug)}
                     className="group bg-card border border-border rounded-xl p-4 text-left hover:border-[oklch(0.55_0.18_200)]/50 hover:shadow-md transition-all"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[oklch(0.55_0.18_200)]/10 text-[oklch(0.45_0.18_200)]">
-                        {state.code}
+                        {state.cities.length} cities
                       </span>
                       <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-[oklch(0.55_0.18_200)] transition-colors" />
                     </div>
@@ -302,7 +301,7 @@ export default function TherapistsLanding() {
           <MessageCircle className="w-12 h-12 text-[oklch(0.55_0.18_200)] mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-foreground mb-3">Ready to find a therapist?</h2>
           <p className="text-muted-foreground mb-6">
-            Search {(categoryCounts?.therapists ?? 38000).toLocaleString()}+ verified therapists across all 50 states. Filter by insurance, telehealth, and specialty.
+            Search {categoryCounts ? `${categoryCounts.therapists.toLocaleString()}+ ` : ""}verified therapists across Southern California. Filter by insurance, telehealth, and specialty.
           </p>
           <Link
             href="/find-therapist?category=Therapist"
@@ -311,7 +310,7 @@ export default function TherapistsLanding() {
             <Search className="w-5 h-5" />
             Search Therapists Now
           </Link>
-          <p className="text-xs text-muted-foreground mt-4">Free to use · No account required · All 50 states</p>
+          <p className="text-xs text-muted-foreground mt-4">Free to use · No account required · Southern California</p>
         </div>
       </section>
 

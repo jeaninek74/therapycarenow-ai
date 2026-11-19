@@ -2,7 +2,8 @@ import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { BookOpen, Phone, Globe, MapPin, Loader2 } from "lucide-react";
 import NavBar from "@/components/NavBar";
-import StatePicker from "@/components/StatePicker";
+import CountyPicker from "@/components/CountyPicker";
+import { SERVICE_REGION_NAME, getSoCalCounty } from "@shared/region";
 
 const CATEGORY_LABELS: Record<string, string> = {
   hotline: "Crisis Hotlines",
@@ -25,8 +26,9 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function FreeResources() {
-  const [stateCode, setStateCode] = useState<string | undefined>(undefined);
-  const { data: resources, isLoading } = trpc.freeResources.getResources.useQuery({ stateCode });
+  const [countySlug, setCountySlug] = useState<string | undefined>(undefined);
+  const county = getSoCalCounty(countySlug);
+  const { data: resources, isLoading } = trpc.freeResources.getResources.useQuery({ stateCode: "CA" });
 
   const grouped = resources
     ? resources.reduce((acc, r) => {
@@ -46,7 +48,7 @@ export default function FreeResources() {
           <h1 className="text-3xl font-bold text-foreground">Free & Low-Cost Resources</h1>
         </div>
         <p className="text-muted-foreground mb-4">
-          Community clinics, hotlines, and sliding scale providers — available in all 50 states.
+          Community clinics, hotlines, and sliding scale providers across {SERVICE_REGION_NAME}.
         </p>
 
         {/* Crisis disclaimer */}
@@ -62,19 +64,23 @@ export default function FreeResources() {
           </div>
         </div>
 
-        {/* State picker */}
+        {/* County picker */}
         <div className="mb-8">
           <label className="block text-sm font-medium text-foreground mb-2">
-            Filter by state (or view national resources)
+            Your county
           </label>
-          <StatePicker value={stateCode} onChange={setStateCode} placeholder="All states (national resources)" />
-          {stateCode && (
-            <button
-              onClick={() => setStateCode(undefined)}
-              className="text-xs text-primary mt-2 hover:underline"
-            >
-              Clear state filter
-            </button>
+          <CountyPicker value={countySlug} onChange={setCountySlug} />
+          {county && (
+            <div className="mt-4 bg-card border border-border rounded-xl p-4">
+              <p className="text-sm font-semibold text-foreground mb-1">{county.name} 24/7 behavioral health line</p>
+              <a
+                href={`tel:${county.crisisLine.phone}`}
+                className="inline-flex items-center gap-1 text-sm text-primary font-medium hover:underline"
+              >
+                <Phone className="w-4 h-4" />
+                {county.crisisLine.name}: {county.crisisLine.phone}
+              </a>
+            </div>
           )}
         </div>
 
@@ -104,7 +110,7 @@ export default function FreeResources() {
               <div className="text-center py-20 bg-card rounded-2xl border border-border">
                 <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="font-semibold text-foreground mb-2">No resources found</h3>
-                <p className="text-muted-foreground text-sm">Try selecting a different state or clearing the filter.</p>
+                <p className="text-muted-foreground text-sm">Check back soon — we are adding more Southern California resources.</p>
               </div>
             )}
           </div>

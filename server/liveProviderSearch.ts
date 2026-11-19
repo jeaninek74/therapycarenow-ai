@@ -2,13 +2,17 @@
  * Live Therapist Search — NPPES NPI Registry
  *
  * Uses the free, public CMS NPPES NPI Registry API to fetch real licensed
- * mental health providers for any US state or city. No API key required.
+ * mental health providers in Southern California. No API key required.
  * Results are normalized to match the local provider shape so the frontend
  * can render them identically.
  */
 
 import axios from "axios";
 import { safeLog } from "./_core/security";
+import { SERVICE_STATE_CODE, getCountyForCity, getSoCalCounty, isSoCalCity, isSoCalZip } from "@shared/region";
+
+// NPPES only supports trailing-wildcard ZIP queries; these cover every SoCal ZIP (results are re-filtered below).
+const SOCAL_POSTAL_WILDCARDS = ["90*", "91*", "92*", "93*"];
 
 // NPPES API response types
 interface NppesAddress {
@@ -83,7 +87,7 @@ export interface LiveProvider {
 }
 
 export async function searchLiveProviders(params: {
-  stateCode?: string;
+  county?: string;
   city?: string;
   specialty?: string;
   telehealth?: boolean;
@@ -98,32 +102,34 @@ export async function searchLiveProviders(params: {
     ? [mapSpecialtyToTaxonomy(params.specialty)]
     : MENTAL_HEALTH_TAXONOMIES.slice(0, 3); // limit to 3 to avoid too many requests
 
+  const county = getSoCalCounty(params.county);
+
   for (const taxonomy of taxonomiesToSearch) {
     if (results.length >= limit) break;
 
     try {
-      const queryParams: Record<string, string> = {
+      const baseParams: Record<string, string> = {
         version: "2.1",
         enumeration_type: "NPI-1", // individual providers only
         taxonomy_description: taxonomy,
-        limit: String(Math.min(limit - results.length + 10, 200)),
+        state: SERVICE_STATE_CODE,
         skip: "0",
       };
 
-      if (params.stateCode) {
-        queryParams.state = params.stateCode;
-      }
-      if (params.city) {
-        queryParams.city = params.city.toUpperCase();
-      }
+      const queries: Record<string, string>[] = params.city
+        ? [{ ...baseParams, city: params.city.toUpperCase(), limit: String(Math.min(limit - results.length + 10, 200)) }]
+        : SOCAL_POSTAL_WILDCARDS.map((postal_code) => ({
+            ...baseParams,
+            postal_code,
+            limit: String(Math.min(Math.ceil((limit - results.length) / SOCAL_POSTAL_WILDCARDS.length) + 10, 200)),
+          }));
 
-      const response = await axios.get(NPPES_BASE, {
-        params: queryParams,
-        timeout: 8000,
-      });
-
-      const data = response.data;
-      const nppesResults = data?.results ?? [];
+      const responses = await Promise.allSettled(
+        queries.map((queryParams) => axios.get(NPPES_BASE, { params: queryParams, timeout: 8000 }))
+      );
+      const nppesResults = responses.flatMap((res) =>
+        res.status === "fulfilled" ? (res.value.data?.results ?? []) : []
+      );
 
       for (const r of nppesResults) {
         if (results.length >= limit) break;
@@ -159,8 +165,12 @@ export async function searchLiveProviders(params: {
           ? locationAddr.city.charAt(0).toUpperCase() +
             locationAddr.city.slice(1).toLowerCase()
           : null;
-        const stateCode = locationAddr.state ?? params.stateCode ?? null;
+        const stateCode = locationAddr.state ?? SERVICE_STATE_CODE;
         const zipCode = locationAddr.postal_code?.slice(0, 5) ?? null;
+
+        // Southern California only: practice location must be a SoCal ZIP (and in the chosen county, if any)
+        if (stateCode !== SERVICE_STATE_CODE || !(isSoCalZip(zipCode) || isSoCalCity(city))) continue;
+        if (county && getCountyForCity(city)?.slug !== county.slug) continue;
         const phone = locationAddr.telephone_number ?? null;
 
         // Get primary taxonomy

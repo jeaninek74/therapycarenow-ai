@@ -6,6 +6,7 @@ import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_
 import { z } from "zod";
 import { moderateInput, getSupportAssistantResponse } from "./aiGuardrails";
 import { searchLiveProviders } from "./liveProviderSearch";
+import { SERVICE_STATE_CODE } from "@shared/region";
 import {
   logAuditEvent,
   getFreeResources,
@@ -62,7 +63,7 @@ const freeResourcesRouter = router({
   getResources: publicProcedure
     .input(z.object({ stateCode: z.string().length(2).optional() }))
     .query(async ({ input, ctx }) => {
-      const resources = await getFreeResources(input.stateCode);
+      const resources = await getFreeResources(SERVICE_STATE_CODE);
 
       await logAuditEvent({
         userId: ctx.user?.id,
@@ -82,6 +83,7 @@ const providerRouter = router({
     .input(
       z.object({
         stateCode: z.string().length(2).optional(),
+        county: z.string().optional(),
         city: z.string().optional(),
         telehealth: z.boolean().optional(),
         specialty: z.string().optional(),
@@ -95,9 +97,9 @@ const providerRouter = router({
     .query(async ({ input }) => {
       // Run local DB search and live NPPES search in parallel
       const [localResult, liveResult] = await Promise.allSettled([
-        searchProviders({ ...input }),
+        searchProviders({ ...input, stateCode: SERVICE_STATE_CODE }),
         searchLiveProviders({
-          stateCode: input.stateCode,
+          county: input.county,
           city: input.city,
           specialty: input.specialty,
           telehealth: input.telehealth,
@@ -137,7 +139,7 @@ const providerRouter = router({
   getCitiesForState: publicProcedure
     .input(z.object({ stateCode: z.string().length(2) }))
     .query(async ({ input }) => {
-      return getCitiesByState(input.stateCode);
+      return getCitiesByState(SERVICE_STATE_CODE);
     }),
 
   // Category-aware endpoints
@@ -152,7 +154,7 @@ const providerRouter = router({
   getCitiesForStateByCategory: publicProcedure
     .input(z.object({ stateCode: z.string().length(2) }))
     .query(async ({ input }) => {
-      return getCitiesByStateAndCategory(input.stateCode);
+      return getCitiesByStateAndCategory(SERVICE_STATE_CODE);
     }),
 
   searchByCategory: publicProcedure
@@ -160,6 +162,7 @@ const providerRouter = router({
       z.object({
         category: z.enum(['Therapist', 'Psychiatrist', 'Psychologist']).optional(),
         stateCode: z.string().length(2).optional(),
+        county: z.string().optional(),
         city: z.string().optional(),
         telehealth: z.boolean().optional(),
         specialty: z.string().optional(),
@@ -171,7 +174,7 @@ const providerRouter = router({
     )
     .query(async ({ input }) => {
       const { category, ...rest } = input;
-      const results = await searchProviders({ ...rest, limit: input.limit ?? 50 });
+      const results = await searchProviders({ ...rest, stateCode: SERVICE_STATE_CODE, limit: input.limit ?? 50 });
       if (!category) return results.map(p => ({ ...p, category: getProviderCategory(p.licenseType ?? '') }));
       return results
         .filter(p => getProviderCategory(p.licenseType ?? '') === category)
@@ -264,6 +267,7 @@ const aiRouter = router({
       z.object({
         message: z.string().min(1).max(1000),
         stateCode: z.string().length(2).optional(),
+        county: z.string().optional(),
         insuranceCarrier: z.string().optional(),
       })
     )
@@ -331,6 +335,7 @@ const aiRouter = router({
       // Step 3: AI response (only if moderation passed)
       const aiResponse = await getSupportAssistantResponse(input.message, {
         stateCode: input.stateCode,
+        county: input.county,
         insuranceCarrier: input.insuranceCarrier,
       });
 

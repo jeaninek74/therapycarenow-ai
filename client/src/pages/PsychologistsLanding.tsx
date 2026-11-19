@@ -6,26 +6,26 @@ import {
   Brain, Search, MapPin, ChevronRight, Check, Users,
   ClipboardList, ArrowRight, Loader2, BookOpen, FlaskConical,
 } from "lucide-react";
-import { US_STATES } from "@shared/states";
+import { SOCAL_COUNTIES } from "@shared/region";
+import { useCountyDirectory } from "@/hooks/useCountyDirectory";
 
 export default function PsychologistsLanding() {
   const [, navigate] = useLocation();
   const [stateSearch, setStateSearch] = useState("");
 
-  const { data: stateDirectory, isLoading } = trpc.providers.getStateDirectoryByCategory.useQuery();
+  const { countyMap, isLoading } = useCountyDirectory();
   const { data: categoryCounts } = trpc.providers.getCategoryCounts.useQuery();
 
-  const stateMap = new Map<string, number>();
-  (stateDirectory ?? []).forEach((s) => stateMap.set(s.stateCode, s.psychologists));
 
-  const filteredStates = US_STATES.filter((s) =>
-    stateSearch === "" ||
-    s.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
-    s.code.toLowerCase().includes(stateSearch.toLowerCase())
+  const filteredStates = SOCAL_COUNTIES.filter(
+    (c) =>
+      stateSearch === "" ||
+      c.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
+      c.cities.some((city) => city.toLowerCase().includes(stateSearch.toLowerCase()))
   );
 
-  function goSearch(stateCode: string) {
-    sessionStorage.setItem("tcn_state", stateCode);
+  function goSearch(countySlug: string) {
+    sessionStorage.setItem("tcn_county", countySlug);
     sessionStorage.setItem("tcn_category", "Psychologist");
     navigate("/find-therapist");
   }
@@ -41,13 +41,13 @@ export default function PsychologistsLanding() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-[oklch(0.55_0.18_280)]/10 text-[oklch(0.45_0.18_280)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
               <Brain className="w-4 h-4" />
-              {(categoryCounts?.psychologists ?? 4700).toLocaleString()}+ Verified Psychologists · All 50 States
+              {categoryCounts ? `${categoryCounts.psychologists.toLocaleString()}+ ` : ""}Verified Psychologists · Southern California
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
               Find a <span className="text-[oklch(0.45_0.18_280)]">Psychologist</span> near you
             </h1>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Psychologists hold doctoral degrees (PhD or PsyD) and specialize in psychological assessment, testing, and advanced psychotherapy. Browse verified psychologists in every state and city — searchable by specialty, insurance, and telehealth availability.
+              Psychologists hold doctoral degrees (PhD or PsyD) and specialize in psychological assessment, testing, and advanced psychotherapy. Browse verified psychologists in every Southern California county and city — searchable by specialty, insurance, and telehealth availability.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -62,7 +62,7 @@ export default function PsychologistsLanding() {
                 className="flex items-center justify-center gap-2 bg-card border-2 border-[oklch(0.55_0.18_280)]/30 text-foreground font-semibold rounded-xl px-8 py-4 text-lg hover:border-[oklch(0.55_0.18_280)]/60 active:scale-95 transition-all"
               >
                 <MapPin className="w-5 h-5" />
-                Browse by State
+                Browse by County
               </Link>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function PsychologistsLanding() {
               A psychologist is a doctoral-level mental health professional who specializes in the science of human behavior and mental processes. Psychologists complete a PhD or PsyD program (typically 4–7 years) and are trained in both research and clinical practice.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Psychologists are uniquely qualified to administer and interpret <strong className="text-foreground">psychological tests and assessments</strong> — including IQ testing, personality assessment, ADHD evaluation, autism spectrum assessment, and neuropsychological testing. In most states, psychologists cannot prescribe medication (exceptions: Louisiana, New Mexico, Illinois, Iowa, and Idaho).
+              Psychologists are uniquely qualified to administer and interpret <strong className="text-foreground">psychological tests and assessments</strong> — including IQ testing, personality assessment, ADHD evaluation, autism spectrum assessment, and neuropsychological testing. In California, psychologists cannot prescribe medication.
             </p>
             <div className="space-y-3">
               {[
@@ -170,7 +170,7 @@ export default function PsychologistsLanding() {
             <tbody className="divide-y divide-border">
               {[
                 ["Doctoral degree required", "✓ (PhD/PsyD)", "✓ (MD/DO)", "✗"],
-                ["Can prescribe medication", "✗ (most states)", "✓", "✗"],
+                ["Can prescribe medication", "✗", "✓", "✗"],
                 ["Psychological testing", "✓", "✗", "✗"],
                 ["Provides talk therapy", "✓", "Some", "✓"],
                 ["Neuropsychological assessment", "✓", "✗", "✗"],
@@ -196,21 +196,21 @@ export default function PsychologistsLanding() {
         </div>
       </section>
 
-      {/* State directory */}
+      {/* County directory */}
       <section className="bg-muted/40 py-16">
         <div className="container">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">Find Psychologists by State</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-1">Find Psychologists by County</h2>
               <p className="text-muted-foreground text-sm">
-                {(categoryCounts?.psychologists ?? 4700).toLocaleString()}+ psychologists across all 50 states
+                {categoryCounts ? `${categoryCounts.psychologists.toLocaleString()}+ ` : ""}psychologists across Southern California
               </p>
             </div>
             <div className="relative max-w-xs w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search state..."
+                placeholder="Search county or city..."
                 value={stateSearch}
                 onChange={(e) => setStateSearch(e.target.value)}
                 className="w-full pl-9 pr-4 h-10 rounded-xl border border-input bg-background text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -225,16 +225,16 @@ export default function PsychologistsLanding() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
               {filteredStates.map((state) => {
-                const count = stateMap.get(state.code) ?? 0;
+                const count = countyMap.get(state.slug)?.psychologists ?? 0;
                 return (
                   <button
-                    key={state.code}
-                    onClick={() => goSearch(state.code)}
+                    key={state.slug}
+                    onClick={() => goSearch(state.slug)}
                     className="group bg-card border border-border rounded-xl p-4 text-left hover:border-[oklch(0.55_0.18_280)]/50 hover:shadow-md transition-all"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[oklch(0.55_0.18_280)]/10 text-[oklch(0.45_0.18_280)]">
-                        {state.code}
+                        {state.cities.length} cities
                       </span>
                       <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-[oklch(0.55_0.18_280)] transition-colors" />
                     </div>
@@ -262,7 +262,7 @@ export default function PsychologistsLanding() {
             },
             {
               q: "Can a psychologist prescribe medication?",
-              a: "In most states, no. Psychologists are not licensed to prescribe medication. However, in Louisiana, New Mexico, Illinois, Iowa, and Idaho, psychologists with additional training can prescribe certain psychiatric medications. If you need medication management, consider seeing a psychiatrist.",
+              a: "No. California psychologists are not licensed to prescribe medication. If you need medication management, consider seeing a psychiatrist or psychiatric nurse practitioner.",
             },
             {
               q: "When should I see a psychologist instead of a therapist?",
@@ -291,7 +291,7 @@ export default function PsychologistsLanding() {
           <Brain className="w-12 h-12 text-[oklch(0.55_0.18_280)] mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-foreground mb-3">Ready to find a psychologist?</h2>
           <p className="text-muted-foreground mb-6">
-            Search {(categoryCounts?.psychologists ?? 4700).toLocaleString()}+ verified psychologists across all 50 states. Filter by insurance, telehealth, and specialty.
+            Search {categoryCounts ? `${categoryCounts.psychologists.toLocaleString()}+ ` : ""}verified psychologists across Southern California. Filter by insurance, telehealth, and specialty.
           </p>
           <Link
             href="/find-therapist?category=Psychologist"
@@ -300,7 +300,7 @@ export default function PsychologistsLanding() {
             <Search className="w-5 h-5" />
             Search Psychologists Now
           </Link>
-          <p className="text-xs text-muted-foreground mt-4">Free to use · No account required · All 50 states</p>
+          <p className="text-xs text-muted-foreground mt-4">Free to use · No account required · Southern California</p>
         </div>
       </section>
 

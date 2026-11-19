@@ -6,27 +6,27 @@ import {
   Stethoscope, Search, MapPin, ChevronRight, Check, Shield,
   Users, Brain, Pill, ClipboardList, Phone, ArrowRight, Loader2,
 } from "lucide-react";
-import { US_STATES, getStateName } from "@shared/states";
+import { SOCAL_COUNTIES } from "@shared/region";
+import { useCountyDirectory } from "@/hooks/useCountyDirectory";
 
 export default function PsychiatristsLanding() {
   const [, navigate] = useLocation();
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [stateSearch, setStateSearch] = useState("");
 
-  const { data: stateDirectory, isLoading } = trpc.providers.getStateDirectoryByCategory.useQuery();
+  const { countyMap, isLoading } = useCountyDirectory();
   const { data: categoryCounts } = trpc.providers.getCategoryCounts.useQuery();
 
-  const stateMap = new Map<string, number>();
-  (stateDirectory ?? []).forEach((s) => stateMap.set(s.stateCode, s.psychiatrists));
 
-  const filteredStates = US_STATES.filter((s) =>
-    stateSearch === "" ||
-    s.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
-    s.code.toLowerCase().includes(stateSearch.toLowerCase())
+  const filteredStates = SOCAL_COUNTIES.filter(
+    (c) =>
+      stateSearch === "" ||
+      c.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
+      c.cities.some((city) => city.toLowerCase().includes(stateSearch.toLowerCase()))
   );
 
-  function goSearch(stateCode: string) {
-    sessionStorage.setItem("tcn_state", stateCode);
+  function goSearch(countySlug: string) {
+    sessionStorage.setItem("tcn_county", countySlug);
     sessionStorage.setItem("tcn_category", "Psychiatrist");
     navigate("/find-therapist");
   }
@@ -42,13 +42,13 @@ export default function PsychiatristsLanding() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-[oklch(0.55_0.18_30)]/10 text-[oklch(0.45_0.18_30)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
               <Stethoscope className="w-4 h-4" />
-              {(categoryCounts?.psychiatrists ?? 9400).toLocaleString()}+ Verified Psychiatrists · All 50 States
+              {categoryCounts ? `${categoryCounts.psychiatrists.toLocaleString()}+ ` : ""}Verified Psychiatrists · Southern California
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
               Find a <span className="text-[oklch(0.45_0.18_30)]">Psychiatrist</span> near you
             </h1>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Psychiatrists are medical doctors (MD/DO) and advanced practice nurses (PMHNP/APRN/NP) who specialize in diagnosing and treating mental health conditions — including prescribing medication. Browse verified psychiatrists in every state and city.
+              Psychiatrists are medical doctors (MD/DO) and advanced practice nurses (PMHNP/APRN/NP) who specialize in diagnosing and treating mental health conditions — including prescribing medication. Browse verified psychiatrists in every Southern California county and city.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -63,7 +63,7 @@ export default function PsychiatristsLanding() {
                 className="flex items-center justify-center gap-2 bg-card border-2 border-[oklch(0.55_0.18_30)]/30 text-foreground font-semibold rounded-xl px-8 py-4 text-lg hover:border-[oklch(0.55_0.18_30)]/60 active:scale-95 transition-all"
               >
                 <MapPin className="w-5 h-5" />
-                Browse by State
+                Browse by County
               </Link>
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function PsychiatristsLanding() {
             </thead>
             <tbody className="divide-y divide-border">
               {[
-                ["Can prescribe medication", "✓", "✗", "✗ (most states)"],
+                ["Can prescribe medication", "✓", "✗", "✗"],
                 ["Provides talk therapy", "Some", "✓", "✓"],
                 ["Psychological testing", "✗", "✗", "✓"],
                 ["Medical degree required", "✓", "✗", "✗"],
@@ -181,21 +181,21 @@ export default function PsychiatristsLanding() {
         </div>
       </section>
 
-      {/* State directory */}
+      {/* County directory */}
       <section className="bg-muted/40 py-16">
         <div className="container">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-foreground mb-1">Find Psychiatrists by State</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-1">Find Psychiatrists by County</h2>
               <p className="text-muted-foreground text-sm">
-                {(categoryCounts?.psychiatrists ?? 9400).toLocaleString()}+ psychiatrists across all 50 states
+                {categoryCounts ? `${categoryCounts.psychiatrists.toLocaleString()}+ ` : ""}psychiatrists across Southern California
               </p>
             </div>
             <div className="relative max-w-xs w-full">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search state..."
+                placeholder="Search county or city..."
                 value={stateSearch}
                 onChange={(e) => setStateSearch(e.target.value)}
                 className="w-full pl-9 pr-4 h-10 rounded-xl border border-input bg-background text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -210,16 +210,16 @@ export default function PsychiatristsLanding() {
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
               {filteredStates.map((state) => {
-                const count = stateMap.get(state.code) ?? 0;
+                const count = countyMap.get(state.slug)?.psychiatrists ?? 0;
                 return (
                   <button
-                    key={state.code}
-                    onClick={() => goSearch(state.code)}
+                    key={state.slug}
+                    onClick={() => goSearch(state.slug)}
                     className="group bg-card border border-border rounded-xl p-4 text-left hover:border-[oklch(0.55_0.18_30)]/50 hover:shadow-md transition-all"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[oklch(0.55_0.18_30)]/10 text-[oklch(0.45_0.18_30)]">
-                        {state.code}
+                        {state.cities.length} cities
                       </span>
                       <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-[oklch(0.55_0.18_30)] transition-colors" />
                     </div>
@@ -255,11 +255,11 @@ export default function PsychiatristsLanding() {
             },
             {
               q: "Can I see a psychiatrist via telehealth?",
-              a: "Yes. Many psychiatrists in our directory offer telehealth appointments. Use the 'Telehealth only' filter in the search to find providers available online in your state.",
+              a: "Yes. Many psychiatrists in our directory offer telehealth appointments. Use the 'Telehealth only' filter in the search to find providers available online in Southern California.",
             },
             {
               q: "What is a PMHNP and can they prescribe medication?",
-              a: "A Psychiatric Mental Health Nurse Practitioner (PMHNP) is an advanced practice nurse with specialized training in psychiatric care. In most states, PMHNPs have full prescribing authority for psychiatric medications.",
+              a: "A Psychiatric Mental Health Nurse Practitioner (PMHNP) is an advanced practice nurse with specialized training in psychiatric care. In California, PMHNPs prescribe psychiatric medications under a standardized procedure with a supervising physician, or independently once certified under AB 890.",
             },
           ].map(({ q, a }) => (
             <div key={q} className="bg-card border border-border rounded-xl p-5">
@@ -276,7 +276,7 @@ export default function PsychiatristsLanding() {
           <Stethoscope className="w-12 h-12 text-[oklch(0.55_0.18_30)] mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-foreground mb-3">Ready to find a psychiatrist?</h2>
           <p className="text-muted-foreground mb-6">
-            Search {(categoryCounts?.psychiatrists ?? 9400).toLocaleString()}+ verified psychiatrists across all 50 states. Filter by insurance, telehealth, and availability.
+            Search {categoryCounts ? `${categoryCounts.psychiatrists.toLocaleString()}+ ` : ""}verified psychiatrists across Southern California. Filter by insurance, telehealth, and availability.
           </p>
           <Link
             href="/find-therapist?category=Psychiatrist"
@@ -285,7 +285,7 @@ export default function PsychiatristsLanding() {
             <Search className="w-5 h-5" />
             Search Psychiatrists Now
           </Link>
-          <p className="text-xs text-muted-foreground mt-4">Free to use · No account required · All 50 states</p>
+          <p className="text-xs text-muted-foreground mt-4">Free to use · No account required · Southern California</p>
         </div>
       </section>
 

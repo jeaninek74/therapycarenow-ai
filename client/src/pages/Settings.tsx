@@ -4,17 +4,15 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { Shield, MapPin, FileText, LogOut, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import NavBar from "@/components/NavBar";
-import StatePicker from "@/components/StatePicker";
+import { SERVICE_REGION_NAME, SERVICE_STATE_CODE } from "@shared/region";
 import { toast } from "sonner";
 
 export default function Settings() {
   const { user, isAuthenticated, logout } = useAuth();
-  const [selectedState, setSelectedState] = useState<string | undefined>(undefined);
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const { data: compliance, isLoading: complianceLoading } = trpc.compliance.getState.useQuery(
-    { stateCode: selectedState! },
-    { enabled: !!selectedState }
+    { stateCode: SERVICE_STATE_CODE }
   );
 
   const logoutMutation = trpc.auth.logout.useMutation({
@@ -72,12 +70,11 @@ export default function Settings() {
         <section className="bg-card border border-border rounded-2xl p-6 mb-6 shadow-sm">
           <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-primary" />
-            State Therapy Regulations
+            California Therapy Regulations
           </h2>
           <p className="text-sm text-muted-foreground mb-4">
-            Select your state to view telehealth laws, mandatory reporting requirements, and licensing information.
+            Telehealth laws, mandatory reporting requirements, and licensing information that apply to providers serving {SERVICE_REGION_NAME}.
           </p>
-          <StatePicker value={selectedState} onChange={setSelectedState} />
 
           {complianceLoading && (
             <div className="flex items-center gap-2 mt-4 text-muted-foreground text-sm">

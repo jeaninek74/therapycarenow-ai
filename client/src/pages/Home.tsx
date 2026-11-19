@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { SOCAL_COUNTIES } from "@shared/region";
 import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
@@ -15,14 +16,14 @@ export default function Home() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-secondary/60 text-secondary-foreground text-sm font-medium px-4 py-2 rounded-full mb-6">
               <Shield className="w-4 h-4" />
-              HIPAA-compliant · All 50 states · Free to use
+              HIPAA-compliant · Southern California · Free to use
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
               Find the right mental health support,{" "}
               <span className="text-primary">right now.</span>
             </h1>
             <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
-              TherapyCareNow connects you with licensed therapists, psychiatrists, and psychologists across all 50 states — by city, specialty, and insurance.
+              TherapyCareNow connects you with licensed therapists, psychiatrists, and psychologists across Southern California — from Los Angeles and Orange County to San Diego, the Inland Empire, and the Central Coast — by city, specialty, and insurance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
@@ -51,7 +52,7 @@ export default function Home() {
             Browse by Provider Type
           </h2>
           <p className="text-muted-foreground text-lg">
-            We list verified mental health providers across all 50 states.
+            We list verified mental health providers across all eight Southern California counties.
             Each type of provider offers different services — choose the right fit for your needs.
           </p>
         </div>
@@ -134,7 +135,7 @@ export default function Home() {
               </thead>
               <tbody className="divide-y divide-border">
                 {[
-                  ["Can prescribe medication", "✗", "✓", "✗ (most states)"],
+                  ["Can prescribe medication", "✗", "✓", "✗"],
                   ["Provides talk therapy", "✓", "Some", "✓"],
                   ["Psychological testing", "✗", "✗", "✓"],
                   ["Doctoral degree required", "✗", "✓", "✓"],
@@ -194,8 +195,8 @@ export default function Home() {
             <QuickCard
               href="/directory"
               icon={<Search className="w-6 h-6 text-primary" />}
-              title="Browse by State"
-              description="Explore therapists, psychiatrists, and psychologists in every state and city."
+              title="Browse by County"
+              description="Explore therapists, psychiatrists, and psychologists in every Southern California county and city."
             />
             <QuickCard
               href="/benefits"
@@ -224,8 +225,8 @@ export default function Home() {
           />
           <Step
             number="2"
-            title="Search by state and city"
-            description="Browse verified providers across all 50 states. Filter by insurance, telehealth, specialty, and availability."
+            title="Search by county and city"
+            description="Browse verified providers across Southern California. Filter by insurance, telehealth, specialty, and availability."
           />
           <Step
             number="3"
@@ -301,7 +302,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <Heart className="w-4 h-4 text-primary" />
-              <span>TherapyCareNow · All 50 states</span>
+              <span>TherapyCareNow · Southern California</span>
             </div>
             <div className="flex flex-wrap justify-center gap-6">
               <Link href="/therapists" className="hover:text-foreground transition-colors">Therapists</Link>
@@ -466,7 +467,6 @@ function InteractiveDemo() {
     { label: "Psychiatrist", icon: "💊", desc: "Medication management" },
     { label: "Psychologist", icon: "📋", desc: "Testing & assessment" },
   ];
-  const states = ["California", "Texas", "New York", "Florida", "Illinois", "Pennsylvania", "Ohio", "Georgia", "North Carolina", "Michigan", "New Jersey", "Virginia"];
   const concerns = ["Anxiety", "Depression", "Trauma / PTSD", "ADHD", "Relationship issues", "Grief & loss"];
   const reset = () => { setStep(0); setSelectedType(null); setSelectedState(null); setSelectedConcern(null); };
 
@@ -496,12 +496,12 @@ function InteractiveDemo() {
         {step === 1 && (
           <div>
             <p className="text-xs font-semibold text-primary uppercase tracking-wider mb-2">Step 2 of 3</p>
-            <h3 className="text-xl font-bold text-foreground mb-2">Which state are you in?</h3>
-            <p className="text-sm text-muted-foreground mb-6">We have verified {selectedType?.toLowerCase()}s in all 50 states.</p>
+            <h3 className="text-xl font-bold text-foreground mb-2">Which county are you in?</h3>
+            <p className="text-sm text-muted-foreground mb-6">We have verified {selectedType?.toLowerCase()}s across Southern California.</p>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {states.map((s) => (
-                <button key={s} onClick={() => { setSelectedState(s); setStep(2); }}
-                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary">{s}</button>
+              {SOCAL_COUNTIES.map((c) => (
+                <button key={c.slug} onClick={() => { setSelectedState(c.slug); setStep(2); }}
+                  className="px-4 py-3 rounded-xl border-2 border-border hover:border-primary hover:bg-primary/5 transition-all text-sm font-medium text-foreground hover:text-primary">{c.name}</button>
               ))}
             </div>
             <button onClick={() => setStep(0)} className="mt-4 text-sm text-muted-foreground hover:text-foreground transition-colors">← Back</button>
@@ -529,13 +529,13 @@ function InteractiveDemo() {
             <h3 className="text-xl font-bold text-foreground mb-2">Your personalized results are ready</h3>
             <p className="text-muted-foreground text-sm mb-2">
               We found <span className="font-semibold text-foreground">{selectedType}s</span> in{" "}
-              <span className="font-semibold text-foreground">{selectedState}</span> who specialize in{" "}
+              <span className="font-semibold text-foreground">{SOCAL_COUNTIES.find((c) => c.slug === selectedState)?.name}</span> who specialize in{" "}
               <span className="font-semibold text-foreground">{selectedConcern}</span>.
             </p>
             <p className="text-xs text-muted-foreground mb-6">Click below to search real provider listings.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
-                href={`/find-therapist?category=${encodeURIComponent(selectedType ?? '')}&state=${encodeURIComponent(selectedState ?? '')}&concern=${encodeURIComponent(selectedConcern ?? '')}`}
+                href={`/find-therapist?category=${encodeURIComponent(selectedType ?? '')}&county=${encodeURIComponent(selectedState ?? '')}&concern=${encodeURIComponent(selectedConcern ?? '')}`}
                 className="inline-flex items-center justify-center gap-2 bg-primary text-primary-foreground font-semibold rounded-xl px-6 py-3 hover:opacity-90 transition-all"
               >
                 <Search className="w-4 h-4" />
@@ -569,7 +569,7 @@ const TESTIMONIALS: {
     tag: "Found a therapist",
   },
   {
-    quote: "After struggling for months, I finally found a psychiatrist who specializes in ADHD near me. The search by specialty and state made it so easy. Highly recommend this site.",
+    quote: "After struggling for months, I finally found a psychiatrist who specializes in ADHD near me. The search by specialty and city made it so easy. Highly recommend this site.",
     name: "DeShawn R.",
     location: "Atlanta, GA",
     rating: 5,

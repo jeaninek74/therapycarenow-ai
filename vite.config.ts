@@ -157,7 +157,7 @@ const pwaPlugin = VitePWA({
   manifest: {
     name: "TherapyCareNow",
     short_name: "CareNow",
-    description: "Mental health navigation — find crisis support, therapists, and free resources across all 50 states.",
+    description: "Mental health navigation — find crisis support, therapists, and free resources across Southern California.",
     theme_color: "#0d9488",
     background_color: "#f8fafc",
     display: "standalone",
