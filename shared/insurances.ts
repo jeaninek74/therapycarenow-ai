@@ -76,12 +76,12 @@ export const INSURANCE_OPTIONS: string[] = [
   "WellCare",
   "Western Health Advantage",
 
-  // EAP & specialty
-  "Compsych EAP",
-  "Cigna EAP",
-  "Aetna EAP",
-  "Magellan EAP",
-  "Optum EAP",
+  // Employee Assistance Program & specialty
+  "Compsych Employee Assistance Program",
+  "Cigna Employee Assistance Program",
+  "Aetna Employee Assistance Program",
+  "Magellan Employee Assistance Program",
+  "Optum Employee Assistance Program",
 
   // Self-pay options
   "Self-Pay",

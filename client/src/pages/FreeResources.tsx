@@ -1,3 +1,4 @@
+import { STATE_FUNDED_PROGRAMS, GROUP_THERAPY_PROGRAMS, VETERAN_PROGRAMS } from "@shared/socalPrograms";
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { BookOpen, Phone, Globe, MapPin, Loader2 } from "lucide-react";
@@ -5,6 +6,10 @@ import NavBar from "@/components/NavBar";
 import CountyPicker from "@/components/CountyPicker";
 import { SERVICE_REGION_NAME, SOCAL_COUNTIES, getCountyForCity, getSoCalCounty } from "@shared/region";
 import { milesBetweenZips } from "@shared/socalZips";
+
+const PROGRAM_COUNTIES = new Map(
+  [...STATE_FUNDED_PROGRAMS, ...GROUP_THERAPY_PROGRAMS, ...VETERAN_PROGRAMS].map((p) => [p.name, p.counties]),
+);
 
 const CATEGORY_ORDER = ["hotline", "county_resource", "community_clinic", "sliding_scale", "support_group", "national_program", "other"];
 
@@ -17,7 +22,8 @@ function locate(r: { name: string; address?: string | null }) {
     (c) => r.name.includes(c.name.replace(" County", "")) || (c.slug === "los-angeles" && /\bLA\b/.test(r.name)),
   );
   const counties = cityCounty ? [cityCounty] : nameCounties;
-  return { zip, countySlugs: counties.map((c) => c.slug) };
+  const programCounties = PROGRAM_COUNTIES.get(r.name);
+  return { zip, countySlugs: programCounties ?? counties.map((c) => c.slug) };
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -69,7 +75,7 @@ export default function FreeResources() {
       <div className="container py-10 max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
           <BookOpen className="w-7 h-7 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Free & Low-Cost Resources</h1>
+          <h1 className="text-3xl font-bold text-foreground">Free and Low-Cost Help</h1>
         </div>
         <p className="text-muted-foreground mb-4">
           Community clinics, hotlines, and sliding scale providers across {SERVICE_REGION_NAME}.

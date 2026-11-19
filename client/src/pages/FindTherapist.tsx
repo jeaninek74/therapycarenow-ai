@@ -112,6 +112,8 @@ export default function FindTherapist() {
     if (catParam && CATEGORIES.includes(catParam)) setActiveCategory(catParam);
     const countyParam = params.get("county");
     if (countyParam && getSoCalCounty(countyParam)) setCounty(countyParam);
+    const insuranceParam = params.get("insurance");
+    if (insuranceParam && INSURANCE_OPTIONS.includes(insuranceParam)) setInsurance(insuranceParam);
   }, []);
 
   const { data: searchData, isLoading } = trpc.providers.searchByCategory.useQuery({
@@ -141,6 +143,11 @@ export default function FindTherapist() {
     setInsurance(undefined);
     setCostTag(undefined);
     setLimit(50);
+    const params = new URLSearchParams(window.location.search);
+    params.delete("insurance");
+    params.delete("county");
+    const query = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (query ? `?${query}` : ""));
   }
 
   const hasFilters = !!(county || city || zip || telehealth || specialty || insurance || costTag);

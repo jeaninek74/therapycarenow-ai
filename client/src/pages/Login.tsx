@@ -24,12 +24,6 @@ export default function Login() {
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-  // Register form state
-  const [regName, setRegName] = useState("");
-  const [regEmail, setRegEmail] = useState("");
-  const [regPassword, setRegPassword] = useState("");
-  const [regConfirm, setRegConfirm] = useState("");
-
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: async () => {
       await utils.auth.me.invalidate();
@@ -41,29 +35,9 @@ export default function Login() {
     },
   });
 
-  const registerMutation = trpc.auth.register.useMutation({
-    onSuccess: async () => {
-      await utils.auth.me.invalidate();
-      toast.success("Account created! Welcome to TherapyCareNow.");
-      navigate(returnPath);
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     loginMutation.mutate({ email: loginEmail, password: loginPassword });
-  };
-
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (regPassword !== regConfirm) {
-      toast.error("Passwords don't match.");
-      return;
-    }
-    registerMutation.mutate({ name: regName, email: regEmail, password: regPassword });
   };
 
   return (
@@ -81,13 +55,12 @@ export default function Login() {
         <Card className="shadow-lg border-0">
           <CardHeader className="pb-2">
             <CardTitle className="text-xl text-center text-slate-800">Welcome</CardTitle>
-            <CardDescription className="text-center">Sign in or create a free account</CardDescription>
+            <CardDescription className="text-center">Administrator sign in. Visitors do not need an account.</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsList className="grid w-full grid-cols-1 mb-6">
                 <TabsTrigger value="login">Sign In</TabsTrigger>
-                <TabsTrigger value="register">Create Account</TabsTrigger>
               </TabsList>
 
               {/* Login Tab */}
@@ -127,67 +100,6 @@ export default function Login() {
                 </form>
               </TabsContent>
 
-              {/* Register Tab */}
-              <TabsContent value="register">
-                <form onSubmit={handleRegister} className="space-y-4">
-                  <div className="space-y-1">
-                    <Label htmlFor="reg-name">Full Name</Label>
-                    <Input
-                      id="reg-name"
-                      type="text"
-                      placeholder="Jane Smith"
-                      value={regName}
-                      onChange={(e) => setRegName(e.target.value)}
-                      required
-                      autoComplete="name"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="reg-email">Email</Label>
-                    <Input
-                      id="reg-email"
-                      type="email"
-                      placeholder="you@example.com"
-                      value={regEmail}
-                      onChange={(e) => setRegEmail(e.target.value)}
-                      required
-                      autoComplete="email"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="reg-password">Password</Label>
-                    <Input
-                      id="reg-password"
-                      type="password"
-                      placeholder="At least 8 characters"
-                      value={regPassword}
-                      onChange={(e) => setRegPassword(e.target.value)}
-                      required
-                      minLength={8}
-                      autoComplete="new-password"
-                    />
-                  </div>
-                  <div className="space-y-1">
-                    <Label htmlFor="reg-confirm">Confirm Password</Label>
-                    <Input
-                      id="reg-confirm"
-                      type="password"
-                      placeholder="Repeat password"
-                      value={regConfirm}
-                      onChange={(e) => setRegConfirm(e.target.value)}
-                      required
-                      autoComplete="new-password"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white"
-                    disabled={registerMutation.isPending}
-                  >
-                    {registerMutation.isPending ? "Creating account…" : "Create Account"}
-                  </Button>
-                </form>
-              </TabsContent>
             </Tabs>
 
             <p className="text-center text-xs text-slate-400 mt-6">

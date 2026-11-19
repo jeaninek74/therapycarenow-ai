@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Users, Clock, DollarSign, ShieldCheck, HeartHandshake } from "lucide-react";
+import { Users, Clock, DollarSign, ShieldCheck, HeartHandshake, CalendarSearch, ExternalLink } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import CountyPicker from "@/components/CountyPicker";
 import ProgramCard from "@/components/ProgramCard";
 import CrisisNotice from "@/components/CrisisNotice";
 import { SERVICE_REGION_NAME } from "@shared/region";
-import { GROUP_THERAPY_TYPES, GROUP_THERAPY_PROGRAMS, programsForCounty } from "@shared/socalPrograms";
+import { GROUP_THERAPY_TYPES, GROUP_THERAPY_PROGRAMS, ACTIVE_GROUP_FINDERS, programsForCounty } from "@shared/socalPrograms";
 
 export default function GroupTherapy() {
   const [countySlug, setCountySlug] = useState<string | undefined>(undefined);
@@ -26,7 +26,35 @@ export default function GroupTherapy() {
         </p>
         <CrisisNotice />
 
-        <h2 className="text-2xl font-semibold text-foreground mb-4">Types of group therapy</h2>
+        <section id="active-groups" className="bg-primary/5 border border-primary/20 rounded-2xl p-6 mb-10">
+          <div className="flex items-center gap-3 mb-2">
+            <CalendarSearch className="w-6 h-6 text-primary" />
+            <h2 className="text-2xl font-semibold text-foreground">Find an active group</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-4">
+            These official finders list groups that are meeting now, with days, times, locations, and how to join.
+            You can also scroll down to see local organizations by county.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {ACTIVE_GROUP_FINDERS.map((f) => (
+              <a
+                key={f.url}
+                href={f.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-card border border-border rounded-xl p-4 hover:shadow-sm transition-all"
+              >
+                <p className="font-semibold text-foreground text-sm flex items-start gap-1">
+                  {f.name} <ExternalLink className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-primary" />
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">{f.description}</p>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <h2 className="text-2xl font-semibold text-foreground mb-2">Types of group therapy</h2>
+        <div className="mb-4"><CountyPicker value={countySlug} onChange={setCountySlug} /></div>
         <div className="grid gap-4 mb-12">
           {GROUP_THERAPY_TYPES.map((t) => (
             <section key={t.slug} id={t.slug} className="bg-card border border-border rounded-xl p-5">
@@ -51,17 +79,31 @@ export default function GroupTherapy() {
                   <dd className="text-muted-foreground">{t.insurance}</dd>
                 </div>
               </dl>
+              <div className="mt-4 border-t border-border pt-3">
+                <p className="text-sm font-semibold text-foreground mb-2">Groups to join</p>
+                <ul className="grid gap-2 text-sm">
+                  {programsForCounty(GROUP_THERAPY_PROGRAMS, countySlug)
+                    .filter((p) => p.groupTypes?.includes(t.slug))
+                    .map((p) => (
+                      <li key={p.name} className="flex flex-wrap gap-x-3 gap-y-1">
+                        <a href={p.website} target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">{p.name}</a>
+                        {p.phone && <a href={`tel:${p.phone}`} className="text-muted-foreground hover:underline">{p.phone}</a>}
+                        <span className="text-muted-foreground">Cost: {p.cost}</span>
+                      </li>
+                    ))}
+                </ul>
+              </div>
             </section>
           ))}
         </div>
 
         <div className="flex items-center gap-3 mb-2">
           <HeartHandshake className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-semibold text-foreground">Where to find groups</h2>
+          <h2 className="text-2xl font-semibold text-foreground">Local group organizations by county</h2>
         </div>
         <p className="text-sm text-muted-foreground mb-4">
           Pick your county to see local options. Your county behavioral health line and the hospital programs on the
-          Hospital &amp; State Programs page also offer group therapy.
+          Medi-Cal (Medicaid) and Hospital Programs page also offer group therapy.
         </p>
         <div className="mb-6">
           <CountyPicker value={countySlug} onChange={setCountySlug} />

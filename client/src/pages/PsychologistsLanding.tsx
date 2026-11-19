@@ -116,43 +116,6 @@ export default function PsychologistsLanding() {
         </div>
       </section>
 
-      {/* Degree types */}
-      <section className="bg-[oklch(0.55_0.18_280)]/5 py-16">
-        <div className="container">
-          <h2 className="text-2xl font-bold text-foreground mb-2 text-center">Doctoral degrees in our directory</h2>
-          <p className="text-muted-foreground text-center mb-8 text-sm">All psychologists in our directory hold doctoral-level credentials</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {[
-              {
-                type: "PhD",
-                label: "Doctor of Philosophy in Psychology",
-                icon: <BookOpen className="w-6 h-6" />,
-                detail: "Research-focused doctoral degree. PhD psychologists often combine clinical practice with research. Training typically takes 5–7 years.",
-              },
-              {
-                type: "PsyD",
-                label: "Doctor of Psychology",
-                icon: <FlaskConical className="w-6 h-6" />,
-                detail: "Practice-focused doctoral degree designed for clinicians. PsyD programs emphasize clinical skills over research. Training typically takes 4–6 years.",
-              },
-            ].map(({ type, label, icon, detail }) => (
-              <div key={type} className="bg-card border-2 border-[oklch(0.55_0.18_280)]/20 rounded-2xl p-6 hover:border-[oklch(0.55_0.18_280)]/50 transition-colors">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-xl bg-[oklch(0.55_0.18_280)]/10 text-[oklch(0.45_0.18_280)] flex items-center justify-center">
-                    {icon}
-                  </div>
-                  <div>
-                    <p className="text-2xl font-extrabold text-[oklch(0.45_0.18_280)]">{type}</p>
-                    <p className="text-xs font-medium text-foreground">{label}</p>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{detail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Comparison table */}
       <section className="container py-16">
         <h2 className="text-2xl font-bold text-foreground mb-3">Psychologist vs. Psychiatrist vs. Therapist</h2>
@@ -169,7 +132,6 @@ export default function PsychologistsLanding() {
             </thead>
             <tbody className="divide-y divide-border">
               {[
-                ["Doctoral degree required", "✓ (PhD/PsyD)", "✓ (MD/DO)", "✗"],
                 ["Can prescribe medication", "✗", "✓", "✗"],
                 ["Psychological testing", "✓", "✗", "✗"],
                 ["Provides talk therapy", "✓", "Some", "✓"],

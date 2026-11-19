@@ -20,7 +20,7 @@ const INITIAL_MESSAGE: Message = {
 
 - **Understand your options** for mental health support
 - **Explain different therapy types** (CBT, DBT, EMDR, etc.)
-- **Navigate insurance and EAP benefits**
+- **Navigate insurance and Employee Assistance Program benefits**
 - **Refine your therapist search**
 
 **Important:** I am not a therapist and cannot provide clinical advice, diagnosis, or treatment. If you're in crisis, please call or text **988** immediately.
@@ -92,7 +92,7 @@ export default function AIAssistant() {
               <Bot className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="font-semibold text-foreground">Assistant</h1>
+              <h1 className="font-semibold text-foreground">Ask for Guidance</h1>
               <p className="text-xs text-muted-foreground">Navigation help only — not clinical advice</p>
             </div>
           </div>

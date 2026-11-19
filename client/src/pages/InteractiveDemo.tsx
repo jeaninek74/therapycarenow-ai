@@ -32,7 +32,7 @@ const DEMO_STEPS = [
   },
   {
     id: "find-therapist",
-    title: "Find a Therapist",
+    title: "Find a Provider",
     subtitle: "Powerful Search Across Southern California",
     description: "Search by county, city, specialty, insurance, telehealth availability, and cost. Our directory covers every major Southern California city and hundreds of smaller communities, from Santa Barbara to the border.",
     icon: Search,
@@ -133,14 +133,14 @@ const DEMO_STEPS = [
       type: "directory",
       states: SOCAL_COUNTIES.slice(0, 6).map((c) => ({ name: c.name, cityCount: c.cities.length, cities: c.cities.slice(0, 5) })),
     },
-    cta: "Next: Benefits Wallet",
+    cta: "Next: Find Care by Insurance",
     visual: "directory",
   },
   {
     id: "benefits",
-    title: "Benefits Wallet",
+    title: "Find Care by Insurance",
     subtitle: "Know Your Mental Health Coverage",
-    description: "Enter your insurance information to see what mental health benefits you have. Look up your employer's EAP (Employee Assistance Program) for free sessions.",
+    description: "Enter your insurance information to see what mental health benefits you have. Look up your employer's Employee Assistance Program (Employee Assistance Program) for free sessions.",
     icon: Shield,
     color: "from-orange-500 to-amber-600",
     demoContent: {
@@ -160,18 +160,18 @@ const DEMO_STEPS = [
       },
       eap: {
         employer: "Acme Corporation",
-        provider: "Cigna EAP",
+        provider: "Cigna Employee Assistance Program",
         freeSessions: 8,
         phone: "1-800-555-0123",
         website: "eap.cigna.com",
       },
     },
-    cta: "Next: Assistant",
+    cta: "Next: Ask for Guidance",
     visual: "benefits",
   },
   {
     id: "ai-assistant",
-    title: "Support Assistant",
+    title: "Ask for Guidance",
     subtitle: "Guidance, Not Diagnosis",
     description: "Our assistant helps you navigate mental health resources, understand your options, and find the right support — with clear disclaimers that it's not a substitute for professional care.",
     icon: Brain,
@@ -185,7 +185,7 @@ const DEMO_STEPS = [
         },
         {
           role: "assistant",
-          text: "I hear you — feeling anxious and not knowing where to turn can be overwhelming. I'm here to help you find the right resources.\n\nA few things that might help:\n\n**1. Find a therapist** who specializes in anxiety — we have providers across all of Southern California.\n\n**2. Check your benefits** — many insurance plans cover therapy with a low copay, and your employer may offer free EAP sessions.\n\n**3. Free resources** — if cost is a concern, we have free and sliding-scale options in your area.\n\nWould you like me to help you search for therapists near you?",
+          text: "I hear you — feeling anxious and not knowing where to turn can be overwhelming. I'm here to help you find the right resources.\n\nA few things that might help:\n\n**1. Find a therapist** who specializes in anxiety — we have providers across all of Southern California.\n\n**2. Check your benefits** — many insurance plans cover therapy with a low copay, and your employer may offer free Employee Assistance Program sessions.\n\n**3. Free resources** — if cost is a concern, we have free and sliding-scale options in your area.\n\nWould you like me to help you search for therapists near you?",
         },
         {
           role: "user",
@@ -204,14 +204,14 @@ const DEMO_STEPS = [
     id: "more-help",
     title: "More Ways to Get Help",
     subtitle: "Dedicated Pages for Groups, Veterans, Programs & Work Benefits",
-    description: "Group Therapy, Veterans & Military Families, Hospital & State-Funded Programs, and Work Mental Health Benefits (Employee Assistance Programs) each have their own page with phone numbers, websites, cost, and insurance details by county.",
+    description: "Group Therapy, Veterans & Military Families, Medi-Cal (Medicaid) and Hospital Programs, and Employee Assistance Programs each have their own page with phone numbers, websites, cost, and insurance details by county.",
     icon: Users,
     color: "from-sky-500 to-blue-600",
     stats: [
       { label: "Group Therapy Types", value: String(GROUP_THERAPY_TYPES.length) },
       { label: "Veterans Crisis Line", value: "988, press 1" },
       { label: "County Behavioral Health Departments", value: String(SOCAL_COUNTIES.length) },
-      { label: "Public Employer EAPs", value: String(EAP_PROGRAMS.length) },
+      { label: "Public Employer Employee Assistance Programs", value: String(EAP_PROGRAMS.length) },
     ],
     cta: "Next: Security & Privacy",
     visual: "welcome",
@@ -246,7 +246,7 @@ const STEP_LABELS: Record<string, string> = {
   "find-therapist": "Find a Provider",
   "provider-profile": "Provider Profiles",
   directory: "County Directory",
-  benefits: "Benefits Wallet",
+  benefits: "Find Care by Insurance",
   "ai-assistant": "Ask for Guidance",
   "more-help": "More Help",
   security: "Security & Privacy",
@@ -383,7 +383,7 @@ function BenefitsVisual({ content }: { content: any }) {
       <div className="bg-white/10 rounded-xl p-3 backdrop-blur-sm">
         <div className="flex items-center gap-2 mb-2">
           <Shield className="w-4 h-4 text-amber-300" />
-          <span className="text-white font-medium text-sm">EAP: {content.eap.employer}</span>
+          <span className="text-white font-medium text-sm">Employee Assistance Program: {content.eap.employer}</span>
         </div>
         <div className="text-white/80 text-sm">
           <span className="text-amber-300 font-bold">{content.eap.freeSessions} free sessions</span> through {content.eap.provider}
@@ -623,10 +623,10 @@ export default function InteractiveDemo() {
         {/* Quick Links */}
         <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: "Find a Therapist", href: "/find-therapist", icon: Search, color: "bg-blue-50 text-blue-700 border-blue-200" },
+            { label: "Find a Provider", href: "/find-therapist", icon: Search, color: "bg-blue-50 text-blue-700 border-blue-200" },
             { label: "Therapist Directory", href: "/directory", icon: Globe, color: "bg-green-50 text-green-700 border-green-200" },
-            { label: "Benefits Wallet", href: "/benefits", icon: Shield, color: "bg-orange-50 text-orange-700 border-orange-200" },
-            { label: "Free Resources", href: "/free-resources", icon: Heart, color: "bg-teal-50 text-teal-700 border-teal-200" },
+            { label: "Find Care by Insurance", href: "/benefits", icon: Shield, color: "bg-orange-50 text-orange-700 border-orange-200" },
+            { label: "Free and Low-Cost Help", href: "/free-resources", icon: Heart, color: "bg-teal-50 text-teal-700 border-teal-200" },
           ].map((link, i) => {
             const LIcon = link.icon;
             return (

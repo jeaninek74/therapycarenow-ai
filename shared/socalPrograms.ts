@@ -11,6 +11,7 @@ export interface Program {
   website: string;
   address?: string;
   counties?: string[]; // county slugs; omitted = all of Southern California
+  groupTypes?: string[]; // GroupTherapyType slugs this program offers groups for
   cost: string;
   insurance: string;
 }
@@ -26,6 +27,17 @@ export interface GroupTherapyType {
 }
 
 export const GROUP_THERAPY_TYPES: GroupTherapyType[] = [
+  {
+    slug: "functional-neurological-disorder",
+    name: "Functional Neurological Disorder and Psychogenic Non-Epileptic Seizures (Functional Seizures) Support Groups",
+    whatItDoes:
+      "Brings together people whose nervous system sends and receives signals incorrectly, causing symptoms such as seizure-like episodes, weakness, tremor, or trouble walking, even though tests show no structural damage. Members learn about the diagnosis, share coping strategies, and practice skills from treatments like Cognitive Behavioral Therapy and physical rehabilitation.",
+    whoItHelps:
+      "People diagnosed with Functional Neurological Disorder or Psychogenic Non-Epileptic Seizures (also called functional or dissociative seizures), plus their families and caregivers.",
+    format: "Mostly online peer support groups that meet weekly or monthly; some hospital neurology programs offer therapist-led groups.",
+    typicalCost: "Peer support groups are free. Therapist-led groups follow regular therapy rates.",
+    insurance: "Peer groups need no insurance. Therapist-led groups are often covered by Medi-Cal, Medicare, and commercial plans.",
+  },
   {
     slug: "dialectical-behavior-therapy",
     name: "Dialectical Behavior Therapy Skills Group",
@@ -146,6 +158,164 @@ export const GROUP_THERAPY_TYPES: GroupTherapyType[] = [
 
 export const GROUP_THERAPY_PROGRAMS: Program[] = [
   {
+    name: "OUR HOUSE Grief Support Center",
+    description: "Grief support groups for children, teens, and adults after the death of a loved one, in Los Angeles and online.",
+    phone: "310-473-1511",
+    website: "https://www.ourhouse-grief.org/",
+    counties: ["los-angeles"],
+    cost: "Free or low cost; call for details",
+    insurance: "Not needed",
+    groupTypes: ["grief-and-loss"],
+  },
+  {
+    name: "The Elizabeth Hospice Grief Support",
+    description: "Grief support groups and counseling for adults and children in San Diego County, open to the community.",
+    phone: "800-797-2050",
+    website: "https://www.elizabethhospice.org/",
+    counties: ["san-diego"],
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["grief-and-loss"],
+  },
+  {
+    name: "The Compassionate Friends (local chapters)",
+    description: "Free monthly support groups for families after the death of a child, with chapters across Southern California.",
+    phone: "877-969-0010",
+    website: "https://www.compassionatefriends.org/find-support/chapters/",
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["grief-and-loss"],
+  },
+  {
+    name: "Peace Over Violence",
+    description: "Support groups and counseling for survivors of sexual and domestic violence in Los Angeles County.",
+    phone: "213-955-9090",
+    website: "https://www.peaceoverviolence.org/",
+    counties: ["los-angeles"],
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["trauma-and-ptsd"],
+  },
+  {
+    name: "Center for Community Solutions",
+    description: "Support groups and counseling for survivors of sexual assault and relationship violence in San Diego County. 24-hour line.",
+    phone: "888-385-4657",
+    website: "https://www.ccssd.org/",
+    counties: ["san-diego"],
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["trauma-and-ptsd"],
+  },
+  {
+    name: "Los Angeles LGBT Center",
+    description: "Support groups and mental health services for LGBTQ+ people of all ages.",
+    website: "https://lalgbtcenter.org/",
+    counties: ["los-angeles"],
+    cost: "Free or sliding scale",
+    insurance: "Medi-Cal and some commercial plans accepted for therapy; groups are often free",
+    groupTypes: ["lgbtq-support"],
+  },
+  {
+    name: "The LGBTQ Center Long Beach",
+    description: "Peer support groups and counseling for LGBTQ+ adults and youth.",
+    phone: "562-434-4455",
+    website: "https://www.centerlb.org/",
+    counties: ["los-angeles"],
+    cost: "Free or sliding scale",
+    insurance: "Not needed",
+    groupTypes: ["lgbtq-support"],
+  },
+  {
+    name: "LGBTQ Center Orange County",
+    description: "Support groups and counseling for LGBTQ+ youth, adults, and families.",
+    phone: "714-953-5428",
+    website: "https://www.lgbtqcenteroc.org/",
+    counties: ["orange"],
+    cost: "Free or sliding scale",
+    insurance: "Not needed",
+    groupTypes: ["lgbtq-support"],
+  },
+  {
+    name: "The San Diego LGBT Community Center",
+    description: "Support groups and behavioral health services for LGBTQ+ people and families.",
+    phone: "619-692-2077",
+    website: "https://thecentersd.org/",
+    counties: ["san-diego"],
+    cost: "Free or sliding scale",
+    insurance: "Not needed",
+    groupTypes: ["lgbtq-support"],
+  },
+  {
+    name: "Parents Anonymous",
+    description: "Free weekly parent support groups and the National Parent Helpline, based in Southern California.",
+    phone: "855-427-2736",
+    website: "https://parentsanonymous.org/",
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["family-and-parenting", "anger-management"],
+  },
+  {
+    name: "Al-Anon and Alateen meetings",
+    description: "Free in-person, phone, and online meetings for family and friends of people who drink.",
+    website: "https://al-anon.org/al-anon-meetings/",
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["family-and-parenting", "substance-use-recovery"],
+  },
+  {
+    name: "Narcotics Anonymous meeting search",
+    description: "Free in-person and online Narcotics Anonymous meetings.",
+    website: "https://na.org/meetingsearch/",
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["substance-use-recovery"],
+  },
+  {
+    name: "FindTreatment.gov (Substance Abuse and Mental Health Services Administration)",
+    description: "Federal search for licensed substance use and mental health treatment programs, including outpatient group programs. Filter by insurance and payment.",
+    website: "https://findtreatment.gov/",
+    cost: "Varies by program",
+    insurance: "Filter by Medi-Cal, Medicare, private insurance, or sliding scale",
+    groupTypes: ["substance-use-recovery", "trauma-and-ptsd", "depression-and-bipolar-support", "eating-disorders"],
+  },
+  {
+    name: "Dialectical Behavior Therapy-Linehan Board of Certification directory",
+    description: "Find certified Dialectical Behavior Therapy clinicians and programs, many of which run skills groups.",
+    website: "https://dbt-lbc.org/",
+    cost: "Varies by program",
+    insurance: "Varies; ask each program",
+    groupTypes: ["dialectical-behavior-therapy"],
+  },
+  {
+    name: "211 Los Angeles County",
+    description: "Free, 24/7 referral line. Ask for anger management classes, anxiety groups, Cognitive Behavioral Therapy groups, eating disorder groups, and other therapy groups near you.",
+    phone: "800-339-6993",
+    website: "https://211la.org/",
+    counties: ["los-angeles"],
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["anger-management", "cognitive-behavioral-therapy", "acceptance-and-commitment-therapy", "anxiety-and-social-anxiety", "eating-disorders"],
+  },
+  {
+    name: "211 Orange County",
+    description: "Free, 24/7 referral line. Ask for anger management classes, anxiety groups, and other therapy groups near you.",
+    phone: "888-600-4357",
+    website: "https://www.211oc.org/",
+    counties: ["orange"],
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["anger-management", "cognitive-behavioral-therapy", "acceptance-and-commitment-therapy", "anxiety-and-social-anxiety", "eating-disorders"],
+  },
+  {
+    name: "FND Hope (Functional Neurological Disorder Hope) Peer Support Groups",
+    description:
+      "Free online peer support groups for people with Functional Neurological Disorder, including a Functional Seizure Peer Support Group, a United States peer support group, young adult, teen, men's, LGBTQIA+, New to Functional Neurological Disorder, and caregiver groups. Dates and sign-up links are on the FND Hope events calendar.",
+    website: "https://fndhope.org/events/",
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["functional-neurological-disorder"],
+  },
+  {
     name: "National Alliance on Mental Illness Orange County",
     description: "Free peer support groups for people living with mental illness and for family members, plus free education classes.",
     phone: "714-991-6412",
@@ -153,6 +323,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     counties: ["orange"],
     cost: "Free",
     insurance: "Not needed",
+    groupTypes: ["depression-and-bipolar-support", "family-and-parenting", "anxiety-and-social-anxiety"],
   },
   {
     name: "National Alliance on Mental Illness San Diego & Imperial Counties",
@@ -162,6 +333,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     counties: ["san-diego", "imperial"],
     cost: "Free",
     insurance: "Not needed",
+    groupTypes: ["depression-and-bipolar-support", "family-and-parenting", "anxiety-and-social-anxiety"],
   },
   {
     name: "National Alliance on Mental Illness Ventura County",
@@ -171,6 +343,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     counties: ["ventura"],
     cost: "Free",
     insurance: "Not needed",
+    groupTypes: ["depression-and-bipolar-support", "family-and-parenting"],
   },
   {
     name: "National Alliance on Mental Illness California (find a local affiliate)",
@@ -178,6 +351,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     website: "https://namica.org/",
     cost: "Free",
     insurance: "Not needed",
+    groupTypes: ["depression-and-bipolar-support", "family-and-parenting", "anxiety-and-social-anxiety"],
   },
   {
     name: "Alcoholics Anonymous San Diego",
@@ -187,6 +361,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     counties: ["san-diego"],
     cost: "Free",
     insurance: "Not needed",
+    groupTypes: ["substance-use-recovery"],
   },
   {
     name: "Self-Management and Recovery Training (SMART Recovery)",
@@ -194,6 +369,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     website: "https://www.smartrecovery.org/",
     cost: "Free",
     insurance: "Not needed",
+    groupTypes: ["substance-use-recovery"],
   },
   {
     name: "Depression and Bipolar Support Alliance",
@@ -201,6 +377,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     website: "https://www.dbsalliance.org/",
     cost: "Free",
     insurance: "Not needed",
+    groupTypes: ["depression-and-bipolar-support"],
   },
   {
     name: "Vet Centers (U.S. Department of Veterans Affairs)",
@@ -209,6 +386,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     website: "https://www.vetcenter.va.gov/",
     cost: "Free for eligible veterans and families",
     insurance: "Not needed",
+    groupTypes: ["trauma-and-ptsd", "grief-and-loss"],
   },
 ];
 
@@ -459,7 +637,7 @@ export function programsForCounty(programs: Program[], countySlug?: string | nul
 
 export interface EapProgram extends Program {
   eapProvider: string;
-  /** Employer names people may search for (used to seed the employer EAP lookup). */
+  /** Employer names people may search for (used to seed the employer Employee Assistance Program lookup). */
   employerNames: string[];
 }
 
@@ -522,7 +700,7 @@ export const EAP_PROGRAMS: EapProgram[] = [
   },
   {
     name: "County of San Diego Employee Assistance Program",
-    eapProvider: "Anthem EAP",
+    eapProvider: "Anthem Employee Assistance Program",
     employerNames: ["County of San Diego", "San Diego County"],
     description: "24/7 counseling (in person or online), legal and financial consultations for County employees and household members.",
     phone: "888-777-6665",
@@ -533,7 +711,7 @@ export const EAP_PROGRAMS: EapProgram[] = [
   },
   {
     name: "County of Riverside Employee Assistance Program",
-    eapProvider: "Anthem EAP",
+    eapProvider: "Anthem Employee Assistance Program",
     employerNames: ["County of Riverside", "Riverside County"],
     description: "Up to 6 free counseling sessions per issue for employees and household members. Online code: PRISM.",
     phone: "833-954-1067",
@@ -596,5 +774,40 @@ export const EAP_PROGRAMS: EapProgram[] = [
     website: "https://www.foh4you.com/",
     cost: "Free",
     insurance: "Not needed (employer-paid)",
+  },
+];
+
+export interface GroupFinder {
+  name: string;
+  description: string;
+  url: string;
+}
+
+/** Official meeting finders that list groups currently meeting, with dates, times, and locations. */
+export const ACTIVE_GROUP_FINDERS: GroupFinder[] = [
+  {
+    name: "National Alliance on Mental Illness: find your local affiliate's support groups",
+    description: "Free peer and family support groups run by each county's affiliate, with meeting days, times, and locations.",
+    url: "https://namica.org/",
+  },
+  {
+    name: "Self-Management and Recovery Training (SMART Recovery) meeting finder",
+    description: "Search in-person and online addiction recovery meetings by ZIP code.",
+    url: "https://meetings.smartrecovery.org/",
+  },
+  {
+    name: "Alcoholics Anonymous meeting finder",
+    description: "Find in-person and online Alcoholics Anonymous meetings near you.",
+    url: "https://www.aa.org/find-aa",
+  },
+  {
+    name: "Depression and Bipolar Support Alliance: find a support group",
+    description: "In-person chapters and online peer support groups with schedules.",
+    url: "https://www.dbsalliance.org/support/chapters-and-support-groups/",
+  },
+  {
+    name: "FND Hope events calendar",
+    description: "Upcoming online Functional Neurological Disorder and Functional Seizure peer support groups.",
+    url: "https://fndhope.org/events/",
   },
 ];

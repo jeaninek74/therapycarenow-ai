@@ -30,7 +30,7 @@ export default function Home() {
                 { icon: Search, text: "Find therapists, psychiatrists, and psychologists by county, city, specialty, and insurance" },
                 { icon: Phone, text: "Reach 988 and your county's 24/7 crisis line right away" },
                 { icon: BookOpen, text: "Discover free and sliding-scale clinics and community programs" },
-                { icon: Briefcase, text: "Use your insurance and employer EAP benefits to lower costs" },
+                { icon: Briefcase, text: "Use your insurance and Employee Assistance Program benefits to lower costs" },
               ].map(({ icon: Icon, text }) => (
                 <li key={text} className="flex items-start gap-2">
                   <Icon className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
@@ -188,7 +188,6 @@ export default function Home() {
                   ["Can prescribe medication", "✗", "✓", "✗"],
                   ["Provides talk therapy", "✓", "Some", "✓"],
                   ["Psychological testing", "✗", "✗", "✓"],
-                  ["Degree", "Master's", "Medical (MD/DO) or NP", "Doctorate (PhD/PsyD)"],
                   ["Typical session focus", "Therapy & coping", "Medication & diagnosis", "Assessment & therapy"],
                   ["Insurance coverage", "Widely covered", "Widely covered", "Widely covered"],
                 ].map(([feature, therapist, psychiatrist, psychologist]) => (
@@ -251,13 +250,13 @@ export default function Home() {
             <QuickCard
               href="/benefits"
               icon={<Briefcase className="w-6 h-6 text-[oklch(0.58_0.12_155)]" />}
-              title="Benefits Wallet"
-              description="Save your insurance and employer EAP info to speed up matching."
+              title="Find Care by Insurance"
+              description="Save your insurance and employer Employee Assistance Program info to speed up matching."
             />
             <QuickCard
               href="/free-resources"
               icon={<BookOpen className="w-6 h-6 text-[oklch(0.68_0.10_280)]" />}
-              title="Free & Low-Cost Help"
+              title="Free and Low-Cost Help"
               description="Community clinics, hotlines, and sliding scale providers near you."
             />
             <QuickCard
@@ -275,13 +274,13 @@ export default function Home() {
             <QuickCard
               href="/programs"
               icon={<Building2 className="w-6 h-6 text-primary" />}
-              title="Hospital & State Programs"
+              title="Medi-Cal (Medicaid) and Hospital Programs"
               description="Hospital behavioral health programs, Medi-Cal, and county behavioral health departments."
             />
             <QuickCard
               href="/eap"
               icon={<Briefcase className="w-6 h-6 text-primary" />}
-              title="Work Mental Health Benefits (EAP)"
+              title="Employee Assistance Program"
               description="Free, confidential counseling through your employer's Employee Assistance Program."
             />
           </div>
@@ -382,7 +381,7 @@ export default function Home() {
               <Link href="/therapists" className="hover:text-foreground transition-colors">Therapists</Link>
               <Link href="/psychiatrists" className="hover:text-foreground transition-colors">Psychiatrists</Link>
               <Link href="/psychologists" className="hover:text-foreground transition-colors">Psychologists</Link>
-              <Link href="/free-resources" className="hover:text-foreground transition-colors">Free Resources</Link>
+              <Link href="/free-resources" className="hover:text-foreground transition-colors">Free and Low-Cost Help</Link>
               <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Use</Link>
             </div>
@@ -664,7 +663,7 @@ const TESTIMONIALS: {
     tag: "Great resource",
   },
   {
-    quote: "As someone without insurance, I used the Free Help section to find sliding-scale therapists in my area. I'm now in weekly therapy for the first time in my life. Thank you.",
+    quote: "As someone without insurance, I used the Free and Low-Cost Help section to find sliding-scale therapists in my area. I'm now in weekly therapy for the first time in my life. Thank you.",
     name: "Priya S.",
     location: "Chicago, IL",
     rating: 5,

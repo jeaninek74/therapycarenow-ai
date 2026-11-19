@@ -12,7 +12,7 @@ import { EAP_PROGRAMS, programsForCounty } from "@shared/socalPrograms";
 const HOW_TO_FIND = [
   "Check your employer's HR or benefits website, or your benefits enrollment guide.",
   "Look on the back of your health insurance card or your health plan's member website.",
-  "Ask HR or your manager. You don't have to say why; EAP use is confidential.",
+  "Ask HR or your manager. You don't have to say why; Employee Assistance Program use is confidential.",
   "If you're in a union, ask your union. Many unions run their own member assistance program.",
 ];
 
@@ -39,10 +39,10 @@ export default function Eap() {
       <div className="container py-10 max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
           <Briefcase className="w-7 h-7 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Work Mental Health Benefits (Employee Assistance Program)</h1>
+          <h1 className="text-3xl font-bold text-foreground">Employee Assistance Program</h1>
         </div>
         <p className="text-muted-foreground mb-6">
-          An Employee Assistance Program (EAP) is a free, confidential mental health benefit that many employers offer.
+          An Employee Assistance Program is a free, confidential mental health benefit that many employers offer.
           You can usually start counseling within days, with no insurance, copay, or referral, and your employer is not
           told who uses it.
         </p>
@@ -95,7 +95,7 @@ export default function Eap() {
 
         <div className="grid md:grid-cols-2 gap-6 mb-10">
           <section>
-            <h2 className="text-xl font-semibold text-foreground mb-3">What an EAP usually covers</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-3">What an Employee Assistance Program usually covers</h2>
             <ul className="space-y-2">
               {WHAT_IT_COVERS.map((t) => (
                 <li key={t} className="flex items-start gap-2 text-sm text-foreground">
@@ -105,7 +105,7 @@ export default function Eap() {
             </ul>
           </section>
           <section>
-            <h2 className="text-xl font-semibold text-foreground mb-3">How to find your EAP</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-3">How to find your Employee Assistance Program</h2>
             <ul className="space-y-2">
               {HOW_TO_FIND.map((t) => (
                 <li key={t} className="flex items-start gap-2 text-sm text-foreground">

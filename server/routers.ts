@@ -1,7 +1,7 @@
 import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
 import { milesBetweenZips } from "../shared/socalZips";
 import { getSessionCookieOptions } from "./_core/cookies";
-import { registerUser, loginUser, createSessionToken } from "./_core/auth";
+import { loginUser, createSessionToken } from "./_core/auth";
 import { systemRouter } from "./_core/systemRouter";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
@@ -9,14 +9,10 @@ import { moderateInput, getSupportAssistantResponse } from "./aiGuardrails";
 import { searchLiveProviders } from "./liveProviderSearch";
 import { SERVICE_STATE_CODE } from "@shared/region";
 import {
-  logAuditEvent,
   getFreeResources,
   searchProviders,
   getProviderById,
   lookupEAP,
-  getUserProfile,
-  upsertUserProfile,
-  recordConsent,
   getStateCompliance,
   getAllStateCompliance,
   getAuditEventStats,
@@ -65,13 +61,6 @@ const freeResourcesRouter = router({
     .input(z.object({ stateCode: z.string().length(2).optional() }))
     .query(async ({ input, ctx }) => {
       const resources = await getFreeResources(SERVICE_STATE_CODE);
-
-      await logAuditEvent({
-        userId: ctx.user?.id,
-        eventType: "resource_clicked",
-        resourceType: "free_resources",
-        stateCode: input.stateCode,
-      });
 
       return resources;
     }),
@@ -124,11 +113,6 @@ const providerRouter = router({
     .input(z.object({ id: z.number() }))
     .query(async ({ input, ctx }) => {
       const provider = await getProviderById(input.id);
-
-      await logAuditEvent({
-        userId: ctx.user?.id,
-        eventType: "provider_contact_clicked",
-      });
 
       return provider;
     }),
@@ -189,76 +173,9 @@ const providerRouter = router({
     }),
 });
 
-// - Benefits Wallet Router -
+// - My Insurance & Benefits Router (lookup only, nothing is stored) -
 
 const benefitsRouter = router({
-  getProfile: protectedProcedure.query(async ({ ctx }) => {
-    return getUserProfile(ctx.user.id);
-  }),
-
-  saveInsurance: protectedProcedure
-    .input(
-      z.object({
-        insuranceCarrier: z.string().min(1).max(256),
-        insurancePlan: z.string().max(256).optional(),
-        consentGranted: z.boolean(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      if (!input.consentGranted) {
-        throw new Error("Consent is required to save insurance information.");
-      }
-
-      await recordConsent(ctx.user.id, "benefits_storage", true);
-      await upsertUserProfile(ctx.user.id, {
-        insuranceCarrier: input.insuranceCarrier,
-        insurancePlan: input.insurancePlan,
-      });
-
-      await logAuditEvent({
-        userId: ctx.user.id,
-        eventType: "benefits_saved",
-        resourceType: "insurance",
-      });
-
-      return { success: true };
-    }),
-
-  saveEmployer: protectedProcedure
-    .input(
-      z.object({
-        employerName: z.string().min(1).max(256),
-        consentGranted: z.boolean(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      if (!input.consentGranted) {
-        throw new Error("Consent is required to save employer information.");
-      }
-
-      await recordConsent(ctx.user.id, "benefits_storage", true);
-      await upsertUserProfile(ctx.user.id, {
-        employerName: input.employerName,
-      });
-
-      await logAuditEvent({
-        userId: ctx.user.id,
-        eventType: "benefits_saved",
-        resourceType: "employer",
-      });
-
-      return { success: true };
-    }),
-
-  clearBenefits: protectedProcedure.mutation(async ({ ctx }) => {
-    await upsertUserProfile(ctx.user.id, {
-      insuranceCarrier: undefined,
-      insurancePlan: undefined,
-      employerName: undefined,
-    });
-    return { success: true };
-  }),
-
   lookupEAP: publicProcedure
     .input(z.object({ employerName: z.string().min(1) }))
     .query(async ({ input }) => {
@@ -289,22 +206,8 @@ const aiRouter = router({
       // Step 1: Moderation ALWAYS runs first
       const modResult = await moderateInput(input.message);
 
-      await logAuditEvent({
-        userId: ctx.user?.id,
-        eventType: "ai_assistant_used",
-        moderationOutcome: modResult.flagged ? "flagged" : "safe",
-        stateCode: input.stateCode,
-      });
-
       // Step 2: If moderation flags risk → Crisis Mode, block AI
       if (modResult.triggersCrisisMode) {
-        await logAuditEvent({
-          userId: ctx.user?.id,
-          eventType: "crisis_mode_triggered",
-          triggerSource: "moderation",
-          stateCode: input.stateCode,
-        });
-
         // Notify owner — HIPAA-safe: no raw user message stored or transmitted
         notifyOwner({
           title: "🚨 TherapyCareNow: Crisis Mode Activated via AI Moderation",
@@ -444,26 +347,6 @@ export const appRouter = router({
 
   auth: router({
     me: publicProcedure.query((opts) => opts.ctx.user),
-    register: publicProcedure
-      .input(z.object({
-        name: z.string().min(1).max(128),
-        email: z.string().email(),
-        password: z.string().min(8).max(128),
-      }))
-      .mutation(async ({ input, ctx }) => {
-        try {
-          const user = await registerUser(input);
-          const token = await createSessionToken(user.openId);
-          const cookieOptions = getSessionCookieOptions(ctx.req);
-          ctx.res.cookie(COOKIE_NAME, token, { ...cookieOptions, maxAge: ONE_YEAR_MS });
-          return { success: true, user: { id: user.id, name: user.name, email: user.email, role: user.role } };
-        } catch (err: any) {
-          if (err.message === 'EMAIL_TAKEN') {
-            throw new TRPCError({ code: 'CONFLICT', message: 'An account with this email already exists.' });
-          }
-          throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR', message: 'Registration failed.' });
-        }
-      }),
     login: publicProcedure
       .input(z.object({
         email: z.string().email(),

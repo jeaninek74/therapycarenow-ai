@@ -15,10 +15,9 @@ TherapyCareNow is a navigation tool, not a clinic. It does not provide therapy o
 | Group Therapy | `/group-therapy` | What each type of group therapy does (Dialectical Behavior Therapy, anger management, and more), cost, insurance, and where to find groups |
 | Veterans | `/veterans` | VA medical centers, Vet Centers, Veterans Crisis Line, VA Community Care, TRICARE, Military OneSource |
 | Programs | `/programs` | Hospital behavioral health programs, Medi-Cal, Covered California, CalHOPE, 211, and county behavioral health departments |
-| Work Benefits (EAP) | `/eap` | Explains Employee Assistance Programs, looks up your employer's program (no sign-in needed), and lists the programs for State, county, city, and federal employees in Southern California |
-| Benefits Wallet | `/benefits` | Save insurance and employer details; look up Employee Assistance Program (EAP) benefits |
+| Employee Assistance Program | `/eap` | Explains Employee Assistance Programs, looks up your employer's program (no sign-in needed), and lists the programs for State, county, city, and federal employees in Southern California |
+| Find Care by Insurance | `/benefits` | Pick your insurance or employer to see matching clinicians and Employee Assistance Program contacts. Nothing is stored |
 | Assistant | `/ai-assistant` | AI guidance on finding care, with crisis detection that routes to 988 and county crisis lines |
-| Join the Directory | `/join-directory` | Clinicians submit a listing; NPI is checked against the CMS NPPES registry |
 
 ## Clinician verification
 
@@ -38,13 +37,13 @@ When someone filters by a plan, Find a Provider also links to that insurer's off
 
 ## Distance by ZIP code
 
-Find a Provider and Free & Low-Cost Help take the user's ZIP code and sort results nearest first, showing miles. Distances are straight-line between ZIP centroids from the U.S. Census Bureau 2024 ZCTA Gazetteer (`shared/socalZips.ts`). Free resources are grouped by category and filtered by the county in their address.
+Find a Provider and Free and Low-Cost Help take the user's ZIP code and sort results nearest first, showing miles. Distances are straight-line between ZIP centroids from the U.S. Census Bureau 2024 ZCTA Gazetteer (`shared/socalZips.ts`). Free resources are grouped by category and filtered by the county in their address.
 
 ## Region and data sources
 
 - `shared/region.ts`: the eight counties, their cities, and each county's 24/7 crisis line
 - `shared/socalPrograms.ts`: group therapy types, group therapy programs, veterans programs, hospital programs, and state/county-funded programs. Phone numbers and addresses come from each organization's official website.
-- `shared/socalPrograms.ts` (`EAP_PROGRAMS`): Employee Assistance Programs for public employers, taken from each employer's HR page; `scripts/seed-socal.ts` loads them into the employer EAP lookup
+- `shared/socalPrograms.ts` (`EAP_PROGRAMS`): Employee Assistance Programs for public employers, taken from each employer's HR page; `scripts/seed-socal.ts` loads them into the employer Employee Assistance Program lookup
 - `shared/insurances.ts`: insurance options, including Medi-Cal, Medicare, Kaiser Permanente, MetLife, Aetna, Anthem Blue Cross, Blue Shield of California, Cigna, UnitedHealthcare, Health Net, L.A. Care, IEHP, CalOptima Health, Molina Healthcare, TRICARE, and VA Community Care
 
 ## Tech stack
