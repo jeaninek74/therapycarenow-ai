@@ -11,7 +11,7 @@ import { providers, providerSpecialties } from "../drizzle/schema";
 import { SOCAL_COUNTIES, SERVICE_STATE_CODE, isSoCalCity, normalizeCity } from "../shared/region";
 
 const NPPES_BASE = "https://npiregistry.cms.hhs.gov/api/";
-const TAXONOMIES = ["psychiatry", "psychologist", "counselor", "social worker, clinical", "marriage & family therapist"];
+const TAXONOMIES = ["psychiatry", "psychologist", "counselor", "social worker", "marriage & family therapist"];
 
 const db = drizzle(process.env.DATABASE_URL!);
 const countyArg = process.argv.find((a) => a.startsWith("--county="))?.split("=")[1];
