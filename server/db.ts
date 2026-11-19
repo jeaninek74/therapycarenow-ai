@@ -25,18 +25,11 @@ import {
   normalizeCity,
 } from "../shared/region";
 
-/**
- * Restricts provider rows to Southern California (optionally a single county).
- * Region-wide, rows with a SoCal-only ZIP prefix (900–931) also match so unlisted communities aren't hidden.
- */
+/** Restricts provider rows to Southern California cities (optionally a single county). */
 function socalCityCondition(countySlug?: string) {
   const county = getSoCalCounty(countySlug);
-  const cityMatch = inArray(
-    sql`LOWER(TRIM(${providers.city}))`,
-    county ? county.cities.map(normalizeCity) : SOCAL_CITY_KEYS
-  );
-  if (county) return cityMatch;
-  return or(cityMatch, sql`LEFT(TRIM(${providers.zipCode}), 3) BETWEEN '900' AND '931'`)!;
+  const keys = county ? county.cities.map(normalizeCity) : SOCAL_CITY_KEYS;
+  return inArray(sql`LOWER(TRIM(${providers.city}))`, keys);
 }
 
 let _db: ReturnType<typeof drizzle> | null = null;
