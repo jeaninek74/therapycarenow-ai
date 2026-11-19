@@ -13,6 +13,11 @@ import { SOCAL_COUNTIES, SERVICE_STATE_CODE, isSoCalCity, normalizeCity } from "
 const NPPES_BASE = "https://npiregistry.cms.hhs.gov/api/";
 const TAXONOMIES = ["psychiatry", "psychologist", "counselor", "social worker", "marriage & family therapist"];
 
+// Primary taxonomies we list: psychiatry specialties (not neurology), psychologists, licensed counselors,
+// clinical social workers, and marriage & family therapists.
+const MENTAL_HEALTH_PRIMARY =
+  /^(Psychiatry & Neurology, (Psychiatry|.*Psychiatry)|Psychologist(, .*)?|Counselor(, (Mental Health|Professional|Addiction \(Substance Use Disorder\)))?|Social Worker, Clinical|Marriage & Family Therapist)$/;
+
 const db = drizzle(process.env.DATABASE_URL!);
 const countyArg = process.argv.find((a) => a.startsWith("--county="))?.split("=")[1];
 
