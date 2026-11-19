@@ -120,7 +120,7 @@ export default function Home() {
             description="Licensed counselors and therapists who provide talk therapy, behavioral therapy, and emotional support for a wide range of mental health concerns."
             services={[
               "Individual & couples therapy",
-              "CBT, DBT, EMDR, and more",
+              "Cognitive Behavioral, Dialectical Behavior, and EMDR (Eye Movement Desensitization and Reprocessing) therapy",
               "Anxiety, depression, trauma",
               "Grief, life transitions, stress",
             ]}
