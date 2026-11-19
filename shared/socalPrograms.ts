@@ -95,7 +95,7 @@ export const GROUP_THERAPY_TYPES: GroupTherapyType[] = [
     slug: "trauma-and-ptsd",
     name: "Trauma and Post-Traumatic Stress Disorder Group",
     whatItDoes:
-      "Provides a safe space to learn about trauma reactions, build grounding and coping skills, and reduce shame and isolation with people who have had similar experiences.",
+      "Provides a safe space to learn about trauma reactions, build grounding and coping skills, and reduce shame and isolation with people who have had similar experiences. Eye Movement Desensitization and Reprocessing therapy for trauma is usually one-on-one, not a group; find clinicians who offer it under the trauma specialty in Find a Provider.",
     whoItHelps: "Survivors of abuse, assault, violence, combat, accidents, or disasters.",
     format: "Weekly groups, often 10–16 weeks. Veterans can join free groups at VA medical centers and Vet Centers.",
     typicalCost: "Free for eligible veterans; often $40–$100 per session otherwise.",
