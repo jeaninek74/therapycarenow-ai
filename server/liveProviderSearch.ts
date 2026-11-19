@@ -9,7 +9,7 @@
 
 import axios from "axios";
 import { safeLog } from "./_core/security";
-import { SERVICE_STATE_CODE, getCountyForCity, getSoCalCounty, isSoCalCity, isSoCalZip } from "@shared/region";
+import { SERVICE_STATE_CODE, getCountyForCity, getSoCalCounty, isSoCalCity, isSoCalZip, normalizeCity } from "@shared/region";
 
 // NPPES only supports trailing-wildcard ZIP queries; these cover every SoCal ZIP (results are re-filtered below).
 const SOCAL_POSTAL_WILDCARDS = ["90*", "91*", "92*", "93*"];
@@ -103,6 +103,8 @@ export async function searchLiveProviders(params: {
     : MENTAL_HEALTH_TAXONOMIES.slice(0, 3); // limit to 3 to avoid too many requests
 
   const county = getSoCalCounty(params.county);
+  if (params.city && !isSoCalCity(params.city)) return results;
+  const requestedCity = params.city ? normalizeCity(params.city) : null;
 
   for (const taxonomy of taxonomiesToSearch) {
     if (results.length >= limit) break;
@@ -171,6 +173,8 @@ export async function searchLiveProviders(params: {
         // Southern California only: practice location must be a SoCal ZIP (and in the chosen county, if any)
         if (stateCode !== SERVICE_STATE_CODE || !(isSoCalZip(zipCode) || isSoCalCity(city))) continue;
         if (county && getCountyForCity(city)?.slug !== county.slug) continue;
+        // NPPES city queries can return other cities; require an exact match.
+        if (requestedCity && (!city || normalizeCity(city) !== requestedCity)) continue;
         const phone = locationAddr.telephone_number ?? null;
 
         // Get primary taxonomy
