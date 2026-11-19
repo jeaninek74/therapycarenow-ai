@@ -1,4 +1,5 @@
 import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";
+import { milesBetweenZips } from "../shared/socalZips";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { registerUser, loginUser, createSessionToken } from "./_core/auth";
 import { systemRouter } from "./_core/systemRouter";
@@ -168,20 +169,22 @@ const providerRouter = router({
         specialty: z.string().optional(),
         insurance: z.string().optional(),
         costTag: z.enum(['free', 'sliding_scale', 'insurance', 'self_pay']).optional(),
+        zip: z.string().regex(/^\d{5}$/).optional(),
         limit: z.number().min(1).max(100).optional(),
         offset: z.number().min(0).optional(),
       })
     )
     .query(async ({ input }) => {
-      const { category, ...rest } = input;
+      const { category, zip, ...rest } = input;
       const limit = input.limit ?? 50;
-      // Category is derived from license type after the query, so fetch extra rows before filtering.
-      const results = await searchProviders({ ...rest, stateCode: SERVICE_STATE_CODE, limit: category ? 2000 : limit });
-      if (!category) return results.map(p => ({ ...p, category: getProviderCategory(p.licenseType ?? '') }));
+      // Category and distance are computed after the query, so fetch extra rows before filtering and sorting.
+      const results = await searchProviders({ ...rest, stateCode: SERVICE_STATE_CODE, limit: category || zip ? 5000 : limit });
+      const distance = (p: { zipCode?: string | null }) => (zip ? milesBetweenZips(zip, p.zipCode) ?? 1e9 : 0);
       return results
-        .filter(p => getProviderCategory(p.licenseType ?? '') === category)
+        .filter(p => !category || getProviderCategory(p.licenseType ?? '') === category)
+        .sort((a, b) => distance(a) - distance(b))
         .slice(0, limit)
-        .map(p => ({ ...p, category }));
+        .map(p => ({ ...p, category: category ?? getProviderCategory(p.licenseType ?? '') }));
     }),
 });
 

@@ -105,7 +105,7 @@ export default function FreeResources() {
               className="sm:w-64 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
             />
           </div>
-          {zip.length === 5 && !milesBetweenZips(zip, zip) && (
+          {zip.length === 5 && milesBetweenZips(zip, zip) === null && (
             <p className="text-xs text-destructive mt-2">That ZIP code isn't in Southern California.</p>
           )}
           {county && (

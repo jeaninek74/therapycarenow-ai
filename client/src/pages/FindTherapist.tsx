@@ -122,6 +122,7 @@ export default function FindTherapist() {
     specialty,
     insurance,
     costTag,
+    zip: userZip,
     limit,
   });
 
@@ -226,7 +227,7 @@ export default function FindTherapist() {
                   onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
                   className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
-                {zip.length === 5 && !milesBetweenZips(zip, zip) && (
+                {zip.length === 5 && milesBetweenZips(zip, zip) === null && (
                   <p className="text-xs text-destructive mt-1">That ZIP code isn't in Southern California.</p>
                 )}
               </div>
