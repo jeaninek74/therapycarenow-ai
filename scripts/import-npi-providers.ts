@@ -31,8 +31,10 @@ function licenseTypeFor(credential: string, taxonomy: string): string {
   if (t.includes("psycholog")) return c.includes("PSYD") ? "PsyD" : "PhD";
   for (const k of ["LCSW", "LMFT", "LPCC", "LPC", "MSW", "ASW", "AMFT", "APCC"]) if (c.includes(k)) return k;
   if (t.includes("marriage")) return "LMFT";
-  if (t.includes("social worker")) return "LCSW";
-  return "LPCC";
+  if (t.includes("social worker, clinical")) return "LCSW";
+  if (t.includes("addiction")) return "Addiction Counselor";
+  if (t.includes("professional") || t.includes("mental health")) return "LPCC";
+  return "Licensed Therapist";
 }
 
 function specialtiesFor(taxonomy: string): string[] {
