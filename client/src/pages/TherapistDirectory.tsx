@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import NavBar from "@/components/NavBar";
-import { US_STATES, getStateName } from "@shared/states";
+import { SERVICE_REGION_NAME, SOCAL_COUNTIES, getSoCalCounty } from "@shared/region";
+import { useCountyDirectory } from "@/hooks/useCountyDirectory";
 import {
   MapPin, Users, ChevronRight, Search, ArrowLeft, Loader2,
   Stethoscope, Brain, UserCheck,
@@ -60,25 +61,20 @@ export default function TherapistDirectory() {
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const [stateSearch, setStateSearch] = useState("");
 
-  const { data: stateDirectory, isLoading: dirLoading } = trpc.providers.getStateDirectoryByCategory.useQuery();
-  const { data: cities, isLoading: citiesLoading } = trpc.providers.getCitiesForStateByCategory.useQuery(
-    { stateCode: selectedState! },
-    { enabled: !!selectedState }
-  );
+  const { cities: allCities, countyMap, isLoading: dirLoading } = useCountyDirectory();
+  const citiesLoading = dirLoading;
+  const cities = allCities.filter((c) => c.county === selectedState);
+  const countyName = getSoCalCounty(selectedState ?? undefined)?.name ?? SERVICE_REGION_NAME;
   const { data: categoryCounts } = trpc.providers.getCategoryCounts.useQuery();
 
-  // Build a map of stateCode -> category counts
-  const stateMap = new Map<string, { therapists: number; psychiatrists: number; psychologists: number; total: number }>();
-  (stateDirectory ?? []).forEach((s) => stateMap.set(s.stateCode, s));
-
-  const filteredStates = US_STATES.filter((s) =>
+  const filteredStates = SOCAL_COUNTIES.filter((c) =>
     stateSearch === "" ||
-    s.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
-    s.code.toLowerCase().includes(stateSearch.toLowerCase())
+    c.name.toLowerCase().includes(stateSearch.toLowerCase()) ||
+    c.cities.some((city) => city.toLowerCase().includes(stateSearch.toLowerCase()))
   );
 
-  function getCountForCategory(stateCode: string, cat: Category): number {
-    const entry = stateMap.get(stateCode);
+  function getCountForCategory(countySlug: string, cat: Category): number {
+    const entry = countyMap.get(countySlug);
     if (!entry) return 0;
     if (cat === "Therapist") return entry.therapists;
     if (cat === "Psychiatrist") return entry.psychiatrists;
@@ -109,7 +105,7 @@ export default function TherapistDirectory() {
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-foreground mb-2">Provider Directory</h1>
               <p className="text-muted-foreground mb-6">
-                Browse therapists, psychiatrists, and psychologists across all 50 states and every city.
+                Browse therapists, psychiatrists, and psychologists across Southern California — by county and city.
               </p>
 
               {/* Tab switcher */}
@@ -149,7 +145,7 @@ export default function TherapistDirectory() {
                 </div>
                 <div className="ml-auto flex-shrink-0 text-right">
                   <p className="text-2xl font-extrabold text-foreground">{totalForCategory.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">nationwide</p>
+                  <p className="text-xs text-muted-foreground">in Southern California</p>
                 </div>
               </div>
 
@@ -158,35 +154,35 @@ export default function TherapistDirectory() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
-                  placeholder="Search state..."
+                  placeholder="Search county or city..."
                   value={stateSearch}
                   onChange={(e) => setStateSearch(e.target.value)}
                   className="w-full pl-9 pr-4 h-10 rounded-xl border border-input bg-background text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                 />
               </div>
 
-              {/* States grid */}
+              {/* Counties grid */}
               {dirLoading ? (
                 <div className="flex items-center justify-center py-20">
                   <Loader2 className="w-8 h-8 text-primary animate-spin" />
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-                  {filteredStates.map((state) => {
-                    const count = getCountForCategory(state.code, activeCategory);
+                  {filteredStates.map((county) => {
+                    const count = getCountForCategory(county.slug, activeCategory);
                     return (
                       <button
-                        key={state.code}
-                        onClick={() => setSelectedState(state.code)}
+                        key={county.slug}
+                        onClick={() => setSelectedState(county.slug)}
                         className="group bg-card border border-border rounded-xl p-4 text-left hover:border-primary/40 hover:shadow-md transition-all"
                       >
                         <div className="flex items-start justify-between mb-2">
                           <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${meta.badge}`}>
-                            {state.code}
+                            {county.cities.length} cities
                           </span>
                           <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         </div>
-                        <p className="font-medium text-foreground text-sm leading-tight mb-1">{state.name}</p>
+                        <p className="font-medium text-foreground text-sm leading-tight mb-1">{county.name}</p>
                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                           <Users className="w-3 h-3" />
                           {count > 0 ? `${count.toLocaleString()} ${meta.plural.toLowerCase()}` : `Browse ${meta.plural.toLowerCase()}`}
@@ -213,7 +209,7 @@ export default function TherapistDirectory() {
             </div>
           )}
 
-          {/* ── State Detail View ──────────────────────────────────────────── */}
+          {/* ── County Detail View ──────────────────────────────────────────── */}
           {selectedState && (
             <>
               <button
@@ -221,15 +217,15 @@ export default function TherapistDirectory() {
                 className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm mb-6 transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" />
-                All States
+                All Counties
               </button>
 
               <div className="mb-6">
                 <div className="flex flex-wrap items-center gap-3 mb-2">
-                  <h1 className="text-3xl font-bold text-foreground">{getStateName(selectedState)}</h1>
+                  <h1 className="text-3xl font-bold text-foreground">{countyName}</h1>
                 </div>
 
-                {/* Per-category counts for this state */}
+                {/* Per-category counts for this county */}
                 <div className="flex flex-wrap gap-3 mb-4">
                   {CATEGORIES.map((cat) => {
                     const m = CATEGORY_META[cat];
@@ -253,23 +249,23 @@ export default function TherapistDirectory() {
                 </div>
 
                 <p className="text-muted-foreground text-sm">
-                  Browse {meta.plural.toLowerCase()} in {getStateName(selectedState)} by city, or search all {meta.plural.toLowerCase()} in this state.
+                  Browse {meta.plural.toLowerCase()} in {countyName} by city, or search all {meta.plural.toLowerCase()} in this county.
                 </p>
               </div>
 
               {/* Search CTAs */}
               <div className="flex flex-wrap gap-3 mb-8">
                 <Link
-                  href={`/find-therapist?state=${selectedState}&category=${activeCategory}`}
+                  href={`/find-therapist?county=${selectedState}&category=${activeCategory}`}
                   onClick={() => {
-                    sessionStorage.setItem("tcn_state", selectedState);
+                    sessionStorage.setItem("tcn_county", selectedState);
                     sessionStorage.setItem("tcn_category", activeCategory);
                     navigate("/find-therapist");
                   }}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
                 >
                   <Search className="w-4 h-4" />
-                  Search all {getStateName(selectedState)} {meta.plural.toLowerCase()}
+                  Search all {countyName} {meta.plural.toLowerCase()}
                 </Link>
                 <Link
                   href="/find-therapist"
@@ -287,7 +283,7 @@ export default function TherapistDirectory() {
               ) : cities && cities.length > 0 ? (
                 <>
                   <h2 className="text-lg font-semibold text-foreground mb-4">
-                    Cities in {getStateName(selectedState)} — {meta.plural}
+                    Cities in {countyName} — {meta.plural}
                   </h2>
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-8">
                     {cities
@@ -299,7 +295,7 @@ export default function TherapistDirectory() {
                             key={city.city}
                             href="/find-therapist"
                             onClick={() => {
-                              sessionStorage.setItem("tcn_state", selectedState);
+                              sessionStorage.setItem("tcn_county", selectedState);
                               sessionStorage.setItem("tcn_city", city.city);
                               sessionStorage.setItem("tcn_category", activeCategory);
                               navigate("/find-therapist");
@@ -340,14 +336,14 @@ export default function TherapistDirectory() {
               ) : (
                 <div className="text-center py-12 bg-card rounded-2xl border border-border">
                   <MapPin className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground">Loading city data...</p>
+                  <p className="text-muted-foreground">No listed cities yet — use search to find providers in this county.</p>
                 </div>
               )}
 
               {/* Telehealth note */}
               <div className="p-5 bg-card border border-border rounded-xl">
                 <p className="text-sm text-muted-foreground">
-                  <strong className="text-foreground">Note:</strong> Many {meta.plural.toLowerCase()} in {getStateName(selectedState)} also offer telehealth services.
+                  <strong className="text-foreground">Note:</strong> Many {meta.plural.toLowerCase()} in {countyName} also offer telehealth services.
                   Use the{" "}
                   <Link href="/find-therapist" className="text-primary hover:underline">advanced search</Link>{" "}
                   and enable the "Telehealth only" filter to see all available options.

@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import NavBar from "@/components/NavBar";
 import { CheckCircle2, Loader2, Shield, AlertCircle, UserCheck } from "lucide-react";
 import { toast } from "sonner";
-import { US_STATES } from "@shared/states";
+import { SERVICE_STATE_CODE, SERVICE_STATE_NAME, SOCAL_COUNTIES, isSoCalCity } from "@shared/region";
 import { INSURANCE_OPTIONS } from "@shared/insurances";
 
 const SPECIALTIES = [
@@ -34,7 +34,7 @@ export default function ProviderSubmission() {
     lastName: "",
     licenseType: "",
     licenseNumber: "",
-    licenseState: "",
+    licenseState: SERVICE_STATE_CODE,
     specialty: [] as string[],
     insuranceAccepted: [] as string[],
     telehealth: false,
@@ -44,7 +44,7 @@ export default function ProviderSubmission() {
     phone: "",
     website: "",
     city: "",
-    state: "",
+    state: SERVICE_STATE_CODE,
     zip: "",
     sessionFeeMin: "",
     sessionFeeMax: "",
@@ -61,12 +61,14 @@ export default function ProviderSubmission() {
     setNpiQuery(form.npiNumber);
     setTimeout(async () => {
       const result = await refetchNpi();
-      if (result.data?.valid) {
+      if (result.data?.valid && result.data.state && result.data.state !== SERVICE_STATE_CODE) {
+        toast.error(`TherapyCareNow lists Southern California providers only. This NPI is registered in ${result.data.state}.`);
+      } else if (result.data?.valid) {
         setNpiVerified(true);
         setNpiData({ name: result.data.providerName, credential: result.data.credential, state: result.data.state });
         setForm((f) => ({
           ...f,
-          licenseState: result.data?.state ?? f.licenseState,
+          licenseState: SERVICE_STATE_CODE,
         }));
         toast.success("NPI verified successfully");
       } else {
@@ -105,6 +107,10 @@ export default function ProviderSubmission() {
       toast.error("Please fill in all required fields");
       return;
     }
+    if (!isSoCalCity(form.city)) {
+      toast.error("Please enter a practice city in Southern California");
+      return;
+    }
     submitProvider.mutate({
       name: `${form.firstName} ${form.lastName}`.trim(),
       npiNumber: form.npiNumber,
@@ -116,8 +122,8 @@ export default function ProviderSubmission() {
       website: form.website || undefined,
       telehealthAvailable: form.telehealth,
       bio: form.bio || undefined,
-      city: form.city || undefined,
-      stateCode: form.state || undefined,
+      city: form.city.trim(),
+      stateCode: SERVICE_STATE_CODE,
       zipCode: form.zip || undefined,
     });
   };
@@ -167,7 +173,7 @@ export default function ProviderSubmission() {
           <Shield className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
           <div className="text-sm text-amber-800">
             <strong>License Verification Required</strong> — Your NPI number will be verified against the NPPES registry
-            and your state licensing board before your profile is published. Only licensed therapists, social workers,
+            and the California licensing boards before your profile is published. We currently list providers practicing in Southern California only. Only licensed therapists, social workers,
             and psychiatrists are eligible.
           </div>
         </div>
@@ -243,16 +249,7 @@ export default function ProviderSubmission() {
                 </div>
                 <div>
                   <Label>License State *</Label>
-                  <Select value={form.licenseState} onValueChange={(v) => setForm((f) => ({ ...f, licenseState: v }))}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {US_STATES.map((s) => (
-                        <SelectItem key={s.code} value={s.code}>{s.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input value={SERVICE_STATE_NAME} disabled className="mt-1" />
                 </div>
               </div>
               <div>
@@ -280,21 +277,21 @@ export default function ProviderSubmission() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label>City</Label>
-                  <Input value={form.city} onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))} className="mt-1" />
+                  <Label>City *</Label>
+                  <Input
+                    value={form.city}
+                    onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))}
+                    className="mt-1"
+                    list="socal-practice-cities"
+                    placeholder="e.g. Pasadena"
+                  />
+                  <datalist id="socal-practice-cities">
+                    {SOCAL_COUNTIES.flatMap((c) => c.cities).map((c) => <option key={c} value={c} />)}
+                  </datalist>
                 </div>
                 <div>
                   <Label>State</Label>
-                  <Select value={form.state} onValueChange={(v) => setForm((f) => ({ ...f, state: v }))}>
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {US_STATES.map((s) => (
-                        <SelectItem key={s.code} value={s.code}>{s.name}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input value={SERVICE_STATE_NAME} disabled className="mt-1" />
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4">

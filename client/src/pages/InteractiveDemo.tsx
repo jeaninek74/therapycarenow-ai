@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { SOCAL_COUNTIES } from "@shared/region";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,12 +16,12 @@ const DEMO_STEPS = [
     id: "welcome",
     title: "Welcome to TherapyCareNow",
     subtitle: "Your National Mental Health Navigation Platform",
-    description: "TherapyCareNow connects millions of Americans to mental health support — from crisis resources to licensed therapists across all 50 states. Let's walk through the key features.",
+    description: "TherapyCareNow connects Southern Californians to mental health support — from county crisis lines to licensed therapists across all eight Southern California counties. Let's walk through the key features.",
     icon: Heart,
     color: "from-teal-500 to-cyan-600",
     stats: [
-      { label: "Providers Nationwide", value: "17,000+" },
-      { label: "States Covered", value: "All 50" },
+      { label: "Service Region", value: "SoCal" },
+      { label: "Counties Covered", value: String(SOCAL_COUNTIES.length) },
       { label: "Insurance Networks", value: "200+" },
       { label: "Specialties", value: "60+" },
     ],
@@ -30,14 +31,14 @@ const DEMO_STEPS = [
   {
     id: "find-therapist",
     title: "Find a Therapist",
-    subtitle: "Powerful Search Across All 50 States",
-    description: "Search by state, city, specialty, insurance, telehealth availability, and cost. Our directory covers every major city and hundreds of smaller communities nationwide.",
+    subtitle: "Powerful Search Across Southern California",
+    description: "Search by county, city, specialty, insurance, telehealth availability, and cost. Our directory covers every major Southern California city and hundreds of smaller communities, from Santa Barbara to the border.",
     icon: Search,
     color: "from-blue-500 to-indigo-600",
     demoContent: {
       type: "search",
       filters: [
-        { label: "State", value: "California" },
+        { label: "County", value: "Los Angeles County" },
         { label: "City", value: "Los Angeles" },
         { label: "Specialty", value: "Anxiety & Depression" },
         { label: "Insurance", value: "Aetna" },
@@ -122,20 +123,13 @@ const DEMO_STEPS = [
   {
     id: "directory",
     title: "National Therapist Directory",
-    subtitle: "Browse All 50 States & Hundreds of Cities",
-    description: "Our directory is organized by state and city, making it easy to find providers near you. Every state has hundreds of verified providers across all major cities and communities.",
+    subtitle: "Browse 8 Counties & Hundreds of Cities",
+    description: "Our directory is organized by county and city, making it easy to find providers near you across Southern California.",
     icon: Globe,
     color: "from-green-500 to-teal-600",
     demoContent: {
       type: "directory",
-      states: [
-        { name: "California", abbr: "CA", count: 400, cities: ["Los Angeles", "San Francisco", "San Diego", "Sacramento", "San Jose"] },
-        { name: "Texas", abbr: "TX", count: 400, cities: ["Houston", "Dallas", "Austin", "San Antonio", "Fort Worth"] },
-        { name: "New York", abbr: "NY", count: 400, cities: ["New York City", "Buffalo", "Rochester", "Albany", "Syracuse"] },
-        { name: "Florida", abbr: "FL", count: 400, cities: ["Miami", "Orlando", "Tampa", "Jacksonville", "Fort Lauderdale"] },
-        { name: "Illinois", abbr: "IL", count: 400, cities: ["Chicago", "Aurora", "Naperville", "Rockford", "Joliet"] },
-        { name: "Pennsylvania", abbr: "PA", count: 400, cities: ["Philadelphia", "Pittsburgh", "Allentown", "Erie", "Reading"] },
-      ],
+      states: SOCAL_COUNTIES.slice(0, 6).map((c) => ({ name: c.name, cityCount: c.cities.length, cities: c.cities.slice(0, 5) })),
     },
     cta: "Next: Benefits Wallet",
     visual: "directory",
@@ -189,7 +183,7 @@ const DEMO_STEPS = [
         },
         {
           role: "assistant",
-          text: "I hear you — feeling anxious and not knowing where to turn can be overwhelming. I'm here to help you find the right resources.\n\nA few things that might help:\n\n**1. Find a therapist** who specializes in anxiety — we have thousands of providers across all 50 states.\n\n**2. Check your benefits** — many insurance plans cover therapy with a low copay, and your employer may offer free EAP sessions.\n\n**3. Free resources** — if cost is a concern, we have free and sliding-scale options in your area.\n\nWould you like me to help you search for therapists near you?",
+          text: "I hear you — feeling anxious and not knowing where to turn can be overwhelming. I'm here to help you find the right resources.\n\nA few things that might help:\n\n**1. Find a therapist** who specializes in anxiety — we have providers across all of Southern California.\n\n**2. Check your benefits** — many insurance plans cover therapy with a low copay, and your employer may offer free EAP sessions.\n\n**3. Free resources** — if cost is a concern, we have free and sliding-scale options in your area.\n\nWould you like me to help you search for therapists near you?",
         },
         {
           role: "user",
@@ -327,7 +321,7 @@ function DirectoryVisual({ content }: { content: any }) {
         <div key={i} className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-1">
             <span className="text-white font-medium text-sm">{s.name}</span>
-            <Badge className="bg-white/20 text-white border-0 text-xs">{s.count}+ providers</Badge>
+            <Badge className="bg-white/20 text-white border-0 text-xs">{s.cityCount} cities</Badge>
           </div>
           <div className="flex flex-wrap gap-1">
             {s.cities.map((c: string, j: number) => (
@@ -623,8 +617,8 @@ export default function InteractiveDemo() {
         <div className="mt-6 bg-slate-50 dark:bg-slate-900 rounded-xl p-6 border">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { value: "17,000+", label: "Licensed Providers" },
-              { value: "All 50", label: "States Covered" },
+              { value: "NPI", label: "Verified Providers" },
+              { value: String(SOCAL_COUNTIES.length), label: "SoCal Counties Covered" },
               { value: "200+", label: "Insurance Networks" },
               { value: "Free", label: "For Patients" },
             ].map((stat, i) => (

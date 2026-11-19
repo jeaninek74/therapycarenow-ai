@@ -17,6 +17,20 @@ import {
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 import { safeLog } from "./_core/security";
+import {
+  SERVICE_STATE_CODE,
+  SOCAL_CITY_KEYS,
+  getCountyForCity,
+  getSoCalCounty,
+  normalizeCity,
+} from "../shared/region";
+
+/** Restricts provider rows to Southern California cities (optionally a single county). */
+function socalCityCondition(countySlug?: string) {
+  const county = getSoCalCounty(countySlug);
+  const keys = county ? county.cities.map(normalizeCity) : SOCAL_CITY_KEYS;
+  return inArray(sql`LOWER(TRIM(${providers.city}))`, keys);
+}
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -198,6 +212,7 @@ export async function getFreeResources(stateCode?: string) {
 
 export async function searchProviders(params: {
   stateCode?: string;
+  county?: string;
   city?: string;
   telehealth?: boolean;
   specialty?: string;
@@ -210,7 +225,7 @@ export async function searchProviders(params: {
   const db = await getDb();
   if (!db) return [];
 
-  const conditions = [eq(providers.isActive, true)];
+  const conditions = [eq(providers.isActive, true), socalCityCondition(params.county)];
 
   if (params.stateCode) {
     // Match providers licensed in the state OR practicing in the state
@@ -496,7 +511,7 @@ export async function getProviderCountByState() {
       count: sql<number>`count(*)`,
     })
     .from(providers)
-    .where(eq(providers.isActive, true))
+    .where(and(eq(providers.isActive, true), eq(providers.licenseState, SERVICE_STATE_CODE), socalCityCondition()))
     .groupBy(providers.licenseState);
 
   // Merge counts: use licenseState as canonical state
@@ -522,7 +537,7 @@ export async function getCitiesByState(stateCode: string) {
       count: sql<number>`count(*)`,
     })
     .from(providers)
-    .where(and(eq(providers.isActive, true), eq(providers.licenseState, stateCode)))
+    .where(and(eq(providers.isActive, true), eq(providers.licenseState, stateCode), socalCityCondition()))
     .groupBy(providers.city)
     .orderBy(sql`count(*) desc`)
     .limit(50);
@@ -612,7 +627,7 @@ export async function getProviderCategoryCounts() {
       count: sql<number>`count(*)`,
     })
     .from(providers)
-    .where(eq(providers.isActive, true))
+    .where(and(eq(providers.isActive, true), eq(providers.licenseState, SERVICE_STATE_CODE), socalCityCondition()))
     .groupBy(providers.licenseType);
   let therapists = 0, psychiatrists = 0, psychologists = 0;
   for (const row of raw) {
@@ -635,7 +650,7 @@ export async function getProviderCountByStateAndCategory() {
       count: sql<number>`count(*)`,
     })
     .from(providers)
-    .where(eq(providers.isActive, true))
+    .where(and(eq(providers.isActive, true), eq(providers.licenseState, SERVICE_STATE_CODE), socalCityCondition()))
     .groupBy(providers.licenseState, providers.licenseType);
   // Aggregate per state
   const stateMap = new Map<string, { therapists: number; psychiatrists: number; psychologists: number; total: number }>();
@@ -666,7 +681,7 @@ export async function getCitiesByStateAndCategory(stateCode: string) {
       count: sql<number>`count(*)`,
     })
     .from(providers)
-    .where(and(eq(providers.isActive, true), eq(providers.licenseState, stateCode)))
+    .where(and(eq(providers.isActive, true), eq(providers.licenseState, stateCode), socalCityCondition()))
     .groupBy(providers.city, providers.licenseType)
     .orderBy(sql`count(*) desc`);
   // Aggregate per city
@@ -684,9 +699,8 @@ export async function getCitiesByStateAndCategory(stateCode: string) {
     else entry.therapists += n;
   }
   return Array.from(cityMap.entries())
-    .map(([city, counts]) => ({ city, ...counts }))
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 60);
+    .map(([city, counts]) => ({ city, county: getCountyForCity(city)?.slug ?? null, ...counts }))
+    .sort((a, b) => b.total - a.total);
 }
 
 // --- City-Level Provider Pages ---

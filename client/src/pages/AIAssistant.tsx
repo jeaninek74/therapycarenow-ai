@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Bot, Send, AlertTriangle, Shield, Loader2, Phone } from "lucide-react";
 import NavBar from "@/components/NavBar";
-import StatePicker from "@/components/StatePicker";
+import CountyPicker from "@/components/CountyPicker";
 import AIDisclaimerBanner from "@/components/AIDisclaimerBanner";
 import { Streamdown } from "streamdown";
 import { toast } from "sonner";
@@ -32,7 +32,7 @@ export default function AIAssistant() {
   const [, navigate] = useLocation();
   const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
-  const [stateCode, setStateCode] = useState<string | undefined>(undefined);
+  const [county, setCounty] = useState<string | undefined>(undefined);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const sendMessage = trpc.ai.chat.useMutation({
@@ -68,7 +68,7 @@ export default function AIAssistant() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    sendMessage.mutate({ message: trimmed, stateCode });
+    sendMessage.mutate({ message: trimmed, stateCode: "CA", county });
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -96,8 +96,8 @@ export default function AIAssistant() {
               <p className="text-xs text-muted-foreground">Navigation help only — not clinical advice</p>
             </div>
           </div>
-          <div className="w-40">
-            <StatePicker value={stateCode} onChange={setStateCode} placeholder="Your state" />
+          <div className="w-48">
+            <CountyPicker value={county} onChange={setCounty} placeholder="Your county" />
           </div>
         </div>
 

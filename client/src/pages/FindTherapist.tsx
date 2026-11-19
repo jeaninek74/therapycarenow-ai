@@ -7,7 +7,8 @@ import {
   Loader2, Globe, Stethoscope, Brain, UserCheck, X,
 } from "lucide-react";
 import NavBar from "@/components/NavBar";
-import StatePicker from "@/components/StatePicker";
+import CountyPicker from "@/components/CountyPicker";
+import { SERVICE_REGION_NAME, SOCAL_COUNTIES, getSoCalCounty } from "@shared/region";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -82,7 +83,7 @@ const COST_OPTIONS = [
 
 export default function FindTherapist() {
   const [activeCategory, setActiveCategory] = useState<Category>("Therapist");
-  const [stateCode, setStateCode] = useState<string | undefined>(undefined);
+  const [county, setCounty] = useState<string | undefined>(undefined);
   const [cityInput, setCityInput] = useState<string>("");
   const [city, setCity] = useState<string | undefined>(undefined);
   const [telehealth, setTelehealth] = useState<boolean | undefined>(undefined);
@@ -94,10 +95,10 @@ export default function FindTherapist() {
 
   // Pre-fill from directory navigation
   useEffect(() => {
-    const preState = sessionStorage.getItem("tcn_state");
+    const preCounty = sessionStorage.getItem("tcn_county");
     const preCity = sessionStorage.getItem("tcn_city");
     const preCat = sessionStorage.getItem("tcn_category") as Category | null;
-    if (preState) { setStateCode(preState); sessionStorage.removeItem("tcn_state"); }
+    if (preCounty) { setCounty(preCounty); sessionStorage.removeItem("tcn_county"); }
     if (preCity) { setCityInput(preCity); setCity(preCity); sessionStorage.removeItem("tcn_city"); }
     if (preCat && CATEGORIES.includes(preCat)) { setActiveCategory(preCat); sessionStorage.removeItem("tcn_category"); }
 
@@ -105,13 +106,13 @@ export default function FindTherapist() {
     const params = new URLSearchParams(window.location.search);
     const catParam = params.get("category") as Category | null;
     if (catParam && CATEGORIES.includes(catParam)) setActiveCategory(catParam);
-    const stateParam = params.get("state");
-    if (stateParam) setStateCode(stateParam);
+    const countyParam = params.get("county");
+    if (countyParam && getSoCalCounty(countyParam)) setCounty(countyParam);
   }, []);
 
   const { data: searchData, isLoading } = trpc.providers.searchByCategory.useQuery({
     category: activeCategory,
-    stateCode,
+    county,
     city,
     telehealth,
     specialty,
@@ -124,7 +125,7 @@ export default function FindTherapist() {
   const meta = CATEGORY_META[activeCategory];
 
   function clearFilters() {
-    setStateCode(undefined);
+    setCounty(undefined);
     setCityInput("");
     setCity(undefined);
     setTelehealth(undefined);
@@ -134,7 +135,7 @@ export default function FindTherapist() {
     setLimit(50);
   }
 
-  const hasFilters = !!(stateCode || city || telehealth || specialty || insurance || costTag);
+  const hasFilters = !!(county || city || telehealth || specialty || insurance || costTag);
 
   return (
     <div className="min-h-screen bg-background">
@@ -180,20 +181,26 @@ export default function FindTherapist() {
           <div className="bg-card border border-border rounded-2xl p-6 mb-8 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div>
-                <label className="block text-sm font-medium text-foreground mb-2">State</label>
-                <StatePicker value={stateCode} onChange={setStateCode} />
+                <label className="block text-sm font-medium text-foreground mb-2">County</label>
+                <CountyPicker value={county} onChange={setCounty} />
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">City (optional)</label>
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="e.g. Austin"
+                    placeholder="e.g. Pasadena"
+                    list="socal-cities"
                     value={cityInput}
                     onChange={(e) => setCityInput(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter") setCity(cityInput || undefined); }}
                     className="flex-1 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
+                  <datalist id="socal-cities">
+                    {(getSoCalCounty(county) ? [getSoCalCounty(county)!] : SOCAL_COUNTIES)
+                      .flatMap((c) => c.cities)
+                      .map((c) => <option key={c} value={c} />)}
+                  </datalist>
                   <button
                     onClick={() => setCity(cityInput || undefined)}
                     className="h-10 px-3 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90"
@@ -291,7 +298,7 @@ export default function FindTherapist() {
             <div>
               <p className="text-sm text-muted-foreground mb-4">
                 Showing <strong className="text-foreground">{results.length}</strong> {meta.plural.toLowerCase()}
-                {stateCode && ` in ${stateCode}`}
+                {` in ${getSoCalCounty(county)?.name ?? SERVICE_REGION_NAME}`}
                 {city && ` · ${city}`}
               </p>
               <div className="flex flex-col gap-4">
@@ -315,7 +322,7 @@ export default function FindTherapist() {
               <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
               <h3 className="font-semibold text-foreground mb-2">No {meta.plural.toLowerCase()} found</h3>
               <p className="text-muted-foreground text-sm mb-4">
-                Try adjusting your filters or selecting a different state.
+                Try adjusting your filters or selecting a different county.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
                 <button

@@ -10,6 +10,7 @@
 
 import { invokeLLM } from "./_core/llm";
 import { safeLog } from "./_core/security";
+import { SERVICE_REGION_NAME, getSoCalCounty } from "@shared/region";
 
 export interface ModerationResult {
   safe: boolean;
@@ -121,9 +122,12 @@ Be conservative — when in doubt, flag it. User safety is the top priority.`,
  */
 export async function getSupportAssistantResponse(
   userMessage: string,
-  context?: { stateCode?: string; insuranceCarrier?: string }
+  context?: { stateCode?: string; county?: string; insuranceCarrier?: string }
 ): Promise<AIResponse> {
-  const contextInfo = context?.stateCode ? `User is in state: ${context.stateCode}.` : "";
+  const county = getSoCalCounty(context?.county);
+  const contextInfo = county
+    ? `User is in ${county.name}, ${SERVICE_REGION_NAME}. The county's 24/7 behavioral health line is ${county.crisisLine.name} (${county.crisisLine.phone}).`
+    : `User is in ${SERVICE_REGION_NAME}.`;
   const insuranceInfo = context?.insuranceCarrier
     ? `User has insurance: ${context.insuranceCarrier}.`
     : "";
@@ -133,7 +137,7 @@ export async function getSupportAssistantResponse(
       messages: [
         {
           role: "system",
-          content: `You are a helpful navigation assistant for TherapyCareNow, a mental health resource platform.
+          content: `You are a helpful navigation assistant for TherapyCareNow, a mental health resource platform serving ${SERVICE_REGION_NAME} (Los Angeles, Orange, San Diego, Riverside, San Bernardino, Ventura, Santa Barbara, and Imperial counties).
 
 YOUR ROLE: Help users understand their options and navigate to appropriate care. You are NOT a therapist.
 
