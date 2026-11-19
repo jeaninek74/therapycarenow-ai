@@ -407,7 +407,12 @@ function ProviderCard({ provider, category }: { provider: any; category: Categor
           </p>
           {provider.detailsConfirmed === false ? (
             <p className="text-xs text-muted-foreground mb-2">
-              Telehealth and insurance not yet confirmed by this clinician. Call to ask.
+              <span className="font-medium text-foreground">Insurance:</span>{" "}
+              {(provider.insuranceAccepted ?? []).length > 0
+                ? `${(provider.insuranceAccepted as string[]).join(", ")} (from insurer and Medi-Cal public directories)`
+                : "Not listed in the public insurer directories we check. Call to ask."}
+              {" · "}
+              <span className="font-medium text-foreground">Telehealth:</span> not confirmed, call to ask
             </p>
           ) : (
             <p className="text-xs text-muted-foreground mb-2">
@@ -454,6 +459,18 @@ function ProviderCard({ provider, category }: { provider: any; category: Categor
             >
               <Phone className="w-4 h-4" />
               {provider.phone}
+            </a>
+          )}
+          {provider.website && (
+            <a
+              href={provider.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1 text-sm text-primary font-medium hover:underline"
+            >
+              <Globe className="w-4 h-4" />
+              Visit website
             </a>
           )}
           <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-foreground" />
