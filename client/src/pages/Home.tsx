@@ -22,8 +22,24 @@ export default function Home() {
               Find the right mental health support,{" "}
               <span className="text-primary">right now.</span>
             </h1>
-            <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
-              TherapyCareNow connects you with licensed therapists, psychiatrists, and psychologists across Southern California — from Los Angeles and Orange County to San Diego, the Inland Empire, and the Central Coast — by city, specialty, and insurance.
+            <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+              TherapyCareNow is a free guide that helps people in Southern California find mental health care. Looking for help is hard, especially when you're struggling. We bring licensed providers, crisis lines, and low-cost options for all eight counties, from Los Angeles and Orange County to San Diego, the Inland Empire, and the Central Coast, into one place so you can get to the right support faster.
+            </p>
+            <ul className="grid sm:grid-cols-2 gap-3 mb-6 text-sm text-foreground">
+              {[
+                { icon: Search, text: "Find therapists, psychiatrists, and psychologists by county, city, specialty, and insurance" },
+                { icon: Phone, text: "Reach 988 and your county's 24/7 crisis line right away" },
+                { icon: BookOpen, text: "Discover free and sliding-scale clinics and community programs" },
+                { icon: Briefcase, text: "Use your insurance and employer EAP benefits to lower costs" },
+              ].map(({ icon: Icon, text }) => (
+                <li key={text} className="flex items-start gap-2">
+                  <Icon className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                  <span>{text}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-muted-foreground mb-10">
+              We're a navigation tool, not a clinic. We don't provide therapy or diagnosis. We connect you with the people and programs who do.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
