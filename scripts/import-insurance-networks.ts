@@ -9,7 +9,7 @@ import "dotenv/config";
 import { createInterface } from "node:readline";
 import { Readable } from "node:stream";
 import { drizzle } from "drizzle-orm/mysql2";
-import { isNotNull, like } from "drizzle-orm";
+import { and, inArray, isNotNull, like } from "drizzle-orm";
 import { providerInsurance, providers } from "../drizzle/schema";
 
 const NPI_SYSTEM = "http://hl7.org/fhir/sid/us-npi";
@@ -89,8 +89,13 @@ async function main() {
   const clinicians = rows.filter((r): r is { id: number; npi: string } => !!r.npi);
   console.log(`${clinicians.length} NPI-verified clinicians`);
 
-  const save = async (insuranceName: string, label: string, ids: number[]) => {
-    await db.delete(providerInsurance).where(like(providerInsurance.planName, `${SOURCE_PREFIX}${label}`));
+  /** Replaces this source's matches for the clinicians that were checked (all of them when `checked` is omitted). */
+  const save = async (insuranceName: string, label: string, ids: number[], checked?: number[]) => {
+    const sourceTag = like(providerInsurance.planName, `${SOURCE_PREFIX}${label}`);
+    if (!checked) await db.delete(providerInsurance).where(sourceTag);
+    for (let i = 0; checked && i < checked.length; i += 500) {
+      await db.delete(providerInsurance).where(and(sourceTag, inArray(providerInsurance.providerId, checked.slice(i, i + 500))));
+    }
     for (let i = 0; i < ids.length; i += 500) {
       await db.insert(providerInsurance).values(
         ids.slice(i, i + 500).map((providerId) => ({ providerId, insuranceName, planName: `${SOURCE_PREFIX}${label}` })),
@@ -119,7 +124,12 @@ async function main() {
       console.warn(`${src.insuranceName}: ${failed} lookups failed; rerun with --only=${src.key} to fill them.`);
       incomplete = true;
     }
-    await save(src.insuranceName, src.label, clinicians.filter((_, i) => results[i] === true).map((c) => c.id));
+    await save(
+      src.insuranceName,
+      src.label,
+      clinicians.filter((_, i) => results[i] === true).map((c) => c.id),
+      clinicians.filter((_, i) => results[i] !== null).map((c) => c.id),
+    );
   }
 
   process.exit(incomplete ? 2 : 0);
