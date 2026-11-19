@@ -1,3 +1,4 @@
+import { SOCAL_COUNTIES } from "./region";
 /**
  * Curated Southern California programs. Phone numbers and addresses were taken
  * from each organization's official website; entries without a confirmed phone
@@ -12,6 +13,7 @@ export interface Program {
   address?: string;
   counties?: string[]; // county slugs; omitted = all of Southern California
   groupTypes?: string[]; // GroupTherapyType slugs this program offers groups for
+  online?: boolean; // meets online, open to Southern California residents
   cost: string;
   insurance: string;
 }
@@ -158,6 +160,24 @@ export const GROUP_THERAPY_TYPES: GroupTherapyType[] = [
 
 export const GROUP_THERAPY_PROGRAMS: Program[] = [
   {
+    name: "National Alliance on Mental Illness Urban Los Angeles",
+    description: "Free peer and family support groups for people living with mental illness and their families in Los Angeles.",
+    website: "https://namiurbanla.org/",
+    counties: ["los-angeles"],
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["depression-and-bipolar-support", "family-and-parenting", "anxiety-and-social-anxiety"],
+  },
+  {
+    name: "National Alliance on Mental Illness Inland Valley",
+    description: "Free peer and family support groups in western Riverside County.",
+    website: "https://namiinlandvalley.org/",
+    counties: ["riverside"],
+    cost: "Free",
+    insurance: "Not needed",
+    groupTypes: ["depression-and-bipolar-support", "family-and-parenting", "anxiety-and-social-anxiety"],
+  },
+  {
     name: "OUR HOUSE Grief Support Center",
     description: "Grief support groups for children, teens, and adults after the death of a loved one, in Los Angeles and online.",
     phone: "310-473-1511",
@@ -185,6 +205,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     cost: "Free",
     insurance: "Not needed",
     groupTypes: ["grief-and-loss"],
+    online: true,
   },
   {
     name: "Peace Over Violence",
@@ -252,7 +273,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     website: "https://parentsanonymous.org/",
     cost: "Free",
     insurance: "Not needed",
-    groupTypes: ["family-and-parenting", "anger-management"],
+    groupTypes: ["family-and-parenting"],
   },
   {
     name: "Al-Anon and Alateen meetings",
@@ -261,6 +282,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     cost: "Free",
     insurance: "Not needed",
     groupTypes: ["family-and-parenting", "substance-use-recovery"],
+    online: true,
   },
   {
     name: "Narcotics Anonymous meeting search",
@@ -269,22 +291,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     cost: "Free",
     insurance: "Not needed",
     groupTypes: ["substance-use-recovery"],
-  },
-  {
-    name: "FindTreatment.gov (Substance Abuse and Mental Health Services Administration)",
-    description: "Federal search for licensed substance use and mental health treatment programs, including outpatient group programs. Filter by insurance and payment.",
-    website: "https://findtreatment.gov/",
-    cost: "Varies by program",
-    insurance: "Filter by Medi-Cal, Medicare, private insurance, or sliding scale",
-    groupTypes: ["substance-use-recovery", "trauma-and-ptsd", "depression-and-bipolar-support", "eating-disorders"],
-  },
-  {
-    name: "Dialectical Behavior Therapy-Linehan Board of Certification directory",
-    description: "Find certified Dialectical Behavior Therapy clinicians and programs, many of which run skills groups.",
-    website: "https://dbt-lbc.org/",
-    cost: "Varies by program",
-    insurance: "Varies; ask each program",
-    groupTypes: ["dialectical-behavior-therapy"],
+    online: true,
   },
   {
     name: "211 Los Angeles County",
@@ -314,6 +321,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     cost: "Free",
     insurance: "Not needed",
     groupTypes: ["functional-neurological-disorder"],
+    online: true,
   },
   {
     name: "National Alliance on Mental Illness Orange County",
@@ -346,14 +354,6 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     groupTypes: ["depression-and-bipolar-support", "family-and-parenting"],
   },
   {
-    name: "National Alliance on Mental Illness California (find a local affiliate)",
-    description: "Directory of free National Alliance on Mental Illness support groups across Los Angeles, Riverside, San Bernardino, Santa Barbara, and the rest of Southern California.",
-    website: "https://namica.org/",
-    cost: "Free",
-    insurance: "Not needed",
-    groupTypes: ["depression-and-bipolar-support", "family-and-parenting", "anxiety-and-social-anxiety"],
-  },
-  {
     name: "Alcoholics Anonymous San Diego",
     description: "Free peer recovery meetings across San Diego County. Call to speak with a sober volunteer.",
     phone: "619-265-8762",
@@ -370,6 +370,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     cost: "Free",
     insurance: "Not needed",
     groupTypes: ["substance-use-recovery"],
+    online: true,
   },
   {
     name: "Depression and Bipolar Support Alliance",
@@ -378,6 +379,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
     cost: "Free",
     insurance: "Not needed",
     groupTypes: ["depression-and-bipolar-support"],
+    online: true,
   },
   {
     name: "Vet Centers (U.S. Department of Veterans Affairs)",
@@ -477,18 +479,20 @@ export const HOSPITAL_PROGRAMS: Program[] = [
     description: "Inpatient, partial hospitalization, and intensive outpatient programs with group therapy for adults, teens, and children, including chemical dependency programs.",
     phone: "909-558-9275",
     website: "https://lluh.org/behavioral-health",
-    counties: ["san-bernardino", "riverside"],
     cost: "Insurance or self-pay",
     insurance: "Accepts Medi-Cal, Medicare, and most commercial plans; call to confirm your plan",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
+    counties: ["san-bernardino"],
   },
   {
     name: "Sharp Mesa Vista Hospital",
     description: "San Diego's largest private psychiatric hospital, with inpatient care, partial hospitalization, intensive outpatient, and Dialectical Behavior Therapy and chemical dependency group programs.",
     phone: "858-836-8434",
     website: "https://www.sharp.com/services/mental-health",
-    counties: ["san-diego"],
     cost: "Insurance or self-pay",
     insurance: "Accepts Medicare and most commercial plans; call intake to confirm",
+    groupTypes: ["dialectical-behavior-therapy", "substance-use-recovery"],
+    counties: ["san-diego"],
   },
   {
     name: "Sharp Grossmont Hospital Behavioral Health",
@@ -564,6 +568,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["los-angeles"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal, Medicare, uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
   {
     name: "Orange County Behavioral Health Services",
@@ -573,6 +578,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["orange"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal (CalOptima Health), uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
   {
     name: "San Diego County Behavioral Health Services",
@@ -582,6 +588,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["san-diego"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal, uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
   {
     name: "Riverside University Health System – Behavioral Health",
@@ -591,6 +598,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["riverside"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal (Inland Empire Health Plan), uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
   {
     name: "San Bernardino County Department of Behavioral Health",
@@ -600,6 +608,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["san-bernardino"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal (Inland Empire Health Plan), uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
   {
     name: "Ventura County Behavioral Health",
@@ -609,6 +618,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["ventura"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal (Gold Coast Health Plan), uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
   {
     name: "Santa Barbara County Department of Behavioral Wellness",
@@ -618,6 +628,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["santa-barbara"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal (CenCal Health), uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
   {
     name: "Imperial County Behavioral Health Services",
@@ -627,6 +638,7 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
     counties: ["imperial"],
     cost: "Free with Medi-Cal; sliding scale otherwise",
     insurance: "Medi-Cal (California Health & Wellness, Molina Healthcare), uninsured",
+    groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
   },
 ];
 
@@ -776,6 +788,18 @@ export const EAP_PROGRAMS: EapProgram[] = [
     insurance: "Not needed (employer-paid)",
   },
 ];
+
+/** Every program that runs groups, for the Group Therapy page. */
+export function groupProgramsFor(slug: string): Program[] {
+  return [...GROUP_THERAPY_PROGRAMS, ...HOSPITAL_PROGRAMS, ...STATE_FUNDED_PROGRAMS].filter((p) => p.groupTypes?.includes(slug));
+}
+
+/** Where a group meets: "Online" or its Southern California counties. */
+export function groupLocation(p: Program): string {
+  if (p.online) return "Online";
+  if (!p.counties) return "Southern California";
+  return p.counties.map((c) => SOCAL_COUNTIES.find((x) => x.slug === c)?.name ?? c).join(", ");
+}
 
 export interface GroupFinder {
   name: string;
