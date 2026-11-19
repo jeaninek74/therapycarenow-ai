@@ -14,7 +14,7 @@ export default function Programs() {
     <div className="min-h-screen bg-background">
       <NavBar />
       <div className="container py-10 max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-foreground mb-2">Hospital &amp; State-Funded Programs</h1>
+        <h1 className="text-3xl font-bold text-foreground mb-2">Medi-Cal (Medicaid) and Hospital Programs</h1>
         <p className="text-muted-foreground mb-6">
           Hospital behavioral health programs and California state and county programs, such as Medi-Cal and county
           behavioral health departments, across {SERVICE_REGION_NAME}.
@@ -27,7 +27,7 @@ export default function Programs() {
 
         <div className="flex items-center gap-2 mb-4">
           <Landmark className="w-6 h-6 text-primary" />
-          <h2 className="text-2xl font-semibold text-foreground">State &amp; county programs</h2>
+          <h2 className="text-2xl font-semibold text-foreground">Medi-Cal, state, and county programs</h2>
         </div>
         <div className="grid gap-4 mb-12">
           {programsForCounty(STATE_FUNDED_PROGRAMS, countySlug).map((p) => (

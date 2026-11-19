@@ -251,7 +251,7 @@ export default function Home() {
               href="/benefits"
               icon={<Briefcase className="w-6 h-6 text-[oklch(0.58_0.12_155)]" />}
               title="Find Care by Insurance"
-              description="Save your insurance and employer Employee Assistance Program info to speed up matching."
+              description="Pick your insurance to see clinicians your plan lists, or look up your employer's Employee Assistance Program. Nothing is saved."
             />
             <QuickCard
               href="/free-resources"
