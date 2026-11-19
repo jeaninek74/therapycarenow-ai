@@ -90,7 +90,7 @@ export default function NavBar() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setProviderDropdownOpen((v) => !v)}
-              className={`flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary ${
+              className={`whitespace-nowrap flex items-center gap-1 text-sm font-medium transition-colors hover:text-primary ${
                 isProviderActive ? "text-primary" : "text-muted-foreground"
               }`}
             >
