@@ -38,9 +38,33 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-muted-foreground mb-10">
+            <p className="text-sm text-muted-foreground mb-6">
               We're a navigation tool, not a clinic. We don't provide therapy or diagnosis. We connect you with the people and programs who do.
             </p>
+            <div className="bg-card/80 border border-border rounded-2xl p-5 mb-10">
+              <h2 className="font-semibold text-foreground mb-3">Therapist, psychiatrist, or psychologist?</h2>
+              <dl className="space-y-3 text-sm">
+                {[
+                  {
+                    term: "Therapist (LMFT, LCSW, LPCC)",
+                    def: "A master's-level licensed counselor who provides talk therapy for stress, anxiety, depression, relationships, and grief. Therapists can't prescribe medication. They're usually the best place to start.",
+                  },
+                  {
+                    term: "Psychiatrist (MD, DO) or psychiatric nurse practitioner (PMHNP)",
+                    def: "A medical provider who diagnoses mental health conditions and prescribes and manages medication. Visits are often shorter and focus on medication. See one if you may need medication or have symptoms such as bipolar disorder, psychosis, or severe depression.",
+                  },
+                  {
+                    term: "Psychologist (PhD, PsyD)",
+                    def: "A doctoral-level clinician who provides therapy and psychological testing, such as for ADHD, learning differences, or a complex diagnosis. Psychologists in California can't prescribe medication.",
+                  },
+                ].map(({ term, def }) => (
+                  <div key={term}>
+                    <dt className="font-medium text-foreground">{term}</dt>
+                    <dd className="text-muted-foreground">{def}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="tel:988"
@@ -154,7 +178,7 @@ export default function Home() {
                   ["Can prescribe medication", "✗", "✓", "✗"],
                   ["Provides talk therapy", "✓", "Some", "✓"],
                   ["Psychological testing", "✗", "✗", "✓"],
-                  ["Doctoral degree required", "✗", "✓", "✓"],
+                  ["Degree", "Master's", "Medical (MD/DO) or NP", "Doctorate (PhD/PsyD)"],
                   ["Typical session focus", "Therapy & coping", "Medication & diagnosis", "Assessment & therapy"],
                   ["Insurance coverage", "Widely covered", "Widely covered", "Widely covered"],
                 ].map(([feature, therapist, psychiatrist, psychologist]) => (
