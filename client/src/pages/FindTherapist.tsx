@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { milesBetweenZips } from "@shared/socalZips";
+import { INSURER_DIRECTORIES } from "@shared/insurerDirectories";
 import { Link } from "wouter";
 import { INSURANCE_OPTIONS } from "@shared/insurances";
 import { trpc } from "@/lib/trpc";
@@ -310,6 +311,25 @@ export default function FindTherapist() {
           </div>
 
           {/* ── Results ────────────────────────────────────────────────────── */}
+          {insurance && INSURER_DIRECTORIES[insurance] && (
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-4 text-sm">
+              <p className="text-foreground">
+                This list shows clinicians that public directories list under {insurance}. To see the plan's full network,{" "}
+                <a
+                  href={INSURER_DIRECTORIES[insurance].url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-primary underline"
+                >
+                  search {INSURER_DIRECTORIES[insurance].label}'s own directory
+                </a>
+                .
+              </p>
+              {INSURER_DIRECTORIES[insurance].note && (
+                <p className="text-muted-foreground mt-1">{INSURER_DIRECTORIES[insurance].note}</p>
+              )}
+            </div>
+          )}
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
