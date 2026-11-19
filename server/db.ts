@@ -250,6 +250,25 @@ export async function searchProviders(params: {
   if (params.costTag) {
     conditions.push(eq(providers.costTag, params.costTag as any));
   }
+  // Filter in SQL so the limit applies to matching providers, not to all providers.
+  if (params.specialty) {
+    conditions.push(
+      inArray(
+        providers.id,
+        db.select({ id: providerSpecialties.providerId }).from(providerSpecialties)
+          .where(like(providerSpecialties.specialty, `%${params.specialty}%`)),
+      ),
+    );
+  }
+  if (params.insurance) {
+    conditions.push(
+      inArray(
+        providers.id,
+        db.select({ id: providerInsurance.providerId }).from(providerInsurance)
+          .where(like(providerInsurance.insuranceName, `%${params.insurance}%`)),
+      ),
+    );
+  }
 
   const baseProviders = await db
     .select()

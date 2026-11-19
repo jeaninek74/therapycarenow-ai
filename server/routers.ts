@@ -174,10 +174,13 @@ const providerRouter = router({
     )
     .query(async ({ input }) => {
       const { category, ...rest } = input;
-      const results = await searchProviders({ ...rest, stateCode: SERVICE_STATE_CODE, limit: input.limit ?? 50 });
+      const limit = input.limit ?? 50;
+      // Category is derived from license type after the query, so fetch extra rows before filtering.
+      const results = await searchProviders({ ...rest, stateCode: SERVICE_STATE_CODE, limit: category ? 2000 : limit });
       if (!category) return results.map(p => ({ ...p, category: getProviderCategory(p.licenseType ?? '') }));
       return results
         .filter(p => getProviderCategory(p.licenseType ?? '') === category)
+        .slice(0, limit)
         .map(p => ({ ...p, category }));
     }),
 });
