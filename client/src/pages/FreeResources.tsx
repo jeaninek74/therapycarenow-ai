@@ -13,9 +13,9 @@ function locate(r: { name: string; address?: string | null }) {
   const zip = r.address?.match(/\b(9\d{4})\b/)?.[1];
   const parts = (r.address ?? "").split(",").map((s) => s.trim());
   const cityCounty = parts.length >= 2 ? getCountyForCity(parts[parts.length - 2]) : undefined;
-  const nameCounties = /count(y|ies)/i.test(r.name)
-    ? SOCAL_COUNTIES.filter((c) => r.name.includes(c.name.replace(" County", "")))
-    : [];
+  const nameCounties = SOCAL_COUNTIES.filter(
+    (c) => r.name.includes(c.name.replace(" County", "")) || (c.slug === "los-angeles" && /\bLA\b/.test(r.name)),
+  );
   const counties = cityCounty ? [cityCounty] : nameCounties;
   return { zip, countySlugs: counties.map((c) => c.slug) };
 }
@@ -24,7 +24,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   hotline: "Crisis Hotlines",
   sliding_scale: "Sliding Scale Therapy",
   community_clinic: "Community Clinics",
-  national_program: "National Programs",
+  national_program: "State, Federal & Veterans Programs",
   support_group: "Support Groups",
   county_resource: "County Resources",
   other: "Other Resources",
