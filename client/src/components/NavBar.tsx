@@ -75,11 +75,11 @@ export default function NavBar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-4 xl:gap-5">
+        <div className="hidden xl:flex items-center gap-4 2xl:gap-5">
           {/* Demo */}
           <Link
             href="/demo"
-            className={`text-sm font-medium transition-colors hover:text-primary ${
+            className={`whitespace-nowrap text-sm font-medium transition-colors hover:text-primary ${
               location === "/demo" ? "text-primary" : "text-muted-foreground"
             }`}
           >
@@ -153,7 +153,7 @@ export default function NavBar() {
             <Link
               key={link.href}
               href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-primary ${
+              className={`whitespace-nowrap text-sm font-medium transition-colors hover:text-primary ${
                 location === link.href ? "text-primary" : "text-muted-foreground"
               }`}
             >
@@ -211,7 +211,7 @@ export default function NavBar() {
 
         {/* Mobile menu toggle */}
         <button
-          className="md:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+          className="xl:hidden p-2 rounded-lg hover:bg-muted transition-colors"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
@@ -221,7 +221,7 @@ export default function NavBar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
+        <div className="xl:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
           <Link href="/demo" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
             Demo
           </Link>
