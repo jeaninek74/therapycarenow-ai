@@ -24,7 +24,7 @@ TherapyCareNow is a navigation tool, not a clinic. It does not provide therapy o
 
 Every clinician shown in the directory must have an NPI number and `verificationStatus = "verified"` (enforced in `server/db.ts`). Providers are imported from the [CMS NPPES NPI Registry](https://npiregistry.cms.hhs.gov/) by `scripts/import-npi-providers.ts`: only active individual NPIs with a mental health taxonomy and a California practice location in a recognized Southern California city are imported. Live search results also come from NPPES.
 
-The NPI registry does not record telehealth or accepted insurance. Registry-imported listings show "Telehealth and insurance not yet confirmed, call to ask" (`detailsConfirmed: false`, see `shared/providerSource.ts`). Clinicians who join through `/join-directory` must state whether they offer telehealth and select every insurance they accept; on approval those plans are saved to `provider_insurance`.
+The NPI registry does not record telehealth or accepted insurance. Registry-imported listings show "Telehealth and insurance not yet confirmed, call to ask" (`detailsConfirmed: false`, see `shared/providerSource.ts`). Accepted insurance is not collected from clinicians.
 
 ## Region and data sources
 

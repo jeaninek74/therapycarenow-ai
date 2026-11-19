@@ -107,10 +107,6 @@ export default function ProviderSubmission() {
       toast.error("Please fill in all required fields");
       return;
     }
-    if (form.insuranceAccepted.length === 0) {
-      toast.error("Select every insurance plan you accept (choose Self-Pay if you don't take insurance)");
-      return;
-    }
     if (!isSoCalCity(form.city)) {
       toast.error("Please enter a practice city in Southern California");
       return;
@@ -360,7 +356,7 @@ export default function ProviderSubmission() {
           {/* Insurance */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-slate-800">Step 5: Insurance Accepted (select all that apply) *</CardTitle>
+              <CardTitle className="text-slate-800">Step 5: Insurance Accepted</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">
