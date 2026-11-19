@@ -56,11 +56,11 @@ function titleCase(s: string): string {
   return s.toLowerCase().replace(/\b[a-z]/g, (m) => m.toUpperCase());
 }
 
-async function fetchCity(city: string, taxonomy: string): Promise<any[]> {
+async function fetchPage(city: string, taxonomy: string, skip: number): Promise<any[]> {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await axios.get(NPPES_BASE, {
-        params: { version: "2.1", enumeration_type: "NPI-1", taxonomy_description: taxonomy, state: SERVICE_STATE_CODE, city: city.toUpperCase(), limit: "200" },
+        params: { version: "2.1", enumeration_type: "NPI-1", taxonomy_description: taxonomy, state: SERVICE_STATE_CODE, city: city.toUpperCase(), limit: "200", skip: String(skip) },
         timeout: 20000,
       });
       return res.data?.results ?? [];
@@ -69,6 +69,17 @@ async function fetchCity(city: string, taxonomy: string): Promise<any[]> {
     }
   }
   return [];
+}
+
+// NPPES returns at most 200 results per request and allows skip up to 1000.
+async function fetchCity(city: string, taxonomy: string): Promise<any[]> {
+  const all: any[] = [];
+  for (let skip = 0; skip <= 1000; skip += 200) {
+    const page = await fetchPage(city, taxonomy, skip);
+    all.push(...page);
+    if (page.length < 200) break;
+  }
+  return all;
 }
 
 async function main() {
