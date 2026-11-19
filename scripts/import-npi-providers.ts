@@ -56,7 +56,7 @@ function titleCase(s: string): string {
   return s.toLowerCase().replace(/\b[a-z]/g, (m) => m.toUpperCase());
 }
 
-async function fetchPage(city: string, taxonomy: string, skip: number): Promise<any[]> {
+async function fetchPage(city: string, taxonomy: string, skip: number): Promise<any[] | null> {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await axios.get(NPPES_BASE, {
@@ -68,14 +68,21 @@ async function fetchPage(city: string, taxonomy: string, skip: number): Promise<
       await new Promise((r) => setTimeout(r, 1500 * (attempt + 1)));
     }
   }
-  return [];
+  return null;
 }
 
 // NPPES returns at most 200 results per request and allows skip up to 1000.
+let failedPages = 0;
+
 async function fetchCity(city: string, taxonomy: string): Promise<any[]> {
   const all: any[] = [];
   for (let skip = 0; skip <= 1000; skip += 200) {
     const page = await fetchPage(city, taxonomy, skip);
+    if (page === null) {
+      failedPages++;
+      console.warn(`NPPES request failed: ${city} / ${taxonomy} / skip=${skip}. Rerun to fill the gap.`);
+      break;
+    }
     all.push(...page);
     if (page.length < 200) break;
   }
@@ -135,6 +142,10 @@ async function main() {
     console.log(`${county.name}: ${imported} imported so far`);
   }
   console.log(`Done. Imported ${imported} NPI-verified providers.`);
+  if (failedPages > 0) {
+    console.error(`${failedPages} NPPES page(s) failed; rerun the import (existing NPIs are skipped).`);
+    process.exit(2);
+  }
   process.exit(0);
 }
 
