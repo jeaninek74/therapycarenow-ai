@@ -289,7 +289,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
   {
     name: "211 Los Angeles County",
     description: "Free, 24/7 referral line. Ask for anger management classes, anxiety groups, Cognitive Behavioral Therapy groups, eating disorder groups, and other therapy groups near you.",
-    phone: "211",
+    phone: "800-339-6993",
     website: "https://211la.org/",
     counties: ["los-angeles"],
     cost: "Free",
@@ -299,7 +299,7 @@ export const GROUP_THERAPY_PROGRAMS: Program[] = [
   {
     name: "211 Orange County",
     description: "Free, 24/7 referral line. Ask for anger management classes, anxiety groups, and other therapy groups near you.",
-    phone: "211",
+    phone: "888-600-4357",
     website: "https://www.211oc.org/",
     counties: ["orange"],
     cost: "Free",
