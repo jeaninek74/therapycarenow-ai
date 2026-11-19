@@ -1,24 +1,44 @@
 /**
- * Comprehensive list of major US health insurance carriers accepted by mental health providers.
+ * Health insurance plans used in Southern California, plus major national carriers, accepted by mental health providers.
  * Used across FindTherapist, ProviderSubmission, BenefitsWallet, and other pages.
  */
 export const INSURANCE_OPTIONS: string[] = [
-  // Major national carriers
+  // California & Southern California plans
+  "Medi-Cal",
+  "Medicare",
+  "Kaiser Permanente",
+  "MetLife",
   "Aetna",
+  "Anthem Blue Cross",
+  "Blue Shield of California",
+  "Cigna",
+  "UnitedHealthcare",
+  "Health Net",
+  "L.A. Care Health Plan",
+  "Inland Empire Health Plan (IEHP)",
+  "CalOptima Health",
+  "Molina Healthcare",
+  "Community Health Group",
+  "Sharp Health Plan",
+  "Gold Coast Health Plan",
+  "CenCal Health",
+  "California Health & Wellness",
+  "Covered California",
+  "TRICARE",
+  "VA Community Care",
+
+  // Major national carriers
   "Anthem",
   "Blue Cross Blue Shield (BCBS)",
   "Blue Cross",
   "Blue Shield",
-  "Cigna",
   "Humana",
-  "Kaiser Permanente",
   "United Healthcare",
   "UnitedHealth",
   "Optum",
 
   // Government programs
   "Medicaid",
-  "Medicare",
   "Medicare Advantage",
   "CHIP (Children's Health Insurance Program)",
   "Tricare",
@@ -39,12 +59,10 @@ export const INSURANCE_OPTIONS: string[] = [
   "Fidelis Care",
   "Friday Health Plans",
   "HealthFirst",
-  "Health Net",
   "HealthMarket",
   "Highmark",
   "Independence Blue Cross",
   "Magellan Health",
-  "Molina Healthcare",
   "MODA Health",
   "MVP Health Care",
   "Oscar Health",

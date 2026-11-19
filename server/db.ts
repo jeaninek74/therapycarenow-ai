@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql } from "drizzle-orm";
+import { and, eq, inArray, isNotNull, like, or, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   auditEvents,
@@ -16,6 +16,7 @@ import {
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
+import { detailsConfirmedByClinician } from "../shared/providerSource";
 import { safeLog } from "./_core/security";
 import {
   SERVICE_STATE_CODE,
@@ -25,11 +26,15 @@ import {
   normalizeCity,
 } from "../shared/region";
 
-/** Restricts provider rows to Southern California cities (optionally a single county). */
+/** Restricts provider rows to NPI-verified clinicians in Southern California cities (optionally a single county). */
 function socalCityCondition(countySlug?: string) {
   const county = getSoCalCounty(countySlug);
   const keys = county ? county.cities.map(normalizeCity) : SOCAL_CITY_KEYS;
-  return inArray(sql`LOWER(TRIM(${providers.city}))`, keys);
+  return and(
+    inArray(sql`LOWER(TRIM(${providers.city}))`, keys),
+    isNotNull(providers.npiNumber),
+    eq(providers.verificationStatus, "verified"),
+  )!;
 }
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -245,6 +250,25 @@ export async function searchProviders(params: {
   if (params.costTag) {
     conditions.push(eq(providers.costTag, params.costTag as any));
   }
+  // Filter in SQL so the limit applies to matching providers, not to all providers.
+  if (params.specialty) {
+    conditions.push(
+      inArray(
+        providers.id,
+        db.select({ id: providerSpecialties.providerId }).from(providerSpecialties)
+          .where(like(providerSpecialties.specialty, `%${params.specialty}%`)),
+      ),
+    );
+  }
+  if (params.insurance) {
+    conditions.push(
+      inArray(
+        providers.id,
+        db.select({ id: providerInsurance.providerId }).from(providerInsurance)
+          .where(like(providerInsurance.insuranceName, `%${params.insurance}%`)),
+      ),
+    );
+  }
 
   const baseProviders = await db
     .select()
@@ -298,16 +322,30 @@ export async function searchProviders(params: {
     .from(providerInsurance)
     .where(inArray(providerInsurance.providerId, providerIds));
 
+  const groupBy = <T extends { providerId: number }>(rows: T[], pick: (r: T) => string) => {
+    const m = new Map<number, string[]>();
+    for (const r of rows) {
+      const list = m.get(r.providerId);
+      if (list) list.push(pick(r));
+      else m.set(r.providerId, [pick(r)]);
+    }
+    return m;
+  };
+  const specsById = groupBy(allSpecialties, (s) => s.specialty);
+  const insById = groupBy(allInsurance, (i) => i.insuranceName);
+  const specialtyIdSet = specialtyProviderIds ? new Set(specialtyProviderIds) : null;
+  const insuranceIdSet = insuranceProviderIds ? new Set(insuranceProviderIds) : null;
+
   // Build result with match scoring
   const results = baseProviders
     .filter((p) => {
-      if (specialtyProviderIds !== null && !specialtyProviderIds.includes(p.id)) return false;
-      if (insuranceProviderIds !== null && !insuranceProviderIds.includes(p.id)) return false;
+      if (specialtyIdSet && !specialtyIdSet.has(p.id)) return false;
+      if (insuranceIdSet && !insuranceIdSet.has(p.id)) return false;
       return true;
     })
     .map((p) => {
-      const specs = allSpecialties.filter((s) => s.providerId === p.id).map((s) => s.specialty);
-      const ins = allInsurance.filter((i) => i.providerId === p.id).map((i) => i.insuranceName);
+      const specs = specsById.get(p.id) ?? [];
+      const ins = insById.get(p.id) ?? [];
 
       let score = 0;
       const reasons: string[] = [];
@@ -337,6 +375,7 @@ export async function searchProviders(params: {
         ...p,
         specialties: specs,
         insuranceAccepted: ins,
+        detailsConfirmed: detailsConfirmedByClinician(p.verificationNotes),
         matchScore: score,
         matchReasons: reasons,
       };
@@ -367,6 +406,7 @@ export async function getProviderById(id: number) {
     ...result[0],
     specialties: specs.map((s) => s.specialty),
     insuranceAccepted: ins.map((i) => i.insuranceName),
+    detailsConfirmed: detailsConfirmedByClinician(result[0].verificationNotes),
   };
 }
 

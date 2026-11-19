@@ -3,13 +3,28 @@ import { trpc } from "@/lib/trpc";
 import { BookOpen, Phone, Globe, MapPin, Loader2 } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import CountyPicker from "@/components/CountyPicker";
-import { SERVICE_REGION_NAME, getSoCalCounty } from "@shared/region";
+import { SERVICE_REGION_NAME, SOCAL_COUNTIES, getCountyForCity, getSoCalCounty } from "@shared/region";
+import { milesBetweenZips } from "@shared/socalZips";
+
+const CATEGORY_ORDER = ["hotline", "county_resource", "community_clinic", "sliding_scale", "support_group", "national_program", "other"];
+
+/** County and ZIP for a resource, from its address ("Street, City, CA 90000") or a county name in its title. */
+function locate(r: { name: string; address?: string | null }) {
+  const zip = r.address?.match(/\b(9\d{4})\b/)?.[1];
+  const parts = (r.address ?? "").split(",").map((s) => s.trim());
+  const cityCounty = parts.length >= 2 ? getCountyForCity(parts[parts.length - 2]) : undefined;
+  const nameCounties = SOCAL_COUNTIES.filter(
+    (c) => r.name.includes(c.name.replace(" County", "")) || (c.slug === "los-angeles" && /\bLA\b/.test(r.name)),
+  );
+  const counties = cityCounty ? [cityCounty] : nameCounties;
+  return { zip, countySlugs: counties.map((c) => c.slug) };
+}
 
 const CATEGORY_LABELS: Record<string, string> = {
   hotline: "Crisis Hotlines",
   sliding_scale: "Sliding Scale Therapy",
   community_clinic: "Community Clinics",
-  national_program: "National Programs",
+  national_program: "State, Federal & Veterans Programs",
   support_group: "Support Groups",
   county_resource: "County Resources",
   other: "Other Resources",
@@ -27,17 +42,26 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default function FreeResources() {
   const [countySlug, setCountySlug] = useState<string | undefined>(undefined);
+  const [zip, setZip] = useState("");
+  const userZip = /^\d{5}$/.test(zip) ? zip : undefined;
   const county = getSoCalCounty(countySlug);
   const { data: resources, isLoading } = trpc.freeResources.getResources.useQuery({ stateCode: "CA" });
 
-  const grouped = resources
-    ? resources.reduce((acc, r) => {
-        const cat = r.category ?? "other";
-        if (!acc[cat]) acc[cat] = [];
-        acc[cat].push(r);
-        return acc;
-      }, {} as Record<string, typeof resources>)
-    : {};
+  const located = (resources ?? [])
+    .map((r) => {
+      const loc = locate(r);
+      return { ...r, zip: loc.zip, countySlugs: loc.countySlugs, milesAway: userZip ? milesBetweenZips(userZip, loc.zip) : null };
+    })
+    .filter((r) => !countySlug || r.countySlugs.length === 0 || r.countySlugs.includes(countySlug))
+    .sort((a, b) => (a.milesAway ?? 1e9) - (b.milesAway ?? 1e9));
+  const grouped = located.reduce((acc, r) => {
+    const cat = r.category ?? "other";
+    (acc[cat] ??= []).push(r);
+    return acc;
+  }, {} as Record<string, typeof located>);
+  const orderedGroups = Object.entries(grouped).sort(
+    ([a], [b]) => (CATEGORY_ORDER.indexOf(a) + 1 || 99) - (CATEGORY_ORDER.indexOf(b) + 1 || 99),
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -69,7 +93,24 @@ export default function FreeResources() {
           <label className="block text-sm font-medium text-foreground mb-2">
             Your county
           </label>
-          <CountyPicker value={countySlug} onChange={setCountySlug} />
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex-1">
+              <CountyPicker value={countySlug} onChange={setCountySlug} />
+            </div>
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={5}
+              placeholder="Your ZIP code (to sort by distance)"
+              aria-label="Your ZIP code"
+              value={zip}
+              onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
+              className="sm:w-64 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+            />
+          </div>
+          {zip.length === 5 && milesBetweenZips(zip, zip) === null && (
+            <p className="text-xs text-destructive mt-2">That ZIP code isn't in Southern California.</p>
+          )}
           {county && (
             <div className="mt-4 bg-card border border-border rounded-xl p-4">
               <p className="text-sm font-semibold text-foreground mb-1">{county.name} 24/7 behavioral health line</p>
@@ -90,7 +131,7 @@ export default function FreeResources() {
           </div>
         ) : (
           <div className="flex flex-col gap-8">
-            {Object.entries(grouped).map(([category, items]) => (
+            {orderedGroups.map(([category, items]) => (
               <section key={category}>
                 <div className="flex items-center gap-2 mb-4">
                   <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide ${CATEGORY_COLORS[category] ?? "bg-muted text-muted-foreground"}`}>
@@ -106,7 +147,7 @@ export default function FreeResources() {
               </section>
             ))}
 
-            {resources && resources.length === 0 && (
+            {resources && located.length === 0 && (
               <div className="text-center py-20 bg-card rounded-2xl border border-border">
                 <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="font-semibold text-foreground mb-2">No resources found</h3>
@@ -128,6 +169,21 @@ function ResourceCard({ resource }: { resource: any }) {
           <h3 className="font-semibold text-foreground mb-1">{resource.name}</h3>
           {resource.description && (
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">{resource.description}</p>
+          )}
+          {resource.address ? (
+            <p className="text-sm text-foreground mb-3 flex items-start gap-1">
+              <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-muted-foreground" />
+              <span>
+                {resource.address}
+                {resource.milesAway != null && (
+                  <span className="ml-2 font-semibold text-primary">{resource.milesAway.toFixed(1)} mi away</span>
+                )}
+              </span>
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground mb-3">
+              {resource.countySlugs?.length ? `Serves ${resource.countySlugs.map((s: string) => getSoCalCounty(s)?.name).join(" and ")}` : "Phone or online, available anywhere in Southern California"}
+            </p>
           )}
           <div className="flex flex-wrap gap-3">
             {resource.phone && (
@@ -161,12 +217,6 @@ function ResourceCard({ resource }: { resource: any }) {
             )}
           </div>
         </div>
-        {resource.stateCode && (
-          <span className="flex items-center gap-1 text-xs text-muted-foreground flex-shrink-0">
-            <MapPin className="w-3 h-3" />
-            {resource.stateCode}
-          </span>
-        )}
         {resource.isNational && (
           <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full flex-shrink-0">
             National

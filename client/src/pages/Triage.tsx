@@ -56,7 +56,7 @@ const PROVIDER_TYPES = [
   {
     id: "therapist",
     label: "Therapist / Counselor",
-    description: "Talk therapy, CBT, DBT, EMDR, and more",
+    description: "Talk therapy, Cognitive Behavioral Therapy, Dialectical Behavior Therapy, and more",
     icon: "🧠",
   },
   {

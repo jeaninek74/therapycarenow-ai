@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { SOCAL_COUNTIES } from "@shared/region";
-import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, Star, Quote } from "lucide-react";
+import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, Star, Quote, Users, Flag, Building2 } from "lucide-react";
 import { useState } from "react";
 import NavBar from "@/components/NavBar";
 
@@ -259,6 +259,30 @@ export default function Home() {
               icon={<BookOpen className="w-6 h-6 text-[oklch(0.68_0.10_280)]" />}
               title="Free & Low-Cost Help"
               description="Community clinics, hotlines, and sliding scale providers near you."
+            />
+            <QuickCard
+              href="/group-therapy"
+              icon={<Users className="w-6 h-6 text-primary" />}
+              title="Group Therapy"
+              description="What each type of group does, from Dialectical Behavior Therapy to anger management, and where to find one."
+            />
+            <QuickCard
+              href="/veterans"
+              icon={<Flag className="w-6 h-6 text-primary" />}
+              title="Veterans & Military Families"
+              description="VA medical centers, Vet Centers, the Veterans Crisis Line, and TRICARE coverage."
+            />
+            <QuickCard
+              href="/programs"
+              icon={<Building2 className="w-6 h-6 text-primary" />}
+              title="Hospital & State Programs"
+              description="Hospital behavioral health programs, Medi-Cal, and county behavioral health departments."
+            />
+            <QuickCard
+              href="/eap"
+              icon={<Briefcase className="w-6 h-6 text-primary" />}
+              title="Work Mental Health Benefits (EAP)"
+              description="Free, confidential counseling through your employer's Employee Assistance Program."
             />
           </div>
         </div>

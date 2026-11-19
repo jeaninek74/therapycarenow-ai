@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { milesBetweenZips } from "@shared/socalZips";
+import { INSURER_DIRECTORIES } from "@shared/insurerDirectories";
 import { Link } from "wouter";
 import { INSURANCE_OPTIONS } from "@shared/insurances";
 import { trpc } from "@/lib/trpc";
@@ -31,7 +33,7 @@ const CATEGORY_META: Record<Category, {
     color: "text-[oklch(0.45_0.18_200)]",
     bg: "bg-[oklch(0.55_0.18_200)]/10",
     badge: "bg-[oklch(0.55_0.18_200)]/10 text-[oklch(0.45_0.18_200)]",
-    description: "Licensed counselors providing talk therapy, CBT, DBT, EMDR, and more. Cannot prescribe medication.",
+    description: "Licensed counselors providing talk therapy, Cognitive Behavioral Therapy, Dialectical Behavior Therapy, Eye Movement Desensitization and Reprocessing, and more. Cannot prescribe medication.",
   },
   Psychiatrist: {
     label: "Psychiatrist",
@@ -85,6 +87,8 @@ export default function FindTherapist() {
   const [activeCategory, setActiveCategory] = useState<Category>("Therapist");
   const [county, setCounty] = useState<string | undefined>(undefined);
   const [cityInput, setCityInput] = useState<string>("");
+  const [zip, setZip] = useState("");
+  const userZip = /^\d{5}$/.test(zip) ? zip : undefined;
   const [city, setCity] = useState<string | undefined>(undefined);
   const [telehealth, setTelehealth] = useState<boolean | undefined>(undefined);
   const [specialty, setSpecialty] = useState<string | undefined>(undefined);
@@ -118,16 +122,20 @@ export default function FindTherapist() {
     specialty,
     insurance,
     costTag,
+    zip: userZip,
     limit,
   });
 
-  const results = searchData ?? [];
+  const results = (searchData ?? [])
+    .map((p: any) => ({ ...p, milesAway: userZip ? milesBetweenZips(userZip, p.zipCode) : null }))
+    .sort((a: any, b: any) => (userZip ? (a.milesAway ?? 1e9) - (b.milesAway ?? 1e9) : 0));
   const meta = CATEGORY_META[activeCategory];
 
   function clearFilters() {
     setCounty(undefined);
     setCityInput("");
     setCity(undefined);
+    setZip("");
     setTelehealth(undefined);
     setSpecialty(undefined);
     setInsurance(undefined);
@@ -135,7 +143,7 @@ export default function FindTherapist() {
     setLimit(50);
   }
 
-  const hasFilters = !!(county || city || telehealth || specialty || insurance || costTag);
+  const hasFilters = !!(county || city || zip || telehealth || specialty || insurance || costTag);
 
   return (
     <div className="min-h-screen bg-background">
@@ -208,6 +216,21 @@ export default function FindTherapist() {
                     Go
                   </button>
                 </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">Your ZIP code (sort by distance)</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  maxLength={5}
+                  placeholder="e.g. 91101"
+                  value={zip}
+                  onChange={(e) => setZip(e.target.value.replace(/\D/g, ""))}
+                  className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                />
+                {zip.length === 5 && milesBetweenZips(zip, zip) === null && (
+                  <p className="text-xs text-destructive mt-1">That ZIP code isn't in Southern California.</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">Specialty</label>
@@ -290,6 +313,25 @@ export default function FindTherapist() {
           </div>
 
           {/* ── Results ────────────────────────────────────────────────────── */}
+          {insurance && INSURER_DIRECTORIES[insurance] && (
+            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 mb-4 text-sm">
+              <p className="text-foreground">
+                This list shows clinicians that public directories list under {insurance}. To see the plan's full network,{" "}
+                <a
+                  href={INSURER_DIRECTORIES[insurance].url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-primary underline"
+                >
+                  search {INSURER_DIRECTORIES[insurance].label}'s own directory
+                </a>
+                .
+              </p>
+              {INSURER_DIRECTORIES[insurance].note && (
+                <p className="text-muted-foreground mt-1">{INSURER_DIRECTORIES[insurance].note}</p>
+              )}
+            </div>
+          )}
           {isLoading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -300,6 +342,7 @@ export default function FindTherapist() {
                 Showing <strong className="text-foreground">{results.length}</strong> {meta.plural.toLowerCase()}
                 {` in ${getSoCalCounty(county)?.name ?? SERVICE_REGION_NAME}`}
                 {city && ` · ${city}`}
+                {userZip && ` · nearest to ${userZip} first`}
               </p>
               <div className="flex flex-col gap-4">
                 {results.map((p: any) => (
@@ -379,7 +422,28 @@ function ProviderCard({ provider, category }: { provider: any; category: Categor
             <span className="font-medium">{provider.licenseType}</span>
             {provider.city && ` · ${provider.city}`}
             {provider.stateCode && `, ${provider.stateCode}`}
+            {provider.zipCode && ` ${String(provider.zipCode).slice(0, 5)}`}
+            {provider.milesAway != null && (
+              <span className="ml-2 font-semibold text-primary">{provider.milesAway.toFixed(1)} mi away</span>
+            )}
           </p>
+          {provider.detailsConfirmed === false ? (
+            <p className="text-xs text-muted-foreground mb-2">
+              <span className="font-medium text-foreground">Insurance:</span>{" "}
+              {(provider.insuranceAccepted ?? []).length > 0
+                ? `${(provider.insuranceAccepted as string[]).join(", ")} (from insurer and Medi-Cal public directories)`
+                : "Not listed in the public insurer directories we check. Call to ask."}
+              {" · "}
+              <span className="font-medium text-foreground">Telehealth:</span> not confirmed, call to ask
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground mb-2">
+              <span className="font-medium text-foreground">Telehealth:</span> {provider.telehealthAvailable ? "Yes" : "No"}
+              {" · "}
+              <span className="font-medium text-foreground">Insurance:</span>{" "}
+              {(provider.insuranceAccepted ?? []).length > 0 ? (provider.insuranceAccepted as string[]).join(", ") : "Not listed"}
+            </p>
+          )}
           <div className="flex flex-wrap gap-2">
             {provider.telehealthAvailable && (
               <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
@@ -417,6 +481,18 @@ function ProviderCard({ provider, category }: { provider: any; category: Categor
             >
               <Phone className="w-4 h-4" />
               {provider.phone}
+            </a>
+          )}
+          {provider.website && (
+            <a
+              href={provider.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center gap-1 text-sm text-primary font-medium hover:underline"
+            >
+              <Globe className="w-4 h-4" />
+              Visit website
             </a>
           )}
           <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-foreground" />

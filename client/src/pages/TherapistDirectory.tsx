@@ -28,7 +28,7 @@ const CATEGORY_META: Record<Category, {
     color: "text-[oklch(0.45_0.18_200)]",
     bg: "bg-[oklch(0.55_0.18_200)]/10",
     badge: "bg-[oklch(0.55_0.18_200)]/10 text-[oklch(0.45_0.18_200)] border border-[oklch(0.55_0.18_200)]/20",
-    description: "Licensed counselors and therapists providing talk therapy, CBT, DBT, EMDR, and more.",
+    description: "Licensed counselors and therapists providing talk therapy, Cognitive Behavioral Therapy, Dialectical Behavior Therapy, Eye Movement Desensitization and Reprocessing, and more.",
     licenses: "LCSW · LPC · LMFT · LMHC · LCPC · MSW · and more",
   },
   Psychiatrist: {

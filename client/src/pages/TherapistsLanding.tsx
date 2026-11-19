@@ -106,7 +106,7 @@ export default function TherapistsLanding() {
               A therapist (also called a counselor or psychotherapist) is a licensed mental health professional who provides talk therapy and counseling. Most therapists hold a master's degree (MA, MS, MSW, MEd) in a mental health field and complete 2–3 years of supervised clinical practice before licensure.
             </p>
             <p className="text-muted-foreground leading-relaxed mb-6">
-              Therapists use evidence-based approaches such as <strong className="text-foreground">Cognitive Behavioral Therapy (CBT)</strong>, <strong className="text-foreground">Dialectical Behavior Therapy (DBT)</strong>, <strong className="text-foreground">EMDR</strong>, and <strong className="text-foreground">Acceptance and Commitment Therapy (ACT)</strong> to help clients build coping skills, process emotions, and make meaningful changes in their lives. Therapists cannot prescribe medication — if medication is needed, they coordinate with a psychiatrist.
+              Therapists use evidence-based approaches such as <strong className="text-foreground">Cognitive Behavioral Therapy (CBT)</strong>, <strong className="text-foreground">Dialectical Behavior Therapy (DBT)</strong>, <strong className="text-foreground">Eye Movement Desensitization and Reprocessing (EMDR)</strong>, and <strong className="text-foreground">Acceptance and Commitment Therapy (ACT)</strong> to help clients build coping skills, process emotions, and make meaningful changes in their lives. Therapists cannot prescribe medication — if medication is needed, they coordinate with a psychiatrist.
             </p>
             <div className="space-y-3">
               {[
@@ -114,7 +114,7 @@ export default function TherapistsLanding() {
                 "Couples and marriage counseling",
                 "Family therapy and conflict resolution",
                 "Group therapy and support groups",
-                "Evidence-based modalities: CBT, DBT, EMDR, ACT, IFS",
+                "Evidence-based approaches: Cognitive Behavioral Therapy, Dialectical Behavior Therapy, Eye Movement Desensitization and Reprocessing, Acceptance and Commitment Therapy, and Internal Family Systems",
                 "Telehealth and in-person sessions available",
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3">

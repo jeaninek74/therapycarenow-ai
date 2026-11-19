@@ -121,6 +121,7 @@ export default function ProviderSubmission() {
       phone: form.phone || undefined,
       website: form.website || undefined,
       telehealthAvailable: form.telehealth,
+      insuranceAccepted: form.insuranceAccepted,
       bio: form.bio || undefined,
       city: form.city.trim(),
       stateCode: SERVICE_STATE_CODE,
@@ -310,7 +311,7 @@ export default function ProviderSubmission() {
               </div>
               <div className="flex gap-6">
                 {[
-                  { key: "telehealth", label: "Offers Telehealth" },
+                  { key: "telehealth", label: "Offers Telehealth (video or phone sessions)" },
                   { key: "inPerson", label: "In-Person Sessions" },
                   { key: "slidingScale", label: "Sliding Scale Fees" },
                 ].map(({ key, label }) => (

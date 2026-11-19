@@ -186,6 +186,7 @@ export const providerSubmissions = mysqlTable(
     website: varchar("website", { length: 512 }),
     bookingUrl: varchar("bookingUrl", { length: 512 }),
     telehealthAvailable: boolean("telehealthAvailable").default(false),
+    insuranceAccepted: text("insuranceAccepted"), // JSON array of plan names
     city: varchar("city", { length: 128 }),
     stateCode: varchar("stateCode", { length: 2 }),
     zipCode: varchar("zipCode", { length: 10 }),

@@ -1,6 +1,6 @@
 import { useParams, Link } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { Phone, Video, MapPin, DollarSign, ChevronLeft, Loader2, Shield } from "lucide-react";
+import { Phone, Video, MapPin, DollarSign, ChevronLeft, Loader2, Shield, Globe } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import VerificationBadge from "@/components/VerificationBadge";
 
@@ -93,6 +93,17 @@ export default function ProviderProfile() {
               Call {provider.phone}
             </a>
           )}
+          {provider.website && (
+            <a
+              href={provider.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 flex items-center justify-center gap-2 border border-primary text-primary font-semibold rounded-xl py-3 hover:bg-primary/5 w-full"
+            >
+              <Globe className="w-5 h-5" />
+              Visit website
+            </a>
+          )}
         </div>
 
         {/* Specialties */}
@@ -106,6 +117,18 @@ export default function ProviderProfile() {
                 </span>
               ))}
             </div>
+          </div>
+        )}
+
+        {provider.detailsConfirmed === false && (
+          <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+            <h2 className="font-semibold text-foreground mb-2">Telehealth &amp; insurance</h2>
+            <p className="text-sm text-muted-foreground">
+              License and practice location are verified through the federal NPI Registry. Insurance below comes from
+              the State of California's Medi-Cal provider list and insurers' public provider directories, matched by
+              NPI. Networks change, so confirm with the office and your plan. Telehealth is not recorded in these
+              sources; call to ask.
+            </p>
           </div>
         )}
 
