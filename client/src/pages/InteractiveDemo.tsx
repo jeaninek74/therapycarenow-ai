@@ -32,7 +32,7 @@ const DEMO_STEPS = [
   },
   {
     id: "find-therapist",
-    title: "Find a Therapist",
+    title: "Find a Provider",
     subtitle: "Powerful Search Across Southern California",
     description: "Search by county, city, specialty, insurance, telehealth availability, and cost. Our directory covers every major Southern California city and hundreds of smaller communities, from Santa Barbara to the border.",
     icon: Search,
@@ -133,12 +133,12 @@ const DEMO_STEPS = [
       type: "directory",
       states: SOCAL_COUNTIES.slice(0, 6).map((c) => ({ name: c.name, cityCount: c.cities.length, cities: c.cities.slice(0, 5) })),
     },
-    cta: "Next: Benefits Wallet",
+    cta: "Next: My Insurance & Benefits",
     visual: "directory",
   },
   {
     id: "benefits",
-    title: "Benefits Wallet",
+    title: "My Insurance & Benefits",
     subtitle: "Know Your Mental Health Coverage",
     description: "Enter your insurance information to see what mental health benefits you have. Look up your employer's EAP (Employee Assistance Program) for free sessions.",
     icon: Shield,
@@ -166,12 +166,12 @@ const DEMO_STEPS = [
         website: "eap.cigna.com",
       },
     },
-    cta: "Next: Assistant",
+    cta: "Next: Ask for Guidance",
     visual: "benefits",
   },
   {
     id: "ai-assistant",
-    title: "Support Assistant",
+    title: "Ask for Guidance",
     subtitle: "Guidance, Not Diagnosis",
     description: "Our assistant helps you navigate mental health resources, understand your options, and find the right support — with clear disclaimers that it's not a substitute for professional care.",
     icon: Brain,
@@ -246,7 +246,7 @@ const STEP_LABELS: Record<string, string> = {
   "find-therapist": "Find a Provider",
   "provider-profile": "Provider Profiles",
   directory: "County Directory",
-  benefits: "Benefits Wallet",
+  benefits: "My Insurance & Benefits",
   "ai-assistant": "Ask for Guidance",
   "more-help": "More Help",
   security: "Security & Privacy",
@@ -623,10 +623,10 @@ export default function InteractiveDemo() {
         {/* Quick Links */}
         <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { label: "Find a Therapist", href: "/find-therapist", icon: Search, color: "bg-blue-50 text-blue-700 border-blue-200" },
+            { label: "Find a Provider", href: "/find-therapist", icon: Search, color: "bg-blue-50 text-blue-700 border-blue-200" },
             { label: "Therapist Directory", href: "/directory", icon: Globe, color: "bg-green-50 text-green-700 border-green-200" },
-            { label: "Benefits Wallet", href: "/benefits", icon: Shield, color: "bg-orange-50 text-orange-700 border-orange-200" },
-            { label: "Free Resources", href: "/free-resources", icon: Heart, color: "bg-teal-50 text-teal-700 border-teal-200" },
+            { label: "My Insurance & Benefits", href: "/benefits", icon: Shield, color: "bg-orange-50 text-orange-700 border-orange-200" },
+            { label: "Free & Low-Cost Help", href: "/free-resources", icon: Heart, color: "bg-teal-50 text-teal-700 border-teal-200" },
           ].map((link, i) => {
             const LIcon = link.icon;
             return (

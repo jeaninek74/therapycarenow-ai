@@ -30,7 +30,7 @@ export default function BenefitsWallet() {
 
   const saveInsurance = trpc.benefits.saveInsurance.useMutation({
     onSuccess: () => {
-      toast.success("Insurance saved to your Benefits Wallet");
+      toast.success("Insurance saved to My Insurance & Benefits");
       refetchProfile();
       setInsuranceCarrier("");
       setInsurancePlan("");
@@ -40,7 +40,7 @@ export default function BenefitsWallet() {
 
   const saveEmployer = trpc.benefits.saveEmployer.useMutation({
     onSuccess: () => {
-      toast.success("Employer EAP saved to your Benefits Wallet");
+      toast.success("Employer EAP saved to My Insurance & Benefits");
       refetchProfile();
       setEmployerName("");
     },
@@ -71,9 +71,9 @@ export default function BenefitsWallet() {
         <NavBar />
         <div className="container py-20 max-w-md mx-auto text-center">
           <Lock className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-foreground mb-3">Sign in to use Benefits Wallet</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-3">Sign in to use My Insurance & Benefits</h2>
           <p className="text-muted-foreground mb-6">
-            Benefits Wallet securely stores your insurance and EAP information to speed up therapist matching. Sign in to get started.
+            My Insurance & Benefits securely stores your insurance and EAP information to speed up therapist matching. Sign in to get started.
           </p>
           <a
             href={getLoginUrl()}
@@ -92,7 +92,7 @@ export default function BenefitsWallet() {
       <div className="container py-10 max-w-2xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
           <Briefcase className="w-7 h-7 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Benefits Wallet</h1>
+          <h1 className="text-3xl font-bold text-foreground">My Insurance & Benefits</h1>
         </div>
         <p className="text-muted-foreground mb-8">
           Save your insurance and employer EAP info to speed up therapist matching. Your data is encrypted and private.

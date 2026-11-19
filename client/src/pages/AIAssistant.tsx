@@ -92,7 +92,7 @@ export default function AIAssistant() {
               <Bot className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="font-semibold text-foreground">Assistant</h1>
+              <h1 className="font-semibold text-foreground">Ask for Guidance</h1>
               <p className="text-xs text-muted-foreground">Navigation help only — not clinical advice</p>
             </div>
           </div>

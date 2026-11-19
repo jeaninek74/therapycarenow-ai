@@ -251,7 +251,7 @@ export default function Home() {
             <QuickCard
               href="/benefits"
               icon={<Briefcase className="w-6 h-6 text-[oklch(0.58_0.12_155)]" />}
-              title="Benefits Wallet"
+              title="My Insurance & Benefits"
               description="Save your insurance and employer EAP info to speed up matching."
             />
             <QuickCard
@@ -382,7 +382,7 @@ export default function Home() {
               <Link href="/therapists" className="hover:text-foreground transition-colors">Therapists</Link>
               <Link href="/psychiatrists" className="hover:text-foreground transition-colors">Psychiatrists</Link>
               <Link href="/psychologists" className="hover:text-foreground transition-colors">Psychologists</Link>
-              <Link href="/free-resources" className="hover:text-foreground transition-colors">Free Resources</Link>
+              <Link href="/free-resources" className="hover:text-foreground transition-colors">Free & Low-Cost Help</Link>
               <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
               <Link href="/terms" className="hover:text-foreground transition-colors">Terms of Use</Link>
             </div>
@@ -664,7 +664,7 @@ const TESTIMONIALS: {
     tag: "Great resource",
   },
   {
-    quote: "As someone without insurance, I used the Free Help section to find sliding-scale therapists in my area. I'm now in weekly therapy for the first time in my life. Thank you.",
+    quote: "As someone without insurance, I used the Free & Low-Cost Help section to find sliding-scale therapists in my area. I'm now in weekly therapy for the first time in my life. Thank you.",
     name: "Priya S.",
     location: "Chicago, IL",
     rating: 5,

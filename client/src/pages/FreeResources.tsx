@@ -69,7 +69,7 @@ export default function FreeResources() {
       <div className="container py-10 max-w-3xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
           <BookOpen className="w-7 h-7 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">Free & Low-Cost Resources</h1>
+          <h1 className="text-3xl font-bold text-foreground">Free & Low-Cost Help</h1>
         </div>
         <p className="text-muted-foreground mb-4">
           Community clinics, hotlines, and sliding scale providers across {SERVICE_REGION_NAME}.
