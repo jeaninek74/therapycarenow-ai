@@ -3,6 +3,7 @@ import { milesBetweenZips } from "@shared/socalZips";
 import { INSURER_DIRECTORIES } from "@shared/insurerDirectories";
 import { Link } from "wouter";
 import { INSURANCE_OPTIONS } from "@shared/insurances";
+import { nameWithoutDegrees } from "@shared/providerSource";
 import { trpc } from "@/lib/trpc";
 import {
   Search, Filter, Phone, Video, MapPin, DollarSign, ChevronRight,
@@ -402,7 +403,7 @@ function ProviderCard({ provider, category }: { provider: any; category: Categor
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
             <h3 className="font-semibold text-foreground text-lg group-hover:text-primary transition-colors">
-              {provider.name}
+              {nameWithoutDegrees(provider.name)}
             </h3>
             {/* Category badge */}
             <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full ${meta.badge}`}>
