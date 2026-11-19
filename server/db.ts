@@ -322,16 +322,30 @@ export async function searchProviders(params: {
     .from(providerInsurance)
     .where(inArray(providerInsurance.providerId, providerIds));
 
+  const groupBy = <T extends { providerId: number }>(rows: T[], pick: (r: T) => string) => {
+    const m = new Map<number, string[]>();
+    for (const r of rows) {
+      const list = m.get(r.providerId);
+      if (list) list.push(pick(r));
+      else m.set(r.providerId, [pick(r)]);
+    }
+    return m;
+  };
+  const specsById = groupBy(allSpecialties, (s) => s.specialty);
+  const insById = groupBy(allInsurance, (i) => i.insuranceName);
+  const specialtyIdSet = specialtyProviderIds ? new Set(specialtyProviderIds) : null;
+  const insuranceIdSet = insuranceProviderIds ? new Set(insuranceProviderIds) : null;
+
   // Build result with match scoring
   const results = baseProviders
     .filter((p) => {
-      if (specialtyProviderIds !== null && !specialtyProviderIds.includes(p.id)) return false;
-      if (insuranceProviderIds !== null && !insuranceProviderIds.includes(p.id)) return false;
+      if (specialtyIdSet && !specialtyIdSet.has(p.id)) return false;
+      if (insuranceIdSet && !insuranceIdSet.has(p.id)) return false;
       return true;
     })
     .map((p) => {
-      const specs = allSpecialties.filter((s) => s.providerId === p.id).map((s) => s.specialty);
-      const ins = allInsurance.filter((i) => i.providerId === p.id).map((i) => i.insuranceName);
+      const specs = specsById.get(p.id) ?? [];
+      const ins = insById.get(p.id) ?? [];
 
       let score = 0;
       const reasons: string[] = [];
