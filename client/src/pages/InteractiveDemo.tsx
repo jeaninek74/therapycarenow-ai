@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { SOCAL_COUNTIES } from "@shared/region";
+import { INSURANCE_OPTIONS } from "@shared/insurances";
+import { GROUP_THERAPY_TYPES, EAP_PROGRAMS } from "@shared/socalPrograms";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +24,7 @@ const DEMO_STEPS = [
     stats: [
       { label: "Service Region", value: "SoCal" },
       { label: "Counties Covered", value: String(SOCAL_COUNTIES.length) },
-      { label: "Insurance Networks", value: "200+" },
+      { label: "Insurance Plans Searchable", value: String(INSURANCE_OPTIONS.length) },
       { label: "Specialties", value: "60+" },
     ],
     cta: "Start Demo",
@@ -195,8 +197,24 @@ const DEMO_STEPS = [
         },
       ],
     },
-    cta: "Next: Security & Privacy",
+    cta: "Next: More Ways to Get Help",
     visual: "chat",
+  },
+  {
+    id: "more-help",
+    title: "More Ways to Get Help",
+    subtitle: "Dedicated Pages for Groups, Veterans, Programs & Work Benefits",
+    description: "Group Therapy, Veterans & Military Families, Hospital & State-Funded Programs, and Work Mental Health Benefits (Employee Assistance Programs) each have their own page with phone numbers, websites, cost, and insurance details by county.",
+    icon: Users,
+    color: "from-sky-500 to-blue-600",
+    stats: [
+      { label: "Group Therapy Types", value: String(GROUP_THERAPY_TYPES.length) },
+      { label: "Veterans Crisis Line", value: "988, press 1" },
+      { label: "County Behavioral Health Departments", value: String(SOCAL_COUNTIES.length) },
+      { label: "Public Employer EAPs", value: String(EAP_PROGRAMS.length) },
+    ],
+    cta: "Next: Security & Privacy",
+    visual: "welcome",
   },
   {
     id: "security",
@@ -222,6 +240,17 @@ const DEMO_STEPS = [
     visual: "security",
   },
 ];
+
+const STEP_LABELS: Record<string, string> = {
+  welcome: "Welcome",
+  "find-therapist": "Find a Provider",
+  "provider-profile": "Provider Profiles",
+  directory: "County Directory",
+  benefits: "Benefits Wallet",
+  "ai-assistant": "Ask for Guidance",
+  "more-help": "More Help",
+  security: "Security & Privacy",
+};
 
 function WelcomeVisual({ stats }: { stats: { label: string; value: string }[] }) {
   return (
@@ -514,7 +543,7 @@ export default function InteractiveDemo() {
                   }`}
                 >
                   <SIcon className="w-3 h-3" />
-                  {s.title.split(' ').slice(0, 2).join(' ')}
+                  {STEP_LABELS[s.id] ?? s.title}
                 </button>
               );
             })}
@@ -619,7 +648,7 @@ export default function InteractiveDemo() {
             {[
               { value: "NPI", label: "Verified Providers" },
               { value: String(SOCAL_COUNTIES.length), label: "SoCal Counties Covered" },
-              { value: "200+", label: "Insurance Networks" },
+              { value: String(INSURANCE_OPTIONS.length), label: "Insurance Plans Searchable" },
               { value: "Free", label: "For Patients" },
             ].map((stat, i) => (
               <div key={i}>
