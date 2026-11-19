@@ -143,7 +143,11 @@ export default function FindTherapist() {
     setInsurance(undefined);
     setCostTag(undefined);
     setLimit(50);
-    window.history.replaceState(null, "", window.location.pathname);
+    const params = new URLSearchParams(window.location.search);
+    params.delete("insurance");
+    params.delete("county");
+    const query = params.toString();
+    window.history.replaceState(null, "", window.location.pathname + (query ? `?${query}` : ""));
   }
 
   const hasFilters = !!(county || city || zip || telehealth || specialty || insurance || costTag);
