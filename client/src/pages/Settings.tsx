@@ -1,26 +1,15 @@
 import { useState } from "react";
 import { trpc } from "@/lib/trpc";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
-import { Shield, MapPin, FileText, LogOut, Loader2, ChevronDown, ChevronUp } from "lucide-react";
+import { Shield, MapPin, FileText, Loader2, ChevronDown, ChevronUp } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import { SERVICE_REGION_NAME, SERVICE_STATE_CODE } from "@shared/region";
-import { toast } from "sonner";
 
 export default function Settings() {
-  const { user, isAuthenticated, logout } = useAuth();
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
 
   const { data: compliance, isLoading: complianceLoading } = trpc.compliance.getState.useQuery(
     { stateCode: SERVICE_STATE_CODE }
   );
-
-  const logoutMutation = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      toast.success("Signed out successfully");
-      window.location.href = "/";
-    },
-  });
 
   function toggleSection(section: string) {
     setExpandedSection(expandedSection === section ? null : section);
@@ -31,40 +20,6 @@ export default function Settings() {
       <NavBar />
       <div className="container py-10 max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold text-foreground mb-8">Settings & Information</h1>
-
-        {/* Account */}
-        <section className="bg-card border border-border rounded-2xl p-6 mb-6 shadow-sm">
-          <h2 className="font-semibold text-foreground mb-4 flex items-center gap-2">
-            <Shield className="w-5 h-5 text-primary" />
-            Account
-          </h2>
-          {isAuthenticated ? (
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-medium text-foreground">{user?.name ?? "User"}</p>
-                <p className="text-sm text-muted-foreground">{user?.email}</p>
-              </div>
-              <button
-                onClick={() => logoutMutation.mutate()}
-                disabled={logoutMutation.isPending}
-                className="flex items-center gap-2 text-sm text-muted-foreground hover:text-destructive transition-colors"
-              >
-                {logoutMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogOut className="w-4 h-4" />}
-                Sign out
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center justify-between">
-              <p className="text-muted-foreground text-sm">Not signed in</p>
-              <a
-                href={getLoginUrl()}
-                className="text-sm text-primary font-medium hover:underline"
-              >
-                Sign in
-              </a>
-            </div>
-          )}
-        </section>
 
         {/* State Compliance Info */}
         <section className="bg-card border border-border rounded-2xl p-6 mb-6 shadow-sm">
