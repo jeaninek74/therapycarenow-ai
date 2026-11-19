@@ -27,6 +27,17 @@ export interface GroupTherapyType {
 
 export const GROUP_THERAPY_TYPES: GroupTherapyType[] = [
   {
+    slug: "functional-neurological-disorder",
+    name: "Functional Neurological Disorder and Psychogenic Non-Epileptic Seizures (Functional Seizures) Support Groups",
+    whatItDoes:
+      "Brings together people whose nervous system sends and receives signals incorrectly, causing symptoms such as seizure-like episodes, weakness, tremor, or trouble walking, even though tests show no structural damage. Members learn about the diagnosis, share coping strategies, and practice skills from treatments like Cognitive Behavioral Therapy and physical rehabilitation.",
+    whoItHelps:
+      "People diagnosed with Functional Neurological Disorder or Psychogenic Non-Epileptic Seizures (also called functional or dissociative seizures), plus their families and caregivers.",
+    format: "Mostly online peer support groups that meet weekly or monthly; some hospital neurology programs offer therapist-led groups.",
+    typicalCost: "Peer support groups are free. Therapist-led groups follow regular therapy rates.",
+    insurance: "Peer groups need no insurance. Therapist-led groups are often covered by Medi-Cal, Medicare, and commercial plans.",
+  },
+  {
     slug: "dialectical-behavior-therapy",
     name: "Dialectical Behavior Therapy Skills Group",
     whatItDoes:
@@ -145,6 +156,14 @@ export const GROUP_THERAPY_TYPES: GroupTherapyType[] = [
 ];
 
 export const GROUP_THERAPY_PROGRAMS: Program[] = [
+  {
+    name: "FND Hope (Functional Neurological Disorder Hope) Peer Support Groups",
+    description:
+      "Free online peer support groups for people with Functional Neurological Disorder, including a Functional Seizure Peer Support Group, a United States peer support group, young adult, teen, men's, LGBTQIA+, New to Functional Neurological Disorder, and caregiver groups. Dates and sign-up links are on the FND Hope events calendar.",
+    website: "https://fndhope.org/events/",
+    cost: "Free",
+    insurance: "Not needed",
+  },
   {
     name: "National Alliance on Mental Illness Orange County",
     description: "Free peer support groups for people living with mental illness and for family members, plus free education classes.",
@@ -596,5 +615,40 @@ export const EAP_PROGRAMS: EapProgram[] = [
     website: "https://www.foh4you.com/",
     cost: "Free",
     insurance: "Not needed (employer-paid)",
+  },
+];
+
+export interface GroupFinder {
+  name: string;
+  description: string;
+  url: string;
+}
+
+/** Official meeting finders that list groups currently meeting, with dates, times, and locations. */
+export const ACTIVE_GROUP_FINDERS: GroupFinder[] = [
+  {
+    name: "National Alliance on Mental Illness: find your local affiliate's support groups",
+    description: "Free peer and family support groups run by each county's affiliate, with meeting days, times, and locations.",
+    url: "https://namica.org/",
+  },
+  {
+    name: "Self-Management and Recovery Training (SMART Recovery) meeting finder",
+    description: "Search in-person and online addiction recovery meetings by ZIP code.",
+    url: "https://meetings.smartrecovery.org/",
+  },
+  {
+    name: "Alcoholics Anonymous meeting finder",
+    description: "Find in-person and online Alcoholics Anonymous meetings near you.",
+    url: "https://www.aa.org/find-aa",
+  },
+  {
+    name: "Depression and Bipolar Support Alliance: find a support group",
+    description: "In-person chapters and online peer support groups with schedules.",
+    url: "https://www.dbsalliance.org/support/chapters-and-support-groups/",
+  },
+  {
+    name: "FND Hope events calendar",
+    description: "Upcoming online Functional Neurological Disorder and Functional Seizure peer support groups.",
+    url: "https://fndhope.org/events/",
   },
 ];
