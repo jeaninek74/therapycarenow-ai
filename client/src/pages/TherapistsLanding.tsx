@@ -179,7 +179,6 @@ export default function TherapistsLanding() {
             </thead>
             <tbody className="divide-y divide-border">
               {[
-                ["Degree required", "Master's (MSW/MA/MEd)", "Medical (MD/DO)", "Doctoral (PhD/PsyD)"],
                 ["Can prescribe medication", "✗", "✓", "✗"],
                 ["Psychological testing", "✗", "✗", "✓"],
                 ["Provides talk therapy", "✓", "Some", "✓"],

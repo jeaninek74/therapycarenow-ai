@@ -188,7 +188,6 @@ export default function Home() {
                   ["Can prescribe medication", "✗", "✓", "✗"],
                   ["Provides talk therapy", "✓", "Some", "✓"],
                   ["Psychological testing", "✗", "✗", "✓"],
-                  ["Degree", "Master's", "Medical (MD/DO) or NP", "Doctorate (PhD/PsyD)"],
                   ["Typical session focus", "Therapy & coping", "Medication & diagnosis", "Assessment & therapy"],
                   ["Insurance coverage", "Widely covered", "Widely covered", "Widely covered"],
                 ].map(([feature, therapist, psychiatrist, psychologist]) => (

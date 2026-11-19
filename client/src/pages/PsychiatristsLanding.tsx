@@ -157,8 +157,6 @@ export default function PsychiatristsLanding() {
                 ["Can prescribe medication", "✓", "✗", "✗"],
                 ["Provides talk therapy", "Some", "✓", "✓"],
                 ["Psychological testing", "✗", "✗", "✓"],
-                ["Medical degree required", "✓", "✗", "✗"],
-                ["Doctoral degree required", "✓", "✗", "✓"],
                 ["Typical session focus", "Medication & diagnosis", "Therapy & coping", "Assessment & therapy"],
               ].map(([feature, psych, therapist, psychologist]) => (
                 <tr key={feature} className="hover:bg-muted/20">
