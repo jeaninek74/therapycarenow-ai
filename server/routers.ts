@@ -175,15 +175,16 @@ const providerRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const { category, zip, ...rest } = input;
+      const { category, zip, offset, ...rest } = input;
       const limit = input.limit ?? 50;
+      const start = offset ?? 0;
       // Category and distance are computed after the query, so fetch extra rows before filtering and sorting.
-      const results = await searchProviders({ ...rest, stateCode: SERVICE_STATE_CODE, limit: category || zip ? 5000 : limit });
+      const results = await searchProviders({ ...rest, stateCode: SERVICE_STATE_CODE, ...(category || zip ? { limit: 20000, offset: 0 } : { limit, offset: start }) });
       const distance = (p: { zipCode?: string | null }) => (zip ? milesBetweenZips(zip, p.zipCode) ?? 1e9 : 0);
       return results
         .filter(p => !category || getProviderCategory(p.licenseType ?? '') === category)
         .sort((a, b) => distance(a) - distance(b))
-        .slice(0, limit)
+        .slice(category || zip ? start : 0, (category || zip ? start : 0) + limit)
         .map(p => ({ ...p, category: category ?? getProviderCategory(p.licenseType ?? '') }));
     }),
 });
