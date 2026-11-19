@@ -24,7 +24,21 @@ TherapyCareNow is a navigation tool, not a clinic. It does not provide therapy o
 
 Every clinician shown in the directory must have an NPI number and `verificationStatus = "verified"` (enforced in `server/db.ts`). Providers are imported from the [CMS NPPES NPI Registry](https://npiregistry.cms.hhs.gov/) by `scripts/import-npi-providers.ts`: only active individual NPIs with a mental health taxonomy and a California practice location in a recognized Southern California city are imported. Live search results also come from NPPES.
 
-The NPI registry does not record telehealth or accepted insurance. Registry-imported listings show "Telehealth and insurance not yet confirmed, call to ask" (`detailsConfirmed: false`, see `shared/providerSource.ts`). Accepted insurance is not collected from clinicians.
+The NPI registry does not record telehealth or accepted insurance. Registry-imported listings show "Telehealth and insurance not yet confirmed, call to ask" (`detailsConfirmed: false`, see `shared/providerSource.ts`). Accepted insurance is not collected from clinicians. `scripts/import-insurance-networks.ts` matches every NPI-verified clinician against public sources and writes `provider_insurance` rows tagged `Source: ...`:
+
+| Plan | Source |
+|---|---|
+| Medi-Cal | California DHCS enrolled Medi-Cal provider list (data.chhs.ca.gov) |
+| Kaiser Permanente | Kaiser public Plan-Net provider directory (FHIR) |
+| L.A. Care Health Plan | L.A. Care public provider directory (FHIR) |
+| Inland Empire Health Plan (IEHP) | IEHP public provider directory (FHIR) |
+| Blue Shield of California, Cigna | Public FHIR directories (Cigna rejects NPI search; Blue Shield is slow; run with `--only=`) |
+
+When someone filters by a plan, Find a Provider also links to that insurer's official Find a Doctor page (`shared/insurerDirectories.ts`). Rerun the importer after importing new clinicians.
+
+## Distance by ZIP code
+
+Find a Provider and Free & Low-Cost Help take the user's ZIP code and sort results nearest first, showing miles. Distances are straight-line between ZIP centroids from the U.S. Census Bureau 2024 ZCTA Gazetteer (`shared/socalZips.ts`). Free resources are grouped by category and filtered by the county in their address.
 
 ## Region and data sources
 
