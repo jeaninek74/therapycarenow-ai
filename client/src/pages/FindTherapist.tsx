@@ -135,6 +135,7 @@ export default function FindTherapist() {
     setCounty(undefined);
     setCityInput("");
     setCity(undefined);
+    setZip("");
     setTelehealth(undefined);
     setSpecialty(undefined);
     setInsurance(undefined);
@@ -142,7 +143,7 @@ export default function FindTherapist() {
     setLimit(50);
   }
 
-  const hasFilters = !!(county || city || telehealth || specialty || insurance || costTag);
+  const hasFilters = !!(county || city || zip || telehealth || specialty || insurance || costTag);
 
   return (
     <div className="min-h-screen bg-background">
