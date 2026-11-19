@@ -75,7 +75,7 @@ export default function NavBar() {
         </Link>
 
         {/* Desktop nav */}
-        <div className="hidden xl:flex items-center gap-4 2xl:gap-5">
+        <div className="hidden 2xl:flex items-center gap-5">
           {/* Demo */}
           <Link
             href="/demo"
@@ -212,7 +212,7 @@ export default function NavBar() {
 
         {/* Mobile menu toggle */}
         <button
-          className="xl:hidden p-2 rounded-lg hover:bg-muted transition-colors"
+          className="2xl:hidden p-2 rounded-lg hover:bg-muted transition-colors"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Toggle menu"
         >
@@ -222,7 +222,7 @@ export default function NavBar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="xl:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
+        <div className="2xl:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
           <Link href="/demo" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
             Demo
           </Link>
