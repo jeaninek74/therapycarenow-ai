@@ -143,9 +143,12 @@ export default function NavBar() {
 
           {/* Other nav links */}
           {[
-            { href: "/free-resources", label: "Free Help" },
-            { href: "/benefits", label: "Benefits Wallet" },
-            { href: "/ai-assistant", label: "Assistant" },
+            { href: "/free-resources", label: "Free & Low-Cost Help" },
+            { href: "/group-therapy", label: "Group Therapy" },
+            { href: "/veterans", label: "Veterans" },
+            { href: "/programs", label: "Programs" },
+            { href: "/benefits", label: "My Insurance & Benefits" },
+            { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (
             <Link
               key={link.href}
@@ -248,9 +251,12 @@ export default function NavBar() {
           <div className="border-t border-border my-1" />
 
           {[
-            { href: "/free-resources", label: "Free Help" },
-            { href: "/benefits", label: "Benefits Wallet" },
-            { href: "/ai-assistant", label: "Assistant" },
+            { href: "/free-resources", label: "Free & Low-Cost Help" },
+            { href: "/group-therapy", label: "Group Therapy" },
+            { href: "/veterans", label: "Veterans" },
+            { href: "/programs", label: "Programs" },
+            { href: "/benefits", label: "My Insurance & Benefits" },
+            { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (
             <Link
               key={link.href}

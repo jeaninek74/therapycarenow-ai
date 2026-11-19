@@ -31,7 +31,7 @@ const CATEGORY_META: Record<Category, {
     color: "text-[oklch(0.45_0.18_200)]",
     bg: "bg-[oklch(0.55_0.18_200)]/10",
     badge: "bg-[oklch(0.55_0.18_200)]/10 text-[oklch(0.45_0.18_200)]",
-    description: "Licensed counselors providing talk therapy, CBT, DBT, EMDR, and more. Cannot prescribe medication.",
+    description: "Licensed counselors providing talk therapy, Cognitive Behavioral Therapy, Dialectical Behavior Therapy, Eye Movement Desensitization and Reprocessing, and more. Cannot prescribe medication.",
   },
   Psychiatrist: {
     label: "Psychiatrist",

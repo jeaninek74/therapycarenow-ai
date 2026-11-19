@@ -1,4 +1,4 @@
-import { and, eq, inArray, like, or, sql } from "drizzle-orm";
+import { and, eq, inArray, isNotNull, like, or, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   auditEvents,
@@ -25,11 +25,15 @@ import {
   normalizeCity,
 } from "../shared/region";
 
-/** Restricts provider rows to Southern California cities (optionally a single county). */
+/** Restricts provider rows to NPI-verified clinicians in Southern California cities (optionally a single county). */
 function socalCityCondition(countySlug?: string) {
   const county = getSoCalCounty(countySlug);
   const keys = county ? county.cities.map(normalizeCity) : SOCAL_CITY_KEYS;
-  return inArray(sql`LOWER(TRIM(${providers.city}))`, keys);
+  return and(
+    inArray(sql`LOWER(TRIM(${providers.city}))`, keys),
+    isNotNull(providers.npiNumber),
+    eq(providers.verificationStatus, "verified"),
+  )!;
 }
 
 let _db: ReturnType<typeof drizzle> | null = null;

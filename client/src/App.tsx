@@ -9,6 +9,9 @@ import FindTherapist from "./pages/FindTherapist";
 import ProviderProfile from "./pages/ProviderProfile";
 import BenefitsWallet from "./pages/BenefitsWallet";
 import FreeResources from "./pages/FreeResources";
+import GroupTherapy from "./pages/GroupTherapy";
+import Veterans from "./pages/Veterans";
+import Programs from "./pages/Programs";
 import AIAssistant from "./pages/AIAssistant";
 import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -35,6 +38,9 @@ function Router() {
       <Route path="/provider/:id" component={ProviderProfile} />
       <Route path="/benefits" component={BenefitsWallet} />
       <Route path="/free-resources" component={FreeResources} />
+      <Route path="/group-therapy" component={GroupTherapy} />
+      <Route path="/veterans" component={Veterans} />
+      <Route path="/programs" component={Programs} />
       <Route path="/ai-assistant" component={AIAssistant} />
       <Route path="/settings" component={Settings} />
       <Route path="/admin" component={AdminDashboard} />

@@ -84,7 +84,7 @@ export default function PsychologistsLanding() {
               {[
                 "Psychological testing and assessment (IQ, ADHD, autism, personality)",
                 "Neuropsychological evaluation",
-                "Advanced evidence-based psychotherapy (CBT, DBT, EMDR)",
+                "Advanced evidence-based psychotherapy (Cognitive Behavioral Therapy, Dialectical Behavior Therapy, Eye Movement Desensitization and Reprocessing)",
                 "Diagnosis of complex mental health conditions",
                 "Research-informed treatment approaches",
                 "Forensic and educational psychology",
@@ -104,7 +104,7 @@ export default function PsychologistsLanding() {
               { area: "Autism Spectrum Assessment", detail: "ADOS-2, ADI-R, and other gold-standard diagnostic tools for ASD" },
               { area: "Neuropsychological Testing", detail: "Cognitive and memory assessment for TBI, dementia, learning disabilities" },
               { area: "Personality Assessment", detail: "MMPI-3, Rorschach, PAI — for clinical, forensic, and occupational contexts" },
-              { area: "Trauma Therapy (EMDR/CPT)", detail: "Evidence-based trauma processing for PTSD and complex trauma" },
+              { area: "Trauma Therapy (Eye Movement Desensitization and Reprocessing, Cognitive Processing Therapy)", detail: "Evidence-based trauma processing for PTSD and complex trauma" },
               { area: "Cognitive Behavioral Therapy", detail: "Structured, goal-oriented therapy for anxiety, depression, OCD, and more" },
             ].map(({ area, detail }) => (
               <div key={area} className="bg-card border border-border rounded-xl p-4">
