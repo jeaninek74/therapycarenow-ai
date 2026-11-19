@@ -15,11 +15,7 @@ import Programs from "./pages/Programs";
 import Eap from "./pages/Eap";
 import AIAssistant from "./pages/AIAssistant";
 import Settings from "./pages/Settings";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminVerificationQueue from "./pages/AdminVerificationQueue";
-import ComplianceMonitor from "./pages/admin/ComplianceMonitor";
 import TherapistDirectory from "./pages/TherapistDirectory";
-import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import ConsentBanner from "./components/ConsentBanner";
@@ -44,11 +40,7 @@ function Router() {
       <Route path="/eap" component={Eap} />
       <Route path="/ai-assistant" component={AIAssistant} />
       <Route path="/settings" component={Settings} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route path="/admin/verification" component={AdminVerificationQueue} />
-      <Route path="/admin/compliance" component={ComplianceMonitor} />
       <Route path="/directory" component={TherapistDirectory} />
-      <Route path="/login" component={Login} />
       <Route path="/privacy" component={PrivacyPolicy} />
       <Route path="/terms" component={TermsOfService} />
       <Route path="/demo" component={InteractiveDemo} />

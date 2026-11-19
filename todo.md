@@ -412,6 +412,6 @@
 ## Search Indexing (Nov 2026)
 - [x] Descriptive title, description, and Open Graph tags for Southern California
 - [x] WebSite and Organization structured data (JSON-LD)
-- [x] robots.txt blocks /login, /admin, /settings; login page sets noindex
+- [x] robots.txt blocks /settings; no login page
 - [x] sitemap.xml of public pages
 - [ ] Submit sitemap and request home page indexing in Google Search Console (owner)

@@ -77,6 +77,6 @@ The live site is the `therapycarenow-web` service in the Railway project `Therap
 ## Search engine indexing
 
 - `client/index.html` sets the search listing title ("TherapyCareNow: Southern California Mental Health Resources"), the description, Open Graph tags, and `WebSite`/`Organization` structured data (JSON-LD) so the site name shows as a resource.
-- `client/public/robots.txt` blocks `/login`, `/admin`, and `/settings`, and points to the sitemap. The login page also sets `noindex, nofollow`.
+- `client/public/robots.txt` blocks `/settings` and points to the sitemap. The site has no login page.
 - `client/public/sitemap.xml` lists the public pages. Update it when you add or remove a public route.
 - After deploying, submit `https://www.therapycarenow.com/sitemap.xml` in Google Search Console and request indexing of the home page.
