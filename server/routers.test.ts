@@ -119,9 +119,9 @@ describe("Free Resources Router", () => {
   });
 });
 
-describe("Benefits Router — requires auth", () => {
-  it("throws UNAUTHORIZED when not authenticated", async () => {
-    const caller = appRouter.createCaller(makeCtx());
-    await expect(caller.benefits.getProfile()).rejects.toThrow();
+describe("Benefits Router — stores nothing", () => {
+  it("exposes only the public EAP lookup", () => {
+    const procedures = Object.keys(appRouter._def.procedures).filter((k) => k.startsWith("benefits."));
+    expect(procedures).toEqual(["benefits.lookupEAP"]);
   });
 });

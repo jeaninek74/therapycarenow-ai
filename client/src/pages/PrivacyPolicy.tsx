@@ -48,11 +48,10 @@ export default function PrivacyPolicy() {
             <h2 className="text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
               <Eye className="w-5 h-5 text-teal-600" /> 1. Information We Collect
             </h2>
-            <p className="mb-3">We collect only the minimum information necessary to provide our services:</p>
+            <p className="mb-3">We do not store personal information about visitors:</p>
             <div className="space-y-2 pl-4 border-l-2 border-teal-200">
-              <p><strong>Account information:</strong> Name and email address when you create an account. Passwords are stored as one-way cryptographic hashes (bcrypt) and cannot be recovered or read by our staff.</p>
-              <p><strong>Usage data:</strong> Anonymized triage session outcomes (risk level only — no session text is stored), page views, and feature usage. No personally identifiable information is included in analytics.</p>
-              <p><strong>Provider directory interactions:</strong> Search filters (state, specialty, insurance) used to find therapists. These are not linked to your identity.</p>
+              <p><strong>No visitor accounts:</strong> TherapyCareNow is a search tool. Visitors do not create accounts, and we do not ask for your name, email, or health information.</p>
+              <p><strong>Searches:</strong> The filters you choose (county, ZIP code, specialty, insurance, employer) are used only to run your search and are not saved.</p>
               <p><strong>Assistant interactions:</strong> Messages sent to the assistant are processed in real time and are <strong>not stored</strong> after the session ends. No conversation history is retained on our servers.</p>
             </div>
           </section>

@@ -14,64 +14,6 @@ export const verificationRouter = router({
       return verifyProviderLicense(input.npiNumber);
     }),
 
-  // - Public: submit a provider for verification -
-  submitProvider: publicProcedure
-    .input(
-      z.object({
-        name: z.string().min(2),
-        npiNumber: z.string().length(10),
-        licenseType: z.string().min(1),
-        licenseState: z.string().length(2),
-        licenseNumber: z.string().optional(),
-        specialty: z.string().optional(),
-        phone: z.string().optional(),
-        website: z.string().optional(),
-        bookingUrl: z.string().optional(),
-        telehealthAvailable: z.boolean().optional(),
-        insuranceAccepted: z.array(z.string().min(1)).optional(),
-        city: z.string().optional(),
-        stateCode: z.string().optional(),
-        zipCode: z.string().optional(),
-        bio: z.string().optional(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const db = await getDb();
-      if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Database unavailable" });
-
-      // Run NPI verification
-      const npiResult = await verifyProviderLicense(input.npiNumber, input.licenseState);
-
-      // Insert submission regardless of NPI result (admin reviews)
-      const [inserted] = await db.insert(providerSubmissions).values({
-        userId: ctx.user?.id ?? null,
-        name: input.name,
-        npiNumber: input.npiNumber,
-        licenseType: input.licenseType,
-        licenseState: input.licenseState,
-        licenseNumber: input.licenseNumber ?? null,
-        specialty: input.specialty ?? null,
-        phone: input.phone ?? null,
-        website: input.website ?? null,
-        bookingUrl: input.bookingUrl ?? null,
-        telehealthAvailable: input.telehealthAvailable ?? false,
-        insuranceAccepted: input.insuranceAccepted?.length ? JSON.stringify(input.insuranceAccepted) : null,
-        city: input.city ?? null,
-        stateCode: input.stateCode ?? null,
-        zipCode: input.zipCode ?? null,
-        bio: input.bio ?? null,
-        status: "pending",
-        npiValid: npiResult.valid,
-        npiLookupResult: JSON.stringify(npiResult),
-      });
-
-      return {
-        submissionId: (inserted as { insertId?: number }).insertId ?? 0,
-        npiValid: npiResult.valid,
-        npiData: npiResult,
-      };
-    }),
-
   // - Admin: get all pending submissions -
   getSubmissions: adminProcedure.query(async () => {
     const db = await getDb();

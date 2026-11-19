@@ -112,6 +112,8 @@ export default function FindTherapist() {
     if (catParam && CATEGORIES.includes(catParam)) setActiveCategory(catParam);
     const countyParam = params.get("county");
     if (countyParam && getSoCalCounty(countyParam)) setCounty(countyParam);
+    const insuranceParam = params.get("insurance");
+    if (insuranceParam && INSURANCE_OPTIONS.includes(insuranceParam)) setInsurance(insuranceParam);
   }, []);
 
   const { data: searchData, isLoading } = trpc.providers.searchByCategory.useQuery({

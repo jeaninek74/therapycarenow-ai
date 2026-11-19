@@ -16,9 +16,8 @@ TherapyCareNow is a navigation tool, not a clinic. It does not provide therapy o
 | Veterans | `/veterans` | VA medical centers, Vet Centers, Veterans Crisis Line, VA Community Care, TRICARE, Military OneSource |
 | Programs | `/programs` | Hospital behavioral health programs, Medi-Cal, Covered California, CalHOPE, 211, and county behavioral health departments |
 | Work Benefits (EAP) | `/eap` | Explains Employee Assistance Programs, looks up your employer's program (no sign-in needed), and lists the programs for State, county, city, and federal employees in Southern California |
-| My Insurance & Benefits | `/benefits` | Save insurance and employer details; look up Employee Assistance Program (EAP) benefits |
+| My Insurance & Benefits | `/benefits` | Pick your insurance or employer to see matching clinicians and Employee Assistance Program (EAP) contacts. Nothing is stored |
 | Assistant | `/ai-assistant` | AI guidance on finding care, with crisis detection that routes to 988 and county crisis lines |
-| Join the Directory | `/join-directory` | Clinicians submit a listing; NPI is checked against the CMS NPPES registry |
 
 ## Clinician verification
 

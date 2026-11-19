@@ -139,7 +139,7 @@ export default function Settings() {
               <strong className="text-foreground">Safety moderation:</strong> All messages to the assistant are screened for safety before processing. If a safety concern is detected, you are routed to crisis resources and the message is not processed.
             </p>
             <p>
-              <strong className="text-foreground">Your rights:</strong> You can delete your saved benefits information at any time from the My Insurance & Benefits page. You can request account deletion by contacting us.
+              <strong className="text-foreground">Your rights:</strong> TherapyCareNow is a search tool. It does not store your searches, insurance, employer, or messages, and visitors do not need an account.
             </p>
           </div>
         </section>

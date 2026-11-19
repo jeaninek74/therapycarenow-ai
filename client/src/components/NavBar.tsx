@@ -201,13 +201,7 @@ export default function NavBar() {
                 <LogOut className="w-3 h-3 mr-1" /> Sign Out
               </Button>
             </div>
-          ) : (
-            <Link href="/login" className="ml-2">
-              <Button size="sm" className="bg-teal-600 hover:bg-teal-700 text-white text-xs h-7 px-3">
-                <LogIn className="w-3 h-3 mr-1" /> Sign In
-              </Button>
-            </Link>
-          )}
+          ) : null}
         </div>
 
         {/* Mobile menu toggle */}
@@ -291,13 +285,7 @@ export default function NavBar() {
                   <LogOut className="w-3 h-3 mr-1" /> Sign Out
                 </Button>
               </div>
-            ) : (
-              <Link href="/login" onClick={() => setMenuOpen(false)}>
-                <Button size="sm" className="w-full bg-teal-600 hover:bg-teal-700 text-white text-xs">
-                  <LogIn className="w-3 h-3 mr-1" /> Sign In / Create Account
-                </Button>
-              </Link>
-            )}
+            ) : null}
           </div>
         </div>
       )}

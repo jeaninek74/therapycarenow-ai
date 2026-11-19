@@ -18,7 +18,6 @@ import Settings from "./pages/Settings";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminVerificationQueue from "./pages/AdminVerificationQueue";
 import ComplianceMonitor from "./pages/admin/ComplianceMonitor";
-import ProviderSubmission from "./pages/ProviderSubmission";
 import TherapistDirectory from "./pages/TherapistDirectory";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -48,10 +47,8 @@ function Router() {
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/verification" component={AdminVerificationQueue} />
       <Route path="/admin/compliance" component={ComplianceMonitor} />
-      <Route path="/join-directory" component={ProviderSubmission} />
       <Route path="/directory" component={TherapistDirectory} />
       <Route path="/login" component={Login} />
-      <Route path="/register" component={Login} />
       <Route path="/privacy" component={PrivacyPolicy} />
       <Route path="/terms" component={TermsOfService} />
       <Route path="/demo" component={InteractiveDemo} />
