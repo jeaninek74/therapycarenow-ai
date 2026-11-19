@@ -1,0 +1,1 @@
+ALTER TABLE `provider_submissions` ADD `insuranceAccepted` text;

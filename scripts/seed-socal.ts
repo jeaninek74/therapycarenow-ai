@@ -1,12 +1,12 @@
 /**
  * Seeds Southern California crisis lines, free resources, and California compliance data.
- * Replaces existing rows in crisis_resources and free_resources (seed-only tables).
+ * Replaces existing rows in crisis_resources, free_resources, employers, and eap_resources (seed-only tables).
  * Run: DATABASE_URL=... npx tsx scripts/seed-socal.ts
  */
 import { drizzle } from "drizzle-orm/mysql2";
-import { crisisResources, freeResources, stateCompliance } from "../drizzle/schema";
+import { crisisResources, eapResources, employers, freeResources, stateCompliance } from "../drizzle/schema";
 import { SOCAL_COUNTIES, SERVICE_STATE_CODE, SERVICE_STATE_NAME } from "../shared/region";
-import { GROUP_THERAPY_PROGRAMS, STATE_FUNDED_PROGRAMS, VETERAN_PROGRAMS, type Program } from "../shared/socalPrograms";
+import { EAP_PROGRAMS, GROUP_THERAPY_PROGRAMS, STATE_FUNDED_PROGRAMS, VETERAN_PROGRAMS, type Program } from "../shared/socalPrograms";
 
 const db = drizzle(process.env.DATABASE_URL!);
 
@@ -59,6 +59,20 @@ async function seed() {
     ...GROUP_THERAPY_PROGRAMS.map((p) => toResource(p, "support_group")),
     ...VETERAN_PROGRAMS.map((p) => toResource(p, p.phone && p.phone.length <= 4 ? "hotline" : "national_program")),
   ]);
+
+  await db.delete(eapResources);
+  await db.delete(employers);
+  await db.insert(employers).values(
+    EAP_PROGRAMS.flatMap((p) =>
+      p.employerNames.map((name) => ({
+        name,
+        nameNormalized: name.toLowerCase(),
+        eapProvider: p.eapProvider,
+        eapPhone: p.phone ?? null,
+        eapUrl: p.website,
+      })),
+    ),
+  );
 
   await db.insert(stateCompliance).values({
     stateCode: SERVICE_STATE_CODE,

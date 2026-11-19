@@ -224,7 +224,7 @@ export default function BenefitsWallet() {
                   id="eap-search"
                   value={eapSearch}
                   onChange={(e) => setEapSearch(e.target.value)}
-                  placeholder="e.g., Amazon, Google, Walmart..."
+                  placeholder="e.g., County of Los Angeles, State of California..."
                   className="pl-9"
                 />
               </div>

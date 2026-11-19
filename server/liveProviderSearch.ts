@@ -82,6 +82,7 @@ export interface LiveProvider {
   costTag: string;
   specialties: string[];
   source: "nppes"; // marks as live result
+  detailsConfirmed: false; // NPPES does not record telehealth or insurance
   npiNumber: string;
   verificationStatus: "verified"; // NPPES entries are NPI-verified by CMS
 }
@@ -191,12 +192,13 @@ export async function searchLiveProviders(params: {
           stateCode,
           zipCode,
           phone,
-          telehealthAvailable: true, // Most modern providers offer telehealth
+          telehealthAvailable: false,
           inPersonAvailable: true,
           acceptsNewPatients: true,
           costTag: "insurance",
           specialties: [specialty],
           source: "nppes",
+          detailsConfirmed: false,
           npiNumber: npi,
           verificationStatus: "verified",
         });

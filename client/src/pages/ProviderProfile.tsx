@@ -109,6 +109,17 @@ export default function ProviderProfile() {
           </div>
         )}
 
+        {provider.detailsConfirmed === false && (
+          <div className="bg-card border border-border rounded-2xl p-6 mb-6">
+            <h2 className="font-semibold text-foreground mb-2">Telehealth &amp; insurance</h2>
+            <p className="text-sm text-muted-foreground">
+              This clinician's license and practice location are verified through the federal NPI Registry, which does
+              not record telehealth or accepted insurance. Call the office to ask whether they offer telehealth and take
+              your plan.
+            </p>
+          </div>
+        )}
+
         {/* Insurance */}
         {provider.insuranceAccepted && provider.insuranceAccepted.length > 0 && (
           <div className="bg-card border border-border rounded-2xl p-6 mb-6">

@@ -16,6 +16,7 @@ import {
   users,
 } from "../drizzle/schema";
 import { ENV } from "./_core/env";
+import { detailsConfirmedByClinician } from "../shared/providerSource";
 import { safeLog } from "./_core/security";
 import {
   SERVICE_STATE_CODE,
@@ -341,6 +342,7 @@ export async function searchProviders(params: {
         ...p,
         specialties: specs,
         insuranceAccepted: ins,
+        detailsConfirmed: detailsConfirmedByClinician(p.verificationNotes),
         matchScore: score,
         matchReasons: reasons,
       };
@@ -371,6 +373,7 @@ export async function getProviderById(id: number) {
     ...result[0],
     specialties: specs.map((s) => s.specialty),
     insuranceAccepted: ins.map((i) => i.insuranceName),
+    detailsConfirmed: detailsConfirmedByClinician(result[0].verificationNotes),
   };
 }
 

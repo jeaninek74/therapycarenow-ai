@@ -107,6 +107,10 @@ export default function ProviderSubmission() {
       toast.error("Please fill in all required fields");
       return;
     }
+    if (form.insuranceAccepted.length === 0) {
+      toast.error("Select every insurance plan you accept (choose Self-Pay if you don't take insurance)");
+      return;
+    }
     if (!isSoCalCity(form.city)) {
       toast.error("Please enter a practice city in Southern California");
       return;
@@ -121,6 +125,7 @@ export default function ProviderSubmission() {
       phone: form.phone || undefined,
       website: form.website || undefined,
       telehealthAvailable: form.telehealth,
+      insuranceAccepted: form.insuranceAccepted,
       bio: form.bio || undefined,
       city: form.city.trim(),
       stateCode: SERVICE_STATE_CODE,
@@ -310,7 +315,7 @@ export default function ProviderSubmission() {
               </div>
               <div className="flex gap-6">
                 {[
-                  { key: "telehealth", label: "Offers Telehealth" },
+                  { key: "telehealth", label: "Offers Telehealth (video or phone sessions)" },
                   { key: "inPerson", label: "In-Person Sessions" },
                   { key: "slidingScale", label: "Sliding Scale Fees" },
                 ].map(({ key, label }) => (
@@ -355,7 +360,7 @@ export default function ProviderSubmission() {
           {/* Insurance */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-slate-800">Step 5: Insurance Accepted</CardTitle>
+              <CardTitle className="text-slate-800">Step 5: Insurance Accepted (select all that apply) *</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-2">

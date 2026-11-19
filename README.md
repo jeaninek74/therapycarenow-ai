@@ -15,6 +15,7 @@ TherapyCareNow is a navigation tool, not a clinic. It does not provide therapy o
 | Group Therapy | `/group-therapy` | What each type of group therapy does (Dialectical Behavior Therapy, anger management, and more), cost, insurance, and where to find groups |
 | Veterans | `/veterans` | VA medical centers, Vet Centers, Veterans Crisis Line, VA Community Care, TRICARE, Military OneSource |
 | Programs | `/programs` | Hospital behavioral health programs, Medi-Cal, Covered California, CalHOPE, 211, and county behavioral health departments |
+| Work Benefits (EAP) | `/eap` | Explains Employee Assistance Programs, looks up your employer's program (no sign-in needed), and lists the programs for State, county, city, and federal employees in Southern California |
 | Benefits Wallet | `/benefits` | Save insurance and employer details; look up Employee Assistance Program (EAP) benefits |
 | Assistant | `/ai-assistant` | AI guidance on finding care, with crisis detection that routes to 988 and county crisis lines |
 | Join the Directory | `/join-directory` | Clinicians submit a listing; NPI is checked against the CMS NPPES registry |
@@ -23,10 +24,13 @@ TherapyCareNow is a navigation tool, not a clinic. It does not provide therapy o
 
 Every clinician shown in the directory must have an NPI number and `verificationStatus = "verified"` (enforced in `server/db.ts`). Providers are imported from the [CMS NPPES NPI Registry](https://npiregistry.cms.hhs.gov/) by `scripts/import-npi-providers.ts`: only active individual NPIs with a mental health taxonomy and a California practice location in a recognized Southern California city are imported. Live search results also come from NPPES.
 
+The NPI registry does not record telehealth or accepted insurance. Registry-imported listings show "Telehealth and insurance not yet confirmed, call to ask" (`detailsConfirmed: false`, see `shared/providerSource.ts`). Clinicians who join through `/join-directory` must state whether they offer telehealth and select every insurance they accept; on approval those plans are saved to `provider_insurance`.
+
 ## Region and data sources
 
 - `shared/region.ts`: the eight counties, their cities, and each county's 24/7 crisis line
 - `shared/socalPrograms.ts`: group therapy types, group therapy programs, veterans programs, hospital programs, and state/county-funded programs. Phone numbers and addresses come from each organization's official website.
+- `shared/socalPrograms.ts` (`EAP_PROGRAMS`): Employee Assistance Programs for public employers, taken from each employer's HR page; `scripts/seed-socal.ts` loads them into the employer EAP lookup
 - `shared/insurances.ts`: insurance options, including Medi-Cal, Medicare, Kaiser Permanente, MetLife, Aetna, Anthem Blue Cross, Blue Shield of California, Cigna, UnitedHealthcare, Health Net, L.A. Care, IEHP, CalOptima Health, Molina Healthcare, TRICARE, and VA Community Care
 
 ## Tech stack

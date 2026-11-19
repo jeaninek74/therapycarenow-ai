@@ -147,6 +147,7 @@ export default function NavBar() {
             { href: "/group-therapy", label: "Group Therapy" },
             { href: "/veterans", label: "Veterans" },
             { href: "/programs", label: "Programs" },
+            { href: "/eap", label: "Work Benefits (EAP)" },
             { href: "/benefits", label: "My Insurance & Benefits" },
             { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (
@@ -255,6 +256,7 @@ export default function NavBar() {
             { href: "/group-therapy", label: "Group Therapy" },
             { href: "/veterans", label: "Veterans" },
             { href: "/programs", label: "Programs" },
+            { href: "/eap", label: "Work Benefits (EAP)" },
             { href: "/benefits", label: "My Insurance & Benefits" },
             { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (

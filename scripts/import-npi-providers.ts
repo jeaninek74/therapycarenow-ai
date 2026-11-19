@@ -8,6 +8,7 @@ import axios from "axios";
 import { drizzle } from "drizzle-orm/mysql2";
 import { isNotNull } from "drizzle-orm";
 import { providers, providerSpecialties } from "../drizzle/schema";
+import { NPPES_IMPORT_NOTE } from "../shared/providerSource";
 import { SOCAL_COUNTIES, SERVICE_STATE_CODE, isSoCalCity, normalizeCity } from "../shared/region";
 
 const NPPES_BASE = "https://npiregistry.cms.hhs.gov/api/";
@@ -121,7 +122,7 @@ async function main() {
           npiNumber: npi,
           verificationStatus: "verified",
           npiVerifiedAt: new Date(),
-          verificationNotes: "Imported from CMS NPPES registry (active individual NPI, SoCal practice location).",
+          verificationNotes: NPPES_IMPORT_NOTE,
           npiData: JSON.stringify({ taxonomy: desc, taxonomyCode: tax.code, address: loc.address_1, enumerationDate: basic.enumeration_date }),
           telehealthAvailable: false,
           inPersonAvailable: true,

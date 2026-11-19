@@ -228,6 +228,12 @@ export default function Home() {
               title="Hospital & State Programs"
               description="Hospital behavioral health programs, Medi-Cal, and county behavioral health departments."
             />
+            <QuickCard
+              href="/eap"
+              icon={<Briefcase className="w-6 h-6 text-primary" />}
+              title="Work Mental Health Benefits (EAP)"
+              description="Free, confidential counseling through your employer's Employee Assistance Program."
+            />
           </div>
         </div>
       </section>

@@ -3,7 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { eq, desc } from "drizzle-orm";
 import { adminProcedure, protectedProcedure, publicProcedure, router } from "../_core/trpc";
 import { getDb } from "../db";
-import { providers, providerSubmissions } from "../../drizzle/schema";
+import { providerInsurance, providers, providerSubmissions } from "../../drizzle/schema";
 import { verifyProviderLicense } from "../licenseVerification";
 
 export const verificationRouter = router({
@@ -27,7 +27,8 @@ export const verificationRouter = router({
         phone: z.string().optional(),
         website: z.string().optional(),
         bookingUrl: z.string().optional(),
-        telehealthAvailable: z.boolean().optional(),
+        telehealthAvailable: z.boolean(),
+        insuranceAccepted: z.array(z.string().min(1)).min(1),
         city: z.string().optional(),
         stateCode: z.string().optional(),
         zipCode: z.string().optional(),
@@ -53,7 +54,8 @@ export const verificationRouter = router({
         phone: input.phone ?? null,
         website: input.website ?? null,
         bookingUrl: input.bookingUrl ?? null,
-        telehealthAvailable: input.telehealthAvailable ?? false,
+        telehealthAvailable: input.telehealthAvailable,
+        insuranceAccepted: JSON.stringify(input.insuranceAccepted),
         city: input.city ?? null,
         stateCode: input.stateCode ?? null,
         zipCode: input.zipCode ?? null,
@@ -131,6 +133,13 @@ export const verificationRouter = router({
         });
 
         const newProviderId = (newProvider as { insertId?: number }).insertId ?? 0;
+
+        const insuranceNames: string[] = submission.insuranceAccepted ? JSON.parse(submission.insuranceAccepted) : [];
+        if (newProviderId && insuranceNames.length > 0) {
+          await db.insert(providerInsurance).values(
+            insuranceNames.map((insuranceName) => ({ providerId: newProviderId, insuranceName })),
+          );
+        }
 
         await db
           .update(providerSubmissions)

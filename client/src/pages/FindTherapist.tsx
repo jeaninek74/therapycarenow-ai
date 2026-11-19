@@ -380,6 +380,18 @@ function ProviderCard({ provider, category }: { provider: any; category: Categor
             {provider.city && ` · ${provider.city}`}
             {provider.stateCode && `, ${provider.stateCode}`}
           </p>
+          {provider.detailsConfirmed === false ? (
+            <p className="text-xs text-muted-foreground mb-2">
+              Telehealth and insurance not yet confirmed by this clinician. Call to ask.
+            </p>
+          ) : (
+            <p className="text-xs text-muted-foreground mb-2">
+              <span className="font-medium text-foreground">Telehealth:</span> {provider.telehealthAvailable ? "Yes" : "No"}
+              {" · "}
+              <span className="font-medium text-foreground">Insurance:</span>{" "}
+              {(provider.insuranceAccepted ?? []).length > 0 ? (provider.insuranceAccepted as string[]).join(", ") : "Not listed"}
+            </p>
+          )}
           <div className="flex flex-wrap gap-2">
             {provider.telehealthAvailable && (
               <span className="inline-flex items-center gap-1 text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
