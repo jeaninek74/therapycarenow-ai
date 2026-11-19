@@ -482,7 +482,7 @@ export const HOSPITAL_PROGRAMS: Program[] = [
     cost: "Insurance or self-pay",
     insurance: "Accepts Medi-Cal, Medicare, and most commercial plans; call to confirm your plan",
     groupTypes: ["substance-use-recovery", "depression-and-bipolar-support"],
-    counties: ["san-bernardino"],
+    counties: ["san-bernardino", "riverside"],
   },
   {
     name: "Sharp Mesa Vista Hospital",
