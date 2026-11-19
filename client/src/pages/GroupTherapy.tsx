@@ -61,7 +61,7 @@ export default function GroupTherapy() {
         </div>
         <p className="text-sm text-muted-foreground mb-4">
           Pick your county to see local options. Your county behavioral health line and the hospital programs on the
-          Hospital &amp; State Programs page also offer group therapy.
+          Medi-Cal (Medicaid) and Hospital Programs page also offer group therapy.
         </p>
         <div className="mb-6">
           <CountyPicker value={countySlug} onChange={setCountySlug} />

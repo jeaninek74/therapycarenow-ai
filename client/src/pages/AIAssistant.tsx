@@ -20,7 +20,7 @@ const INITIAL_MESSAGE: Message = {
 
 - **Understand your options** for mental health support
 - **Explain different therapy types** (CBT, DBT, EMDR, etc.)
-- **Navigate insurance and EAP benefits**
+- **Navigate insurance and Employee Assistance Program benefits**
 - **Refine your therapist search**
 
 **Important:** I am not a therapist and cannot provide clinical advice, diagnosis, or treatment. If you're in crisis, please call or text **988** immediately.

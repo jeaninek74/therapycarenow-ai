@@ -82,7 +82,7 @@ const PROVIDER_TYPES = [
 const INSURANCE_OPTIONS = [
   { id: "yes", label: "Yes, I have insurance", description: "I want to use my health insurance" },
   { id: "no", label: "No insurance", description: "I need low-cost or free options" },
-  { id: "eap", label: "I have an EAP benefit", description: "Through my employer" },
+  { id: "eap", label: "I have an Employee Assistance Program benefit", description: "Through my employer" },
   { id: "unsure", label: "Not sure", description: "I'll figure it out" },
 ];
 
@@ -141,7 +141,7 @@ function getRecommendation(state: TriageState) {
           external: false,
         },
         {
-          label: "Free & Low-Cost Help",
+          label: "Free and Low-Cost Help",
           description: "Crisis hotlines and immediate support",
           href: "/free-resources",
           variant: "outline" as const,
@@ -201,7 +201,7 @@ function getRecommendation(state: TriageState) {
         external: false,
       },
       {
-        label: "Free & Low-Cost Help",
+        label: "Free and Low-Cost Help",
         description: "Community clinics, hotlines, and more",
         href: "/free-resources",
         variant: "outline" as const,

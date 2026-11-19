@@ -143,12 +143,12 @@ export default function NavBar() {
 
           {/* Other nav links */}
           {[
-            { href: "/free-resources", label: "Free & Low-Cost Help" },
+            { href: "/free-resources", label: "Free and Low-Cost Help" },
             { href: "/group-therapy", label: "Group Therapy" },
             { href: "/veterans", label: "Veterans" },
-            { href: "/programs", label: "Programs" },
-            { href: "/eap", label: "Work Benefits (EAP)" },
-            { href: "/benefits", label: "My Insurance & Benefits" },
+            { href: "/programs", label: "Medi-Cal (Medicaid) and Hospital Programs" },
+            { href: "/eap", label: "Employee Assistance Program" },
+            { href: "/benefits", label: "Find Care by Insurance" },
             { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (
             <Link
@@ -246,12 +246,12 @@ export default function NavBar() {
           <div className="border-t border-border my-1" />
 
           {[
-            { href: "/free-resources", label: "Free & Low-Cost Help" },
+            { href: "/free-resources", label: "Free and Low-Cost Help" },
             { href: "/group-therapy", label: "Group Therapy" },
             { href: "/veterans", label: "Veterans" },
-            { href: "/programs", label: "Programs" },
-            { href: "/eap", label: "Work Benefits (EAP)" },
-            { href: "/benefits", label: "My Insurance & Benefits" },
+            { href: "/programs", label: "Medi-Cal (Medicaid) and Hospital Programs" },
+            { href: "/eap", label: "Employee Assistance Program" },
+            { href: "/benefits", label: "Find Care by Insurance" },
             { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (
             <Link

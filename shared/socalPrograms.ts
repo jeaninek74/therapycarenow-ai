@@ -459,7 +459,7 @@ export function programsForCounty(programs: Program[], countySlug?: string | nul
 
 export interface EapProgram extends Program {
   eapProvider: string;
-  /** Employer names people may search for (used to seed the employer EAP lookup). */
+  /** Employer names people may search for (used to seed the employer Employee Assistance Program lookup). */
   employerNames: string[];
 }
 
@@ -522,7 +522,7 @@ export const EAP_PROGRAMS: EapProgram[] = [
   },
   {
     name: "County of San Diego Employee Assistance Program",
-    eapProvider: "Anthem EAP",
+    eapProvider: "Anthem Employee Assistance Program",
     employerNames: ["County of San Diego", "San Diego County"],
     description: "24/7 counseling (in person or online), legal and financial consultations for County employees and household members.",
     phone: "888-777-6665",
@@ -533,7 +533,7 @@ export const EAP_PROGRAMS: EapProgram[] = [
   },
   {
     name: "County of Riverside Employee Assistance Program",
-    eapProvider: "Anthem EAP",
+    eapProvider: "Anthem Employee Assistance Program",
     employerNames: ["County of Riverside", "Riverside County"],
     description: "Up to 6 free counseling sessions per issue for employees and household members. Online code: PRISM.",
     phone: "833-954-1067",

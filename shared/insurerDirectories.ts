@@ -35,6 +35,6 @@ export const INSURER_DIRECTORIES: Record<string, InsurerDirectory> = {
   MetLife: {
     label: "MetLife",
     url: "https://www.metlife.com/",
-    note: "MetLife plans in California are mainly dental, vision, and Employee Assistance Programs. Therapy is usually covered by your medical plan or your employer's EAP.",
+    note: "MetLife plans in California are mainly dental, vision, and Employee Assistance Programs. Therapy is usually covered by your medical plan or your employer's Employee Assistance Program.",
   },
 };

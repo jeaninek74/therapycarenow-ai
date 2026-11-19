@@ -26,7 +26,7 @@ export default function BenefitsWallet() {
       <div className="container py-10 max-w-2xl mx-auto">
         <div className="flex items-center gap-3 mb-2">
           <Briefcase className="w-7 h-7 text-primary" />
-          <h1 className="text-3xl font-bold text-foreground">My Insurance & Benefits</h1>
+          <h1 className="text-3xl font-bold text-foreground">Find Care by Insurance</h1>
         </div>
         <p className="text-muted-foreground mb-8">
           Pick your insurance to see clinicians your plan lists, or look up your employer's Employee Assistance Program. No sign-in needed.
@@ -82,7 +82,7 @@ export default function BenefitsWallet() {
           {eapResult && eapSearch.length > 2 && (
             <div className="bg-secondary/30 border border-secondary rounded-xl p-4 mt-4">
               <p className="font-semibold text-foreground">{eapResult.employer.name}</p>
-              <p className="text-sm text-muted-foreground">EAP Provider: {eapResult.employer.eapProvider}</p>
+              <p className="text-sm text-muted-foreground">Employee Assistance Program Provider: {eapResult.employer.eapProvider}</p>
               {eapResult.employer.eapPhone && (
                 <a href={`tel:${eapResult.employer.eapPhone}`} className="text-primary text-sm hover:underline block mt-1">
                   {eapResult.employer.eapPhone}
@@ -90,13 +90,13 @@ export default function BenefitsWallet() {
               )}
               {eapResult.employer.eapUrl && (
                 <a href={eapResult.employer.eapUrl} target="_blank" rel="noopener noreferrer" className="text-primary text-sm hover:underline block mt-1">
-                  Visit EAP website →
+                  Visit Employee Assistance Program website →
                 </a>
               )}
             </div>
           )}
           <p className="text-sm text-muted-foreground mt-4">
-            Don't see your employer? <Link href="/eap" className="text-primary hover:underline">Learn how to find your EAP</Link>.
+            Don't see your employer? <Link href="/eap" className="text-primary hover:underline">Learn how to find your Employee Assistance Program</Link>.
           </p>
         </div>
 
