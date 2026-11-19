@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import NavBar from "@/components/NavBar";
 import { CheckCircle2, Loader2, Shield, AlertCircle, UserCheck } from "lucide-react";
 import { toast } from "sonner";
-import { SERVICE_STATE_CODE, SERVICE_STATE_NAME, SOCAL_COUNTIES, isSoCalCity } from "@shared/region";
+import { SERVICE_STATE_CODE, SERVICE_STATE_NAME, SOCAL_COUNTIES, isSoCalCity, isSoCalZip } from "@shared/region";
 import { INSURANCE_OPTIONS } from "@shared/insurances";
 
 const SPECIALTIES = [
@@ -107,7 +107,7 @@ export default function ProviderSubmission() {
       toast.error("Please fill in all required fields");
       return;
     }
-    if (!isSoCalCity(form.city)) {
+    if (!form.city.trim() || !(isSoCalCity(form.city) || isSoCalZip(form.zip.trim()))) {
       toast.error("Please enter a practice city in Southern California");
       return;
     }
@@ -122,7 +122,7 @@ export default function ProviderSubmission() {
       website: form.website || undefined,
       telehealthAvailable: form.telehealth,
       bio: form.bio || undefined,
-      city: form.city,
+      city: form.city.trim(),
       stateCode: SERVICE_STATE_CODE,
       zipCode: form.zip || undefined,
     });
