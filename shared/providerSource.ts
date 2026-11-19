@@ -8,8 +8,3 @@ export const NPPES_IMPORT_NOTE = "Imported from CMS NPPES registry (active indiv
 export function detailsConfirmedByClinician(verificationNotes: string | null | undefined): boolean {
   return verificationNotes !== NPPES_IMPORT_NOTE;
 }
-
-/** Drops degree letters appended to a clinician's name, e.g. "Jane Doe, PhD, CGP" -> "Jane Doe". */
-export function nameWithoutDegrees(name: string): string {
-  return name.split(",")[0].trim();
-}

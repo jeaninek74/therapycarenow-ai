@@ -153,7 +153,9 @@ export async function searchLiveProviders(params: {
         const credential = basic.credential ?? "";
         if (!firstName && !lastName) continue;
 
-        const name = `${firstName} ${lastName}`.trim();
+        const name = credential
+          ? `${firstName} ${lastName}, ${credential}`.trim()
+          : `${firstName} ${lastName}`.trim();
 
         // Get practice location address (prefer LOCATION over MAILING)
         const addresses: NppesAddress[] = r.addresses ?? [];

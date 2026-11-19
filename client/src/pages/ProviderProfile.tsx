@@ -1,4 +1,3 @@
-import { nameWithoutDegrees } from "@shared/providerSource";
 import { useParams, Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Phone, Video, MapPin, DollarSign, ChevronLeft, Loader2, Shield, Globe } from "lucide-react";
@@ -46,7 +45,7 @@ export default function ProviderProfile() {
         <div className="bg-card border border-border rounded-2xl p-8 mb-6 shadow-sm">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-foreground mb-1">{nameWithoutDegrees(provider.name)}</h1>
+              <h1 className="text-2xl font-bold text-foreground mb-1">{provider.name}</h1>
               <p className="text-muted-foreground">{provider.licenseType} · Licensed in {provider.licenseState}</p>
               <div className="mt-2">
                 <VerificationBadge status={(provider.verificationStatus as "verified" | "pending" | "unverified" | "self_reported") ?? "unverified"} />

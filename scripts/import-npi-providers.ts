@@ -115,7 +115,7 @@ async function main() {
         if (!name) continue;
         existing.add(npi);
         const [result] = await db.insert(providers).values({
-          name,
+          name: credential ? `${name}, ${credential}` : name,
           licenseState: SERVICE_STATE_CODE,
           licenseNumber: tax.license,
           licenseType: licenseTypeFor(credential, desc),
