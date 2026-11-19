@@ -87,6 +87,8 @@ async function main() {
         const tax = (r.taxonomies ?? []).find((t: any) => t.primary) ?? r.taxonomies?.[0] ?? {};
         const desc: string = tax.desc ?? "";
         if (!MENTAL_HEALTH_PRIMARY.test(desc)) continue;
+        // Require an active California license on the primary taxonomy.
+        if (tax.state !== SERVICE_STATE_CODE || !tax.license) continue;
         const credential: string = basic.credential ?? "";
         const name = [basic.first_name, basic.last_name].filter(Boolean).map((n: string) => titleCase(n)).join(" ");
         if (!name) continue;
