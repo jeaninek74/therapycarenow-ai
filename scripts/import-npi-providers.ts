@@ -96,7 +96,7 @@ async function main() {
         const [result] = await db.insert(providers).values({
           name: credential ? `${name}, ${credential}` : name,
           licenseState: SERVICE_STATE_CODE,
-          licenseNumber: tax.state === SERVICE_STATE_CODE ? tax.license ?? null : null,
+          licenseNumber: tax.license,
           licenseType: licenseTypeFor(credential, desc),
           npiNumber: npi,
           verificationStatus: "verified",
