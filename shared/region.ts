@@ -68,6 +68,7 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Encinitas", "National City", "La Mesa", "Santee", "Poway", "Imperial Beach", "Lemon Grove",
       "Coronado", "Solana Beach", "Del Mar", "La Jolla", "Rancho Santa Fe", "Spring Valley", "Lakeside",
       "Ramona", "Bonita", "Fallbrook", "Alpine", "Valley Center", "Cardiff", "Cardiff by the Sea",
+      "Julian", "Borrego Springs", "Jamul", "Pine Valley", "Descanso", "Campo", "Pauma Valley", "Warner Springs",
       "San Ysidro", "Jamul",
     ],
   },
@@ -110,7 +111,7 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
     crisisLine: { name: "Santa Barbara County Behavioral Wellness Access Line", phone: "1-888-868-1649" },
     cities: [
       "Santa Maria", "Santa Barbara", "Lompoc", "Goleta", "Carpinteria", "Guadalupe", "Solvang",
-      "Buellton", "Montecito", "Isla Vista", "Orcutt", "Los Olivos", "Summerland",
+      "Buellton", "Montecito", "Isla Vista", "Orcutt", "Los Olivos", "Summerland", "Santa Ynez", "Los Alamos", "Vandenberg Village", "Mission Hills", "Ballard",
     ],
   },
   {

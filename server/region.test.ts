@@ -10,6 +10,8 @@ describe("Southern California service region", () => {
     expect(getCountyForCity("pasadena")?.name).toBe("Los Angeles County");
     expect(getCountyForCity("IRVINE")?.name).toBe("Orange County");
     expect(getCountyForCity("El Centro")?.name).toBe("Imperial County");
+    expect(getCountyForCity(" Santa Ynez ")?.name).toBe("Santa Barbara County");
+    expect(getCountyForCity("Julian")?.name).toBe("San Diego County");
   });
 
   it("rejects cities outside Southern California", () => {
