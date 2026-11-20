@@ -99,13 +99,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-semibold text-slate-900 mb-3">6. Cookies</h2>
-            <p>We use a single session cookie (<code className="bg-slate-100 px-1 rounded text-sm">tcn_session</code>) to maintain your login state. This cookie is:</p>
-            <ul className="space-y-1 list-disc pl-5 mt-2">
-              <li>HttpOnly — cannot be accessed by JavaScript</li>
-              <li>Secure — only transmitted over HTTPS</li>
-              <li>SameSite=Lax — protected against cross-site request forgery</li>
-              <li>Automatically expires after 1 year or when you sign out</li>
-            </ul>
+            <p>TherapyCareNow has no login and sets no cookies for visitors. The only thing kept is a note in your own browser that you closed the notice banner, so it does not appear again. It never leaves your device.</p>
             <p className="mt-3">We do not use tracking cookies, advertising cookies, or third-party analytics cookies.</p>
           </section>
 
