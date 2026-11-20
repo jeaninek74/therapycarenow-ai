@@ -92,7 +92,6 @@ export default function TermsOfService() {
             <h2 className="text-xl font-semibold text-slate-900 mb-3">5. User Responsibilities</h2>
             <p className="mb-3">By using the Platform, you agree to:</p>
             <ul className="space-y-1 list-disc pl-5">
-              <li>Provide accurate information when creating an account.</li>
               <li>Use the Platform only for lawful purposes.</li>
               <li>Not attempt to circumvent security measures, rate limits, or access controls.</li>
               <li>Not use the Platform to harass, impersonate, or harm others.</li>
