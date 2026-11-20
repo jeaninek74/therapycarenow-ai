@@ -835,3 +835,19 @@ export const ACTIVE_GROUP_FINDERS: GroupFinder[] = [
     url: "https://fndhope.org/events/",
   },
 ];
+
+// Official member sites of major Employee Assistance Program companies. On each,
+// the visitor enters their employer name or access code to find their own program.
+export const EAP_VENDORS: { name: string; website: string }[] = [
+  { name: "ComPsych GuidanceResources", website: "https://www.guidanceresources.com" },
+  { name: "Lyra Health", website: "https://my.lyrahealth.com" },
+  { name: "Spring Health", website: "https://benefits.springhealth.com" },
+  { name: "Optum (Live and Work Well)", website: "https://www.liveandworkwell.com" },
+  { name: "Carelon Behavioral Health", website: "https://www.carelonbehavioralhealth.com" },
+  { name: "Magellan Healthcare", website: "https://www.magellanhealthcare.com" },
+  { name: "Cigna Employee Assistance Program", website: "https://www.cigna.com/individuals-families/member-guide/employee-assistance-program" },
+  { name: "Aetna Resources For Living", website: "https://www.resourcesforliving.com" },
+  { name: "TELUS Health (formerly LifeWorks)", website: "https://one.telushealth.com" },
+  { name: "Modern Health", website: "https://my.joinmodernhealth.com" },
+  { name: "Health Advocate", website: "https://members.healthadvocate.com" },
+];
