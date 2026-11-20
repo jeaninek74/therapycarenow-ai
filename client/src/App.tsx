@@ -13,7 +13,6 @@ import GroupTherapy from "./pages/GroupTherapy";
 import Veterans from "./pages/Veterans";
 import Programs from "./pages/Programs";
 import Eap from "./pages/Eap";
-import AIAssistant from "./pages/AIAssistant";
 import Settings from "./pages/Settings";
 import TherapistDirectory from "./pages/TherapistDirectory";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -38,7 +37,6 @@ function Router() {
       <Route path="/veterans" component={Veterans} />
       <Route path="/programs" component={Programs} />
       <Route path="/eap" component={Eap} />
-      <Route path="/ai-assistant" component={AIAssistant} />
       <Route path="/settings" component={Settings} />
       <Route path="/directory" component={TherapistDirectory} />
       <Route path="/privacy" component={PrivacyPolicy} />
