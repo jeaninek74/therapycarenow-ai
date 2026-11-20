@@ -62,9 +62,6 @@ export default function PrivacyPolicy() {
             </h2>
             <ul className="space-y-2 list-disc pl-5">
               <li>All data is transmitted over HTTPS/TLS encryption.</li>
-              <li>Passwords are hashed using bcrypt with a cost factor of 12 — they are never stored in plain text.</li>
-              <li>Session tokens are signed JWTs stored in HttpOnly cookies, inaccessible to JavaScript.</li>
-              <li>Our servers apply rate limiting to prevent brute-force attacks on authentication endpoints.</li>
               <li>Server logs are automatically scrubbed of email addresses, phone numbers, and other PII before storage.</li>
               <li>Database access is restricted to application-level credentials; no direct public database access is permitted.</li>
             </ul>
@@ -72,13 +69,7 @@ export default function PrivacyPolicy() {
 
           <section>
             <h2 className="text-xl font-semibold text-slate-900 mb-3">3. How We Use Your Information</h2>
-            <p className="mb-3">We use your information only to:</p>
-            <ul className="space-y-1 list-disc pl-5">
-              <li>Authenticate your account and maintain your session.</li>
-              <li>Provide personalized resource recommendations based on your state.</li>
-              <li>Improve the accuracy and safety of our triage tools (using only anonymized, aggregated data).</li>
-              <li>Send critical safety notifications if you have opted in (e.g., crisis resource updates for your state).</li>
-            </ul>
+            <p className="mb-3">There is no login and no account. What you type into a search (a ZIP code, insurance plan or employer name) is used only to run that search and is not saved.</p>
             <p className="mt-3">We <strong>never</strong> sell, rent, or share your personal information with third parties for marketing purposes.</p>
           </section>
 
@@ -86,15 +77,8 @@ export default function PrivacyPolicy() {
             <h2 className="text-xl font-semibold text-slate-900 mb-3 flex items-center gap-2">
               <Trash2 className="w-5 h-5 text-teal-600" /> 4. Your Rights
             </h2>
-            <p className="mb-3">You have the right to:</p>
-            <ul className="space-y-1 list-disc pl-5">
-              <li><strong>Access</strong> the personal information we hold about you.</li>
-              <li><strong>Correct</strong> inaccurate information in your account.</li>
-              <li><strong>Delete</strong> your account and all associated data at any time from the Settings page.</li>
-              <li><strong>Export</strong> your account data in a portable format upon request.</li>
-              <li><strong>Opt out</strong> of non-essential communications at any time.</li>
-            </ul>
-            <p className="mt-3">To exercise any of these rights, contact us at <a href="mailto:privacy@therapycarenow.com" className="text-teal-600 underline">privacy@therapycarenow.com</a>.</p>
+            <p className="mb-3">Because we have no accounts and do not save what you enter, we hold no personal information about you to access, correct, export or delete.</p>
+            <p className="mt-3">If you have questions, contact us at <a href="mailto:privacy@therapycarenow.com" className="text-teal-600 underline">privacy@therapycarenow.com</a>.</p>
           </section>
 
           <section>
