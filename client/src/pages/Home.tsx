@@ -16,7 +16,7 @@ export default function Home() {
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 bg-secondary/60 text-secondary-foreground text-sm font-medium px-4 py-2 rounded-full mb-6">
               <Shield className="w-4 h-4" />
-              HIPAA-compliant · Southern California · Free to use
+              Nothing stored · Southern California · Free to use
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
               Find the right mental health support,{" "}
@@ -343,16 +343,19 @@ export default function Home() {
         <div className="mb-8 text-center">
           <h2 className="text-3xl font-bold text-foreground mb-3">Watch a quick demo</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            See TherapyCareNow in action — from triage to provider search to free resources.
+            A walkthrough of searching Southern California providers by insurance and ZIP code, group therapy, veterans, Medi-Cal and hospital programs, Employee Assistance Programs, and free and low-cost help.
           </p>
         </div>
-        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border" style={{ position: "relative", paddingBottom: "75%", height: 0 }}>
-          <iframe
-            src="https://www.loom.com/embed/5fd8e4f2de2d4a27957629344487690d"
-            frameBorder={0}
-            allowFullScreen
-            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
-            title="TherapyCareNow Demo"
+        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border">
+          <video
+            src="/demo.mp4"
+            poster="/demo-poster.jpg"
+            controls
+            muted
+            playsInline
+            preload="metadata"
+            className="w-full h-auto block"
+            aria-label="TherapyCareNow demo"
           />
         </div>
       </section>
