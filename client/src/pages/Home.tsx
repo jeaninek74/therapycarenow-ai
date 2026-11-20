@@ -351,7 +351,6 @@ export default function Home() {
             src="/demo.mp4"
             poster="/demo-poster.jpg"
             controls
-            muted
             playsInline
             preload="metadata"
             className="w-full h-auto block"
