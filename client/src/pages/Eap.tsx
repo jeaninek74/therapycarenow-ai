@@ -7,7 +7,7 @@ import ProgramCard from "@/components/ProgramCard";
 import CrisisNotice from "@/components/CrisisNotice";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
-import { EAP_PROGRAMS, programsForCounty } from "@shared/socalPrograms";
+import { EAP_PROGRAMS, EAP_VENDORS, programsForCounty } from "@shared/socalPrograms";
 
 const HOW_TO_FIND = [
   "Check your employer's HR or benefits website, or your benefits enrollment guide.",
@@ -99,11 +99,29 @@ export default function Eap() {
               </div>
             ) : (
               <p className="mt-4 text-sm text-muted-foreground">
-                We don't have that employer yet. Use the steps below to find your program, or{" "}
+                We don't have that employer yet. Private companies usually use one of the{" "}
+                <a href="#eap-companies" className="text-primary underline">Employee Assistance Program companies below</a>; open its site and enter your employer's name or access code. Or{" "}
                 <Link href="/find-therapist" className="text-primary underline">search for a therapist</Link> who takes your insurance.
               </p>
             )
           )}
+        </section>
+
+        <section id="eap-companies" className="bg-card border border-border rounded-2xl p-6 mb-8">
+          <h2 className="text-xl font-semibold text-foreground mb-2">Private employers: find your program through its Employee Assistance Program company</h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            Most private companies contract with one of these companies. Open its site and enter your employer's name or
+            access code. If you don't know which one your employer uses, check your benefits guide or ask Human Resources.
+          </p>
+          <ul className="grid sm:grid-cols-2 gap-2 text-sm">
+            {EAP_VENDORS.map((v) => (
+              <li key={v.name}>
+                <a href={v.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-primary font-medium hover:underline">
+                  <Globe className="w-4 h-4" /> {v.name}
+                </a>
+              </li>
+            ))}
+          </ul>
         </section>
 
         <div className="grid md:grid-cols-2 gap-6 mb-10">
