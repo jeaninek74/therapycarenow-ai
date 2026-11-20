@@ -143,7 +143,6 @@ export default function NavBar() {
             { href: "/programs", label: "Medi-Cal (Medicaid) and Hospital Programs" },
             { href: "/eap", label: "Employee Assistance Program" },
             { href: "/benefits", label: "Find Care by Insurance" },
-            { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (
             <Link
               key={link.href}
@@ -211,7 +210,6 @@ export default function NavBar() {
             { href: "/programs", label: "Medi-Cal (Medicaid) and Hospital Programs" },
             { href: "/eap", label: "Employee Assistance Program" },
             { href: "/benefits", label: "Find Care by Insurance" },
-            { href: "/ai-assistant", label: "Ask for Guidance" },
           ].map((link) => (
             <Link
               key={link.href}

@@ -166,39 +166,8 @@ const DEMO_STEPS = [
         website: "eap.cigna.com",
       },
     },
-    cta: "Next: Ask for Guidance",
-    visual: "benefits",
-  },
-  {
-    id: "ai-assistant",
-    title: "Ask for Guidance",
-    subtitle: "Guidance, Not Diagnosis",
-    description: "Our assistant helps you navigate mental health resources, understand your options, and find the right support — with clear disclaimers that it's not a substitute for professional care.",
-    icon: Brain,
-    color: "from-violet-500 to-purple-600",
-    demoContent: {
-      type: "chat",
-      messages: [
-        {
-          role: "user",
-          text: "I've been feeling really anxious lately and I'm not sure where to start.",
-        },
-        {
-          role: "assistant",
-          text: "I hear you — feeling anxious and not knowing where to turn can be overwhelming. I'm here to help you find the right resources.\n\nA few things that might help:\n\n**1. Find a therapist** who specializes in anxiety — we have providers across all of Southern California.\n\n**2. Check your benefits** — many insurance plans cover therapy with a low copay, and your employer may offer free Employee Assistance Program sessions.\n\n**3. Free resources** — if cost is a concern, we have free and sliding-scale options in your area.\n\nWould you like me to help you search for therapists near you?",
-        },
-        {
-          role: "user",
-          text: "Yes, I'm in Chicago and have BCBS insurance.",
-        },
-        {
-          role: "assistant",
-          text: "Great! Chicago has excellent mental health resources. With BCBS, you likely have good in-network coverage.\n\nI found **47 BCBS-accepting therapists** in Chicago specializing in anxiety. Many have availability within the week, and several offer telehealth.\n\n*Disclaimer: I'm an informational tool, not a licensed therapist. For emergencies, call 988 or 911.*",
-        },
-      ],
-    },
     cta: "Next: More Ways to Get Help",
-    visual: "chat",
+    visual: "benefits",
   },
   {
     id: "more-help",
@@ -247,7 +216,6 @@ const STEP_LABELS: Record<string, string> = {
   "provider-profile": "Provider Profiles",
   directory: "County Directory",
   benefits: "Find Care by Insurance",
-  "ai-assistant": "Ask for Guidance",
   "more-help": "More Help",
   security: "Security & Privacy",
 };
