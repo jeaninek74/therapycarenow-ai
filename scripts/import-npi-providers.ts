@@ -1,7 +1,8 @@
 /**
  * Imports NPI-verified Southern California mental health clinicians from the
  * CMS NPPES registry into the providers table. Only active individual NPIs whose
- * practice location is a recognized SoCal city are imported. Existing NPIs are skipped.
+ * practice location ZIP code is in one of the 8 Southern California counties are imported,
+ * searching every Southern California ZIP code so no city or community is missed. Existing NPIs are skipped.
  * Run: DATABASE_URL=... npx tsx scripts/import-npi-providers.ts [--county=<slug>]
  */
 import axios from "axios";
@@ -9,7 +10,8 @@ import { drizzle } from "drizzle-orm/mysql2";
 import { isNotNull } from "drizzle-orm";
 import { providers, providerSpecialties } from "../drizzle/schema";
 import { NPPES_IMPORT_NOTE } from "../shared/providerSource";
-import { SOCAL_COUNTIES, SERVICE_STATE_CODE, isSoCalCity, normalizeCity } from "../shared/region";
+import { SOCAL_COUNTIES, SERVICE_STATE_CODE } from "../shared/region";
+import { SOCAL_ZIP_COUNTY } from "../shared/socalZipCounties";
 
 const NPPES_BASE = "https://npiregistry.cms.hhs.gov/api/";
 const TAXONOMIES = ["psychiatry", "psychologist", "counselor", "social worker", "marriage & family therapist"];
@@ -57,11 +59,11 @@ function titleCase(s: string): string {
   return s.toLowerCase().replace(/\b[a-z]/g, (m) => m.toUpperCase());
 }
 
-async function fetchPage(city: string, taxonomy: string, skip: number): Promise<any[] | null> {
+async function fetchPage(zip: string, taxonomy: string, skip: number): Promise<any[] | null> {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await axios.get(NPPES_BASE, {
-        params: { version: "2.1", enumeration_type: "NPI-1", taxonomy_description: taxonomy, state: SERVICE_STATE_CODE, city: city.toUpperCase(), limit: "200", skip: String(skip) },
+        params: { version: "2.1", enumeration_type: "NPI-1", taxonomy_description: taxonomy, state: SERVICE_STATE_CODE, postal_code: zip, limit: "200", skip: String(skip) },
         timeout: 20000,
       });
       return res.data?.results ?? [];
@@ -75,17 +77,18 @@ async function fetchPage(city: string, taxonomy: string, skip: number): Promise<
 // NPPES returns at most 200 results per request and allows skip up to 1000.
 let failedPages = 0;
 
-async function fetchCity(city: string, taxonomy: string): Promise<any[]> {
+async function fetchZip(zip: string, taxonomy: string): Promise<any[]> {
   const all: any[] = [];
   for (let skip = 0; skip <= 1000; skip += 200) {
-    const page = await fetchPage(city, taxonomy, skip);
+    const page = await fetchPage(zip, taxonomy, skip);
     if (page === null) {
       failedPages++;
-      console.warn(`NPPES request failed: ${city} / ${taxonomy} / skip=${skip}. Rerun to fill the gap.`);
+      console.warn(`NPPES request failed: ${zip} / ${taxonomy} / skip=${skip}. Rerun to fill the gap.`);
       break;
     }
     all.push(...page);
     if (page.length < 200) break;
+    if (skip === 1000) console.warn(`ZIP ${zip} / ${taxonomy} hit the NPPES 1,200-result cap.`);
   }
   return all;
 }
@@ -97,14 +100,15 @@ async function main() {
   const counties = countyArg ? SOCAL_COUNTIES.filter((c) => c.slug === countyArg) : SOCAL_COUNTIES;
   let imported = 0;
   for (const county of counties) {
-    for (const city of county.cities) {
-      const rows = (await Promise.all(TAXONOMIES.map((t) => fetchCity(city, t)))).flat();
+    const zips = Object.keys(SOCAL_ZIP_COUNTY).filter((z) => SOCAL_ZIP_COUNTY[z] === county.slug);
+    for (const zip of zips) {
+      const rows = (await Promise.all(TAXONOMIES.map((t) => fetchZip(zip, t)))).flat();
       for (const r of rows) {
         const npi: string = r.number;
         const basic = r.basic ?? {};
         if (!npi || existing.has(npi) || basic.status !== "A") continue;
         const loc = (r.addresses ?? []).find((a: any) => a.address_purpose === "LOCATION");
-        if (!loc || loc.state !== SERVICE_STATE_CODE || normalizeCity(loc.city ?? "") !== normalizeCity(city) || !isSoCalCity(loc.city)) continue;
+        if (!loc || loc.state !== SERVICE_STATE_CODE || (loc.postal_code ?? "").slice(0, 5) !== zip || !loc.city) continue;
         const tax = (r.taxonomies ?? []).find((t: any) => t.primary) ?? r.taxonomies?.[0] ?? {};
         const desc: string = tax.desc ?? "";
         if (!MENTAL_HEALTH_PRIMARY.test(desc)) continue;
