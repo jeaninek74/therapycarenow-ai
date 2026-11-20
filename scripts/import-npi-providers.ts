@@ -6,6 +6,7 @@
  * Run: DATABASE_URL=... npx tsx scripts/import-npi-providers.ts [--county=<slug>]
  */
 import axios from "axios";
+import fs from "node:fs";
 import { drizzle } from "drizzle-orm/mysql2";
 import { isNotNull } from "drizzle-orm";
 import { providers, providerSpecialties } from "../drizzle/schema";
@@ -23,6 +24,9 @@ const MENTAL_HEALTH_PRIMARY =
 
 const db = drizzle(process.env.DATABASE_URL!);
 const countyArg = process.argv.find((a) => a.startsWith("--county="))?.split("=")[1];
+// Optional resume file: ZIP codes already searched are skipped on rerun.
+const progressFile = process.argv.find((a) => a.startsWith("--progress="))?.split("=")[1];
+const doneZips = new Set<string>(progressFile && fs.existsSync(progressFile) ? fs.readFileSync(progressFile, "utf8").split("\n").filter(Boolean) : []);
 
 function licenseTypeFor(credential: string, taxonomy: string): string {
   const c = credential.toUpperCase().replace(/[.\s]/g, "");
@@ -102,6 +106,7 @@ async function main() {
   for (const county of counties) {
     const zips = Object.keys(SOCAL_ZIP_COUNTY).filter((z) => SOCAL_ZIP_COUNTY[z] === county.slug);
     for (const zip of zips) {
+      if (doneZips.has(zip)) continue;
       const rows = (await Promise.all(TAXONOMIES.map((t) => fetchZip(zip, t)))).flat();
       for (const r of rows) {
         const npi: string = r.number;
@@ -143,6 +148,8 @@ async function main() {
         }
         imported++;
       }
+      if (progressFile) fs.appendFileSync(progressFile, zip + "\n");
+      console.log(`${county.name} ${zip}: ${imported} imported so far`);
     }
     console.log(`${county.name}: ${imported} imported so far`);
   }

@@ -875,6 +875,15 @@ export const VETERAN_PROGRAMS: Program[] = [
 
 export const HOSPITAL_PROGRAMS: Program[] = [
   {
+    name: "UCLA Resnick Neuropsychiatric Hospital",
+    description: "UCLA Health psychiatric hospital in Westwood with inpatient, partial hospitalization, and intensive outpatient programs for adults, adolescents, and children.",
+    phone: "310-825-9111",
+    website: "https://www.uclahealth.org/hospitals/resnick",
+    counties: ["los-angeles"],
+    cost: "Varies by insurance",
+    insurance: "Medi-Cal, Medicare, and most commercial plans; call to confirm",
+  },
+  {
     name: "Loma Linda University Behavioral Health",
     description: "Inpatient, partial hospitalization, and intensive outpatient programs with group therapy for adults, teens, and children, including chemical dependency programs.",
     phone: "909-558-9275",
