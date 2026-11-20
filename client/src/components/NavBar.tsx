@@ -4,7 +4,6 @@ import {
   LogIn, LogOut, User, ChevronDown, UserCheck, Brain, Search,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -39,13 +38,8 @@ export default function NavBar() {
   const [location] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const [providerDropdownOpen, setProviderDropdownOpen] = useState(false);
-  const { user, logout } = useAuth();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleLogout = async () => {
-    await logout();
-    toast.success("Signed out successfully.");
-  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -163,45 +157,10 @@ export default function NavBar() {
           ))}
 
           {/* Admin links */}
-          {user?.role === "admin" && (
-            <>
-              <Link
-                href="/admin"
-                className={`text-sm font-medium transition-colors flex items-center gap-1 ${
-                  location === "/admin" ? "text-primary" : "text-muted-foreground hover:text-primary"
-                }`}
-              >
-                <LayoutDashboard className="w-4 h-4" />
-                Admin
-              </Link>
-              <Link
-                href="/admin/verification"
-                className={`text-sm font-medium transition-colors flex items-center gap-1 ${
-                  location === "/admin/verification" ? "text-primary" : "text-muted-foreground hover:text-primary"
-                }`}
-              >
-                Verify Providers
-              </Link>
-            </>
-          )}
+          
 
           {/* Auth */}
-          {user ? (
-            <div className="flex items-center gap-2 ml-2 pl-2 border-l border-border">
-              <span className="text-xs text-muted-foreground flex items-center gap-1 max-w-[120px] truncate">
-                <User className="w-3 h-3 shrink-0" />
-                {user.name}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="text-xs h-7 px-2"
-                onClick={handleLogout}
-              >
-                <LogOut className="w-3 h-3 mr-1" /> Sign Out
-              </Button>
-            </div>
-          ) : null}
+          
         </div>
 
         {/* Mobile menu toggle */}
@@ -264,28 +223,10 @@ export default function NavBar() {
             </Link>
           ))}
 
-          {user?.role === "admin" && (
-            <>
-              <Link href="/admin" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors flex items-center gap-2" onClick={() => setMenuOpen(false)}>
-                <LayoutDashboard className="w-4 h-4" /> Admin Dashboard
-              </Link>
-              <Link href="/admin/verification" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
-                Verify Providers
-              </Link>
-            </>
-          )}
+          
 
           <div className="border-t border-border pt-2 mt-1">
-            {user ? (
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground flex items-center gap-1">
-                  <User className="w-3 h-3" /> {user.name}
-                </span>
-                <Button variant="outline" size="sm" className="text-xs h-7" onClick={() => { handleLogout(); setMenuOpen(false); }}>
-                  <LogOut className="w-3 h-3 mr-1" /> Sign Out
-                </Button>
-              </div>
-            ) : null}
+            
           </div>
         </div>
       )}

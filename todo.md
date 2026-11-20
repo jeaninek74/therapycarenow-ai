@@ -408,3 +408,10 @@
 - [ ] Ensure insurance filters are linked to correct provider types (therapists, psychiatrists, psychologists)
 - [ ] Deploy all changes to Railway (login + new token + railway up)
 - [ ] Add comprehensive list of all major US health insurances across all insurance-related pages
+
+## Search Indexing (Nov 2026)
+- [x] Descriptive title, description, and Open Graph tags for Southern California
+- [x] WebSite and Organization structured data (JSON-LD)
+- [x] robots.txt blocks /settings; no login page
+- [x] sitemap.xml of public pages
+- [ ] Submit sitemap and request home page indexing in Google Search Console (owner)

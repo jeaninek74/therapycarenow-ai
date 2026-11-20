@@ -50,16 +50,33 @@ export default function Eap() {
 
         <section className="bg-card border border-border rounded-2xl p-6 mb-8">
           <h2 className="text-xl font-semibold text-foreground mb-3">Look up your employer's program</h2>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="e.g., County of Los Angeles, State of California"
-              className="pl-9"
-              aria-label="Employer name"
-            />
-          </div>
+          <form
+            role="search"
+            className="flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              (document.activeElement as HTMLElement | null)?.blur();
+            }}
+          >
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                type="search"
+                enterKeyHint="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="e.g., County of Los Angeles, State of California"
+                className="pl-9"
+                aria-label="Employer name"
+              />
+            </div>
+            <button
+              type="submit"
+              className="px-4 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90"
+            >
+              Search
+            </button>
+          </form>
           {search.length > 2 && !isFetching && (
             result ? (
               <div className="mt-4 bg-secondary/30 border border-secondary rounded-xl p-4">
@@ -87,10 +104,6 @@ export default function Eap() {
               </p>
             )
           )}
-          <p className="mt-4 text-sm text-muted-foreground">
-            Want this saved for next time? Add your employer in{" "}
-            <Link href="/benefits" className="text-primary underline">My Insurance &amp; Benefits</Link>.
-          </p>
         </section>
 
         <div className="grid md:grid-cols-2 gap-6 mb-10">

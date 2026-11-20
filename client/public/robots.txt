@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: /settings
+Sitemap: https://www.therapycarenow.com/sitemap.xml
