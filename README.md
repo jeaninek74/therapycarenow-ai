@@ -80,3 +80,4 @@ The live site is the `therapycarenow-web` service in the Railway project `Therap
 - `client/public/robots.txt` blocks `/settings` and points to the sitemap. The site has no login page.
 - `client/public/sitemap.xml` lists the public pages. Update it when you add or remove a public route.
 - After deploying, submit `https://www.therapycarenow.com/sitemap.xml` in Google Search Console and request indexing of the home page.
+- Bing (also used by Yahoo and DuckDuckGo), Yandex and other IndexNow engines: the key file `client/public/5c099915288e40d79a45dfea324ab790.txt` lets us notify them of changed pages. After a deploy, POST the changed URLs to `https://api.indexnow.org/indexnow` with `{"host":"www.therapycarenow.com","key":"5c099915288e40d79a45dfea324ab790","keyLocation":"https://www.therapycarenow.com/5c099915288e40d79a45dfea324ab790.txt","urlList":[...]}`.
