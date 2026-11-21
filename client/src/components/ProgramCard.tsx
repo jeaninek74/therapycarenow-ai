@@ -29,10 +29,12 @@ export default function ProgramCard({ program }: { program: Program }) {
             {program.phone}
           </a>
         )}
-        <a href={program.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-primary font-medium hover:underline">
-          <Globe className="w-4 h-4" />
-          Visit website
-        </a>
+        {program.website && (
+          <a href={program.website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-primary font-medium hover:underline">
+            <Globe className="w-4 h-4" />
+            Visit website
+          </a>
+        )}
       </div>
     </div>
   );

@@ -43,6 +43,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Wilmington", "Harbor City", "Valencia", "Newhall", "Canyon Country", "Stevenson Ranch", "Castaic",
       "Altadena", "La Crescenta", "Montrose", "Topanga", "Hacienda Heights", "Rowland Heights",
       "East Los Angeles", "Marina Del Rey",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "View Park", "Watts",
     ],
   },
   {
@@ -57,6 +59,10 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Dana Point", "Laguna Hills", "Seal Beach", "Laguna Beach", "Laguna Woods", "La Palma",
       "Los Alamitos", "Villa Park", "Ladera Ranch", "Foothill Ranch", "Corona del Mar", "Newport Coast",
       "Trabuco Canyon", "Rossmoor", "Midway City", "Capistrano Beach",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Sunset Beach",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Monarch Beach",
     ],
   },
   {
@@ -70,6 +76,10 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Ramona", "Bonita", "Fallbrook", "Alpine", "Valley Center", "Cardiff", "Cardiff by the Sea",
       "Julian", "Borrego Springs", "Jamul", "Pine Valley", "Descanso", "Campo", "Pauma Valley", "Warner Springs",
       "San Ysidro", "Jamul",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Bonsall", "Boulevard", "Dulzura", "Mount Laguna", "Tecate",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "La Costa",
     ],
   },
   {
@@ -82,6 +92,10 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Palm Springs", "La Quinta", "Beaumont", "Wildomar", "Coachella", "Desert Hot Springs", "Norco",
       "Banning", "Rancho Mirage", "Blythe", "Calimesa", "Canyon Lake", "Indian Wells", "Thousand Palms",
       "Mecca", "Winchester", "French Valley", "Sun City", "Idyllwild",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Bermuda Dunes", "Cherry Valley", "Mira Loma", "Thermal",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Aguanga", "Anza",
     ],
   },
   {
@@ -94,6 +108,10 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Adelanto", "Montclair", "Loma Linda", "Barstow", "Grand Terrace", "Twentynine Palms",
       "Yucca Valley", "Big Bear Lake", "Needles", "Big Bear City", "Lake Arrowhead", "Running Springs",
       "Bloomington", "Phelan", "Joshua Tree", "Crestline", "Mentone",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Alta Loma", "Angelus Oaks", "Blue Jay", "Etiwanda", "Fort Irwin", "Landers", "Morongo Valley",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Forest Falls", "Helendale",
     ],
   },
   {
@@ -103,6 +121,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
     cities: [
       "Oxnard", "Thousand Oaks", "Simi Valley", "Ventura", "San Buenaventura", "Camarillo", "Moorpark",
       "Santa Paula", "Port Hueneme", "Fillmore", "Ojai", "Newbury Park", "Oak Park",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Lake Sherwood", "Oak View", "Santa Rosa Valley",
     ],
   },
   {
@@ -112,6 +132,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
     cities: [
       "Santa Maria", "Santa Barbara", "Lompoc", "Goleta", "Carpinteria", "Guadalupe", "Solvang",
       "Buellton", "Montecito", "Isla Vista", "Orcutt", "Los Olivos", "Summerland", "Santa Ynez", "Los Alamos", "Vandenberg Village", "Ballard",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Gaviota", "Vandenberg Space Force Base",
     ],
   },
   {
