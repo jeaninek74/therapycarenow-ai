@@ -177,15 +177,12 @@ export default function TherapistDirectory() {
                         className="group bg-card border border-border rounded-xl p-4 text-left hover:border-primary/40 hover:shadow-md transition-all"
                       >
                         <div className="flex items-start justify-between mb-2">
-                          <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${meta.badge}`}>
-                            {county.cities.length} cities
-                          </span>
+                          <p className="font-medium text-foreground text-sm leading-tight">{county.name}</p>
                           <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
                         </div>
-                        <p className="font-medium text-foreground text-sm leading-tight mb-1">{county.name}</p>
                         <p className="text-xs text-muted-foreground flex items-center gap-1">
                           <Users className="w-3 h-3" />
-                          {count > 0 ? `${count.toLocaleString()} ${meta.plural.toLowerCase()}` : `Browse ${meta.plural.toLowerCase()}`}
+                          Browse {meta.plural.toLowerCase()}
                         </p>
                       </button>
                     );
