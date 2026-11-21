@@ -39,33 +39,45 @@ export default function PsychiatristsLanding() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[oklch(0.55_0.18_30)]/8 via-background to-background pointer-events-none" />
         <div className="container relative py-20 md:py-28">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-[oklch(0.55_0.18_30)]/10 text-[oklch(0.45_0.18_30)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
-              <Stethoscope className="w-4 h-4" />
-              {categoryCounts ? `${categoryCounts.psychiatrists.toLocaleString()}+ ` : ""}Verified Psychiatrists · Southern California
+          <div className="flex flex-col lg:flex-row lg:items-center gap-10">
+            <div className="max-w-2xl flex-1">
+              <div className="inline-flex items-center gap-2 bg-[oklch(0.55_0.18_30)]/10 text-[oklch(0.45_0.18_30)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
+                <Stethoscope className="w-4 h-4" />
+                {categoryCounts ? `${categoryCounts.psychiatrists.toLocaleString()}+ ` : ""}Verified Psychiatrists · Southern California
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
+                Find a <span className="text-[oklch(0.45_0.18_30)]">Psychiatrist</span> near you
+              </h1>
+              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                Psychiatrists are medical doctors (MD/DO) and advanced practice nurses (PMHNP/APRN/NP) who specialize in diagnosing and treating mental health conditions — including prescribing medication. Browse verified psychiatrists in every Southern California county and city.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/find-therapist?category=Psychiatrist"
+                  className="flex items-center justify-center gap-2 bg-[oklch(0.55_0.18_30)] text-white font-semibold rounded-xl px-8 py-4 text-lg shadow-md hover:opacity-90 active:scale-95 transition-all"
+                >
+                  <Search className="w-5 h-5" />
+                  Search Psychiatrists
+                </Link>
+                <Link
+                  href="/directory"
+                  className="flex items-center justify-center gap-2 bg-card border-2 border-[oklch(0.55_0.18_30)]/30 text-foreground font-semibold rounded-xl px-8 py-4 text-lg hover:border-[oklch(0.55_0.18_30)]/60 active:scale-95 transition-all"
+                >
+                  <MapPin className="w-5 h-5" />
+                  Browse by County
+                </Link>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground leading-tight mb-6">
-              Find a <span className="text-[oklch(0.45_0.18_30)]">Psychiatrist</span> near you
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Psychiatrists are medical doctors (MD/DO) and advanced practice nurses (PMHNP/APRN/NP) who specialize in diagnosing and treating mental health conditions — including prescribing medication. Browse verified psychiatrists in every Southern California county and city.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/find-therapist?category=Psychiatrist"
-                className="flex items-center justify-center gap-2 bg-[oklch(0.55_0.18_30)] text-white font-semibold rounded-xl px-8 py-4 text-lg shadow-md hover:opacity-90 active:scale-95 transition-all"
-              >
-                <Search className="w-5 h-5" />
-                Search Psychiatrists
-              </Link>
-              <Link
-                href="/directory"
-                className="flex items-center justify-center gap-2 bg-card border-2 border-[oklch(0.55_0.18_30)]/30 text-foreground font-semibold rounded-xl px-8 py-4 text-lg hover:border-[oklch(0.55_0.18_30)]/60 active:scale-95 transition-all"
-              >
-                <MapPin className="w-5 h-5" />
-                Browse by County
-              </Link>
+          <div className="bg-destructive/8 border border-destructive/20 rounded-2xl p-5 flex flex-col gap-4 lg:w-96 shrink-0">
+            <div className="flex-1">
+              <p className="font-semibold text-foreground mb-1">In immediate danger?</p>
+              <p className="text-sm text-muted-foreground">Call 911 for emergencies. For mental health crisis support, call or text 988 — free, confidential, 24/7.</p>
             </div>
+            <div className="flex gap-3 flex-shrink-0">
+              <a href="tel:911" className="bg-destructive text-destructive-foreground font-bold rounded-xl px-5 py-2.5 text-sm hover:opacity-90 transition-all">Call 911</a>
+              <a href="tel:988" className="bg-card border-2 border-destructive text-destructive font-bold rounded-xl px-5 py-2.5 text-sm hover:bg-destructive/5 transition-all">Call 988</a>
+            </div>
+          </div>
           </div>
         </div>
       </section>
@@ -287,19 +299,6 @@ export default function PsychiatristsLanding() {
         </div>
       </section>
 
-      {/* Crisis */}
-      <section className="container py-8">
-        <div className="bg-destructive/8 border border-destructive/20 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-4">
-          <div className="flex-1">
-            <p className="font-semibold text-foreground mb-1">In immediate danger?</p>
-            <p className="text-sm text-muted-foreground">Call 911 for emergencies. For mental health crisis support, call or text 988 — free, confidential, 24/7.</p>
-          </div>
-          <div className="flex gap-3 flex-shrink-0">
-            <a href="tel:911" className="bg-destructive text-destructive-foreground font-bold rounded-xl px-5 py-2.5 text-sm hover:opacity-90 transition-all">Call 911</a>
-            <a href="tel:988" className="bg-card border-2 border-destructive text-destructive font-bold rounded-xl px-5 py-2.5 text-sm hover:bg-destructive/5 transition-all">Call 988</a>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
