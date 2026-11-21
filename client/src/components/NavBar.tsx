@@ -70,6 +70,14 @@ export default function NavBar() {
 
         {/* Desktop nav */}
         <div className="hidden 2xl:flex items-center gap-5">
+          <Link
+            href="/"
+            className={`whitespace-nowrap text-sm font-medium transition-colors hover:text-primary ${
+              location === "/" ? "text-primary" : "text-muted-foreground"
+            }`}
+          >
+            Home
+          </Link>
           {/* Demo */}
           <Link
             href="/demo"
@@ -175,6 +183,9 @@ export default function NavBar() {
       {/* Mobile menu */}
       {menuOpen && (
         <div className="2xl:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
+          <Link href="/" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
           <Link href="/demo" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
             Demo
           </Link>
