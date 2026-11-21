@@ -61,6 +61,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Trabuco Canyon", "Rossmoor", "Midway City", "Capistrano Beach",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Sunset Beach",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Monarch Beach",
     ],
   },
   {
@@ -76,6 +78,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "San Ysidro", "Jamul",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Bonsall", "Boulevard", "Dulzura", "Mount Laguna", "Tecate",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "La Costa",
     ],
   },
   {
@@ -90,6 +94,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Mecca", "Winchester", "French Valley", "Sun City", "Idyllwild",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Bermuda Dunes", "Cherry Valley", "Mira Loma", "Thermal",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Aguanga", "Anza",
     ],
   },
   {
@@ -104,6 +110,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Bloomington", "Phelan", "Joshua Tree", "Crestline", "Mentone",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Alta Loma", "Angelus Oaks", "Blue Jay", "Etiwanda", "Fort Irwin", "Landers", "Morongo Valley",
+      // Added from NPI registry practice-location cities, county by ZIP code
+      "Forest Falls", "Helendale",
     ],
   },
   {
