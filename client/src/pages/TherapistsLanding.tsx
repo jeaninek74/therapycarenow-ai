@@ -98,10 +98,9 @@ export default function TherapistsLanding() {
           <div className="bg-destructive/8 border border-destructive/20 rounded-2xl p-5 flex flex-col gap-4 lg:w-96 shrink-0">
             <div className="flex-1">
               <p className="font-semibold text-foreground mb-1">In immediate danger?</p>
-              <p className="text-sm text-muted-foreground">Call 911 for emergencies. For mental health crisis support, call or text 988 — free, confidential, 24/7.</p>
+              <p className="text-sm text-muted-foreground">For mental health crisis support, call or text 988 — free, confidential, 24/7.</p>
             </div>
             <div className="flex gap-3 flex-shrink-0">
-              <a href="tel:911" className="bg-destructive text-destructive-foreground font-bold rounded-xl px-5 py-2.5 text-sm hover:opacity-90 transition-all">Call 911</a>
               <a href="tel:988" className="bg-card border-2 border-destructive text-destructive font-bold rounded-xl px-5 py-2.5 text-sm hover:bg-destructive/5 transition-all">Call 988</a>
             </div>
           </div>
