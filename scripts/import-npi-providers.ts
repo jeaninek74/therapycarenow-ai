@@ -59,6 +59,9 @@ function formatPhone(p?: string | null): string | null {
   return d.length === 10 ? `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}` : null;
 }
 
+// Misspelled or abbreviated practice-location cities seen in NPPES, mapped to the real city.
+const CITY_FIXES: Record<string, string> = {"L.A.": "Los Angeles", "La": "Los Angeles", "Costa Mesta": "Costa Mesa", "Carsbad": "Carlsbad", "Chula Visa": "Chula Vista", "March Arb": "Riverside", "Rancho Milrage": "Rancho Mirage", "29 Palms": "Twentynine Palms", "Rancho Cucuamonga": "Rancho Cucamonga", "Rch Cucamonga": "Rancho Cucamonga", "Newbary Park": "Newbury Park", "Westlake Vlg": "Westlake Village", "Westlake": "Westlake Village", "Santa Maria,": "Santa Maria", "Vandenberg Afb": "Vandenberg Space Force Base"};
+
 function titleCase(s: string): string {
   return s.toLowerCase().replace(/\b[a-z]/g, (m) => m.toUpperCase());
 }
@@ -135,7 +138,7 @@ async function main() {
           npiData: JSON.stringify({ taxonomy: desc, taxonomyCode: tax.code, address: loc.address_1, enumerationDate: basic.enumeration_date }),
           telehealthAvailable: false,
           inPersonAvailable: true,
-          city: titleCase(loc.city),
+          city: CITY_FIXES[titleCase(loc.city)] ?? titleCase(loc.city),
           stateCode: SERVICE_STATE_CODE,
           zipCode: (loc.postal_code ?? "").slice(0, 5) || null,
           phone: formatPhone(loc.telephone_number),
