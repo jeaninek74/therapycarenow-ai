@@ -1788,7 +1788,10 @@ export const STATE_FUNDED_PROGRAMS: Program[] = [
 
 export function programsForCounty(programs: Program[], countySlug?: string | null): Program[] {
   if (!countySlug) return programs;
-  return programs.filter((p) => !p.counties || p.counties.includes(countySlug));
+  // Listings in the chosen county first, then ones that serve all of Southern California.
+  const local = programs.filter((p) => p.counties?.includes(countySlug));
+  const regionWide = programs.filter((p) => !p.counties);
+  return [...local, ...regionWide];
 }
 
 export interface EapProgram extends Program {
