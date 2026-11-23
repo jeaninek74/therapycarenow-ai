@@ -46,7 +46,7 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       // Added from NPI registry practice-location cities, county by ZIP code
       "View Park", "Watts",
       // Communities found in the NPI registry, county by ZIP code
-      "Acton", "Agua Dulce", "Bel Air", "Bell Canyon", "Century City", "City Of Industry", "Eagle Rock", "East Rancho Dominguez", "Highland Park", "Lake Hughes", "Lake View Terrace", "Leona Valley", "Lincoln Heights", "Littlerock", "Llano", "Monte Nido", "Palos Verdes Peninsula", "Phillips Ranch", "Quartz Hill", "Saugus", "Universal City", "Valley Glen", "Verdugo City", "Walnut Park", "West Los Angeles", "Westchester", "Westwood", "Wrightwood",
+      "Acton", "Agua Dulce", "Bel Air", "Century City", "City Of Industry", "Eagle Rock", "East Rancho Dominguez", "Highland Park", "Lake Hughes", "Lake View Terrace", "Leona Valley", "Lincoln Heights", "Littlerock", "Llano", "Monte Nido", "Palos Verdes Peninsula", "Phillips Ranch", "Quartz Hill", "Saugus", "Universal City", "Valley Glen", "Verdugo City", "Walnut Park", "West Los Angeles", "Westchester", "Westwood", 
     ],
   },
   {
@@ -122,6 +122,7 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Forest Falls", "Helendale",
       // Communities found in the NPI registry, county by ZIP code
       "Hinkley", "Lucerne Valley", "Oak Hills", "Oro Grande", "Patton", "Skyforest", "Spring Valley Lake", "Trona", "Yermo",
+      "Wrightwood",
     ],
   },
   {
@@ -133,6 +134,7 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Santa Paula", "Port Hueneme", "Fillmore", "Ojai", "Newbury Park", "Oak Park",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Lake Sherwood", "Oak View", "Santa Rosa Valley",
+      "Bell Canyon",
     ],
   },
   {
