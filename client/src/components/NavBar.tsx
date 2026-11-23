@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import {
   Heart, Menu, X, LayoutDashboard, Stethoscope, UserPlus,
   LogIn, LogOut, User, ChevronDown, UserCheck, Brain, Search,
+  Home, PlayCircle, HandHeart, Users, Medal, Building2, Briefcase, ShieldCheck,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,15 @@ const PROVIDER_TYPES = [
     bg: "bg-[oklch(0.55_0.18_280)]/10",
     description: "PhD/PsyD · Psychological testing · Advanced therapy",
   },
+];
+
+const RESOURCE_LINKS = [
+  { href: "/free-resources", label: "Free and Low-Cost Help", description: "Clinics, hotlines and sliding-scale care", icon: HandHeart, tint: "bg-emerald-100 text-emerald-700" },
+  { href: "/group-therapy", label: "Group Therapy", description: "Support groups near you or online", icon: Users, tint: "bg-sky-100 text-sky-700" },
+  { href: "/veterans", label: "Veterans", description: "VA clinics, Vet Centers and crisis support", icon: Medal, tint: "bg-amber-100 text-amber-700" },
+  { href: "/programs", label: "Medi-Cal (Medicaid) and Hospital Programs", description: "County programs and psychiatric hospitals", icon: Building2, tint: "bg-rose-100 text-rose-700" },
+  { href: "/eap", label: "Employee Assistance Program", description: "Free counseling through your employer", icon: Briefcase, tint: "bg-violet-100 text-violet-700" },
+  { href: "/benefits", label: "Find Care by Insurance", description: "See which providers take your plan", icon: ShieldCheck, tint: "bg-teal-100 text-teal-700" },
 ];
 
 export default function NavBar() {
@@ -79,14 +89,12 @@ export default function NavBar() {
             Home
           </Link>
           {/* Demo */}
-          <Link
-            href="/demo"
-            className={`whitespace-nowrap text-sm font-medium transition-colors hover:text-primary ${
-              location === "/demo" ? "text-primary" : "text-muted-foreground"
-            }`}
+          <a
+            href="/#demo-video"
+            className="whitespace-nowrap text-sm font-medium transition-colors hover:text-primary text-muted-foreground"
           >
             Demo
-          </Link>
+          </a>
 
           {/* Find a Provider dropdown */}
           <div className="relative" ref={dropdownRef}>
@@ -182,60 +190,66 @@ export default function NavBar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div className="2xl:hidden border-t border-border bg-card px-4 py-3 flex flex-col gap-1">
-          <Link href="/" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
-            Home
-          </Link>
-          <Link href="/demo" className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors" onClick={() => setMenuOpen(false)}>
-            Demo
-          </Link>
-
-          {/* Provider types section */}
-          <div className="py-2">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 px-0">Find a Provider</p>
-            {PROVIDER_TYPES.map((pt) => (
-              <Link
-                key={pt.href}
-                href={pt.href}
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-3 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
-              >
-                <span className={`${pt.color}`}>{pt.icon}</span>
-                {pt.label}
-              </Link>
-            ))}
-            <Link href="/find-therapist" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
-              <Search className="w-4 h-4" /> Search all providers
+        <div className="2xl:hidden border-t border-border bg-card px-4 py-4 flex flex-col gap-4 max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <div className="grid grid-cols-2 gap-3">
+            <Link href="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 rounded-xl border border-border p-3 hover:border-primary/40 hover:bg-primary/5 transition-colors">
+              <span className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><Home className="w-5 h-5" /></span>
+              <span className="text-sm font-semibold text-foreground">Home</span>
             </Link>
-            <Link href="/directory" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
-              <LayoutDashboard className="w-4 h-4" /> Browse by county
-            </Link>
+            <a href="/#demo-video" onClick={() => setMenuOpen(false)} className="flex items-center gap-3 rounded-xl border border-border p-3 hover:border-primary/40 hover:bg-primary/5 transition-colors">
+              <span className="w-9 h-9 rounded-lg bg-primary/10 text-primary flex items-center justify-center"><PlayCircle className="w-5 h-5" /></span>
+              <span className="text-sm font-semibold text-foreground">Watch the demo</span>
+            </a>
           </div>
 
-          <div className="border-t border-border my-1" />
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Find a Provider</p>
+            <div className="grid sm:grid-cols-3 gap-3">
+              {PROVIDER_TYPES.map((pt) => (
+                <Link
+                  key={pt.href}
+                  href={pt.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="flex items-start gap-3 rounded-xl border border-border p-3 hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                >
+                  <span className={`w-9 h-9 rounded-lg ${pt.bg} ${pt.color} flex items-center justify-center flex-shrink-0`}>{pt.icon}</span>
+                  <span>
+                    <span className="block text-sm font-semibold text-foreground">{pt.label}</span>
+                    <span className="block text-xs text-muted-foreground">{pt.description}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2 mt-3">
+              <Link href="/find-therapist" onClick={() => setMenuOpen(false)} className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:opacity-90 transition-opacity">
+                <Search className="w-4 h-4" /> Search all providers
+              </Link>
+              <Link href="/directory" onClick={() => setMenuOpen(false)} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-primary/40 transition-colors">
+                <LayoutDashboard className="w-4 h-4" /> Browse by county
+              </Link>
+            </div>
+          </div>
 
-          {[
-            { href: "/free-resources", label: "Free and Low-Cost Help" },
-            { href: "/group-therapy", label: "Group Therapy" },
-            { href: "/veterans", label: "Veterans" },
-            { href: "/programs", label: "Medi-Cal (Medicaid) and Hospital Programs" },
-            { href: "/eap", label: "Employee Assistance Program" },
-            { href: "/benefits", label: "Find Care by Insurance" },
-          ].map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium py-2 text-foreground hover:text-primary transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
-
-          
-
-          <div className="border-t border-border pt-2 mt-1">
-            
+          <div>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Help and Programs</p>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {RESOURCE_LINKS.map(({ href, label, description, icon: Icon, tint }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className={`flex items-start gap-3 rounded-xl border p-3 transition-colors hover:border-primary/40 hover:bg-primary/5 ${
+                    location === href ? "border-primary/50 bg-primary/5" : "border-border"
+                  }`}
+                >
+                  <span className={`w-9 h-9 rounded-lg ${tint} flex items-center justify-center flex-shrink-0`}><Icon className="w-5 h-5" /></span>
+                  <span>
+                    <span className="block text-sm font-semibold text-foreground">{label}</span>
+                    <span className="block text-xs text-muted-foreground">{description}</span>
+                  </span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       )}

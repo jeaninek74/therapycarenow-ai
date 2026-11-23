@@ -1,10 +1,15 @@
 import { Link } from "wouter";
 import { SOCAL_COUNTIES } from "@shared/region";
 import { Heart, Phone, Search, Briefcase, BookOpen, Shield, Check, Brain, UserCheck, FlaskConical, ArrowRight, Stethoscope, Play, Star, Quote, Users, Flag, Building2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {
+  useEffect(() => {
+    if (window.location.hash === "#demo-video") {
+      document.getElementById("demo-video")?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
@@ -92,6 +97,27 @@ export default function Home() {
               </Link>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Demo Video */}
+      <section id="demo-video" className="container py-16 scroll-mt-20">
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl font-bold text-foreground mb-3">Watch a quick demo</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            A walkthrough of searching Southern California providers by insurance and ZIP code, group therapy, veterans, Medi-Cal and hospital programs, Employee Assistance Programs, and free and low-cost help.
+          </p>
+        </div>
+        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border">
+          <video
+            src="/demo.mp4"
+            poster="/demo-poster.jpg"
+            controls
+            playsInline
+            preload="metadata"
+            className="w-full h-auto block"
+            aria-label="TherapyCareNow demo"
+          />
         </div>
       </section>
 
@@ -338,26 +364,6 @@ export default function Home() {
       </section>
 
 
-      {/* Demo Video */}
-      <section className="container py-16">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-3">Watch a quick demo</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            A walkthrough of searching Southern California providers by insurance and ZIP code, group therapy, veterans, Medi-Cal and hospital programs, Employee Assistance Programs, and free and low-cost help.
-          </p>
-        </div>
-        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border">
-          <video
-            src="/demo.mp4"
-            poster="/demo-poster.jpg"
-            controls
-            playsInline
-            preload="metadata"
-            className="w-full h-auto block"
-            aria-label="TherapyCareNow demo"
-          />
-        </div>
-      </section>
 
 
       {/* Safety disclaimer */}
