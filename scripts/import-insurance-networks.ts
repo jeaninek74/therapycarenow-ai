@@ -21,6 +21,7 @@ const FHIR_SOURCES: FhirSource[] = [
   { key: "la-care", insuranceName: "L.A. Care Health Plan", label: "L.A. Care public provider directory", base: "https://us107.ir4.edifecscloud.com/lac/fhir/pd/R4" },
   { key: "iehp", insuranceName: "Inland Empire Health Plan (IEHP)", label: "IEHP public provider directory", base: "https://fhir.iehp.org/provider-directory" },
   { key: "cigna", insuranceName: "Cigna", label: "Cigna public provider directory", base: "https://fhir.cigna.com/ProviderDirectory/v1" },
+  { key: "uhc", insuranceName: "UnitedHealthcare", label: "UnitedHealthcare (Optum) public provider directory", base: "https://flex.optum.com/fhirpublic/R4" },
   { key: "blue-shield", insuranceName: "Blue Shield of California", label: "Blue Shield of California public provider directory", base: "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory" },
 ];
 const MEDI_CAL_CSV =
