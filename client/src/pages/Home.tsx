@@ -17,8 +17,8 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-background to-secondary/20 pointer-events-none" />
-        <div className="container relative py-20 md:py-28 flex flex-col lg:flex-row lg:items-start gap-10">
-          <div className="max-w-2xl flex-1">
+        <div className="container relative pt-20 md:pt-28 pb-12 grid lg:grid-cols-[minmax(0,1fr)_34rem] items-start gap-12">
+          <div>
             <div className="inline-flex items-center gap-2 bg-secondary/60 text-secondary-foreground text-sm font-medium px-4 py-2 rounded-full mb-6">
               <Shield className="w-4 h-4" />
               Nothing stored · Southern California · Free to use
@@ -56,30 +56,6 @@ export default function Home() {
                 (run by CMS). We confirm each clinician has an active National Provider Identifier and a California practice location.
               </span>
             </p>
-            <div className="bg-card/80 border border-border rounded-2xl p-5 mb-10">
-              <h2 className="font-semibold text-foreground mb-3">Therapist, psychiatrist, or psychologist?</h2>
-              <dl className="space-y-3 text-sm">
-                {[
-                  {
-                    term: "Therapist (LMFT, LCSW, LPCC)",
-                    def: "A master's-level licensed counselor who provides talk therapy for stress, anxiety, depression, relationships, and grief. Therapists can't prescribe medication. They're usually the best place to start.",
-                  },
-                  {
-                    term: "Psychiatrist (MD, DO) or psychiatric nurse practitioner (PMHNP)",
-                    def: "A medical provider who diagnoses mental health conditions and prescribes and manages medication. Visits are often shorter and focus on medication. See one if you may need medication or have symptoms such as bipolar disorder, psychosis, or severe depression.",
-                  },
-                  {
-                    term: "Psychologist (PhD, PsyD)",
-                    def: "A doctoral-level clinician who provides therapy and psychological testing, such as for ADHD, learning differences, or a complex diagnosis. Psychologists in California can't prescribe medication.",
-                  },
-                ].map(({ term, def }) => (
-                  <div key={term}>
-                    <dt className="font-medium text-foreground">{term}</dt>
-                    <dd className="text-muted-foreground">{def}</dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <a
                 href="tel:988"
@@ -97,7 +73,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <aside className="w-full lg:w-[30rem] shrink-0 flex flex-col gap-6">
+          <aside className="w-full flex flex-col gap-6">
             <div className="bg-destructive/8 border border-destructive/20 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex-1">
                 <p className="font-semibold text-foreground mb-1">In immediate danger?</p>
@@ -130,6 +106,32 @@ export default function Home() {
               </div>
             </div>
           </aside>
+        </div>
+        <div className="container relative pb-16">
+        <div className="bg-card/80 border border-border rounded-2xl p-6">
+          <h2 className="font-semibold text-foreground mb-3">Therapist, psychiatrist, or psychologist?</h2>
+          <dl className="grid md:grid-cols-3 gap-6 text-sm">
+            {[
+              {
+                term: "Therapist (LMFT, LCSW, LPCC)",
+                def: "A master's-level licensed counselor who provides talk therapy for stress, anxiety, depression, relationships, and grief. Therapists can't prescribe medication. They're usually the best place to start.",
+              },
+              {
+                term: "Psychiatrist (MD, DO) or psychiatric nurse practitioner (PMHNP)",
+                def: "A medical provider who diagnoses mental health conditions and prescribes and manages medication. Visits are often shorter and focus on medication. See one if you may need medication or have symptoms such as bipolar disorder, psychosis, or severe depression.",
+              },
+              {
+                term: "Psychologist (PhD, PsyD)",
+                def: "A doctoral-level clinician who provides therapy and psychological testing, such as for ADHD, learning differences, or a complex diagnosis. Psychologists in California can't prescribe medication.",
+              },
+            ].map(({ term, def }) => (
+              <div key={term}>
+                <dt className="font-medium text-foreground">{term}</dt>
+                <dd className="text-muted-foreground">{def}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
         </div>
       </section>
 
