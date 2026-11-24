@@ -45,6 +45,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "East Los Angeles", "Marina Del Rey",
       // Added from NPI registry practice-location cities, county by ZIP code
       "View Park", "Watts",
+      // Communities found in the NPI registry, county by ZIP code
+      "Acton", "Agua Dulce", "Bel Air", "Century City", "City Of Industry", "Eagle Rock", "East Rancho Dominguez", "Highland Park", "Lake Hughes", "Lake View Terrace", "Leona Valley", "Lincoln Heights", "Littlerock", "Llano", "Monte Nido", "Palos Verdes Peninsula", "Phillips Ranch", "Quartz Hill", "Saugus", "Universal City", "Valley Glen", "Verdugo City", "Walnut Park", "West Los Angeles", "Westchester", "Westwood", 
     ],
   },
   {
@@ -63,6 +65,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Sunset Beach",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Monarch Beach",
+      // Communities found in the NPI registry, county by ZIP code
+      "Anaheim Hills", "Coto De Caza", "North Tustin", "Rancho Mission Viejo", "Silverado",
     ],
   },
   {
@@ -80,6 +84,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Bonsall", "Boulevard", "Dulzura", "Mount Laguna", "Tecate",
       // Added from NPI registry practice-location cities, county by ZIP code
       "La Costa",
+      // Communities found in the NPI registry, county by ZIP code
+      "Camp Pendleton", "Pacific Beach", "Pala", "Santa Ysabel",
     ],
   },
   {
@@ -96,6 +102,8 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Bermuda Dunes", "Cherry Valley", "Mira Loma", "Thermal",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Aguanga", "Anza",
+      // Communities found in the NPI registry, county by ZIP code
+      "Homeland", "Mountain Center", "Nuevo", "Quail Valley",
     ],
   },
   {
@@ -112,6 +120,9 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Alta Loma", "Angelus Oaks", "Blue Jay", "Etiwanda", "Fort Irwin", "Landers", "Morongo Valley",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Forest Falls", "Helendale",
+      // Communities found in the NPI registry, county by ZIP code
+      "Hinkley", "Lucerne Valley", "Oak Hills", "Oro Grande", "Patton", "Skyforest", "Spring Valley Lake", "Trona", "Yermo",
+      "Wrightwood",
     ],
   },
   {
@@ -123,6 +134,7 @@ export const SOCAL_COUNTIES: SoCalCounty[] = [
       "Santa Paula", "Port Hueneme", "Fillmore", "Ojai", "Newbury Park", "Oak Park",
       // Added from NPI registry practice-location cities, county by ZIP code
       "Lake Sherwood", "Oak View", "Santa Rosa Valley",
+      "Bell Canyon",
     ],
   },
   {
