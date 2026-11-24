@@ -17,8 +17,8 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-background to-secondary/20 pointer-events-none" />
-        <div className="container relative py-20 md:py-28">
-          <div className="max-w-2xl">
+        <div className="container relative py-20 md:py-28 flex flex-col lg:flex-row lg:items-start gap-10">
+          <div className="max-w-2xl flex-1">
             <div className="inline-flex items-center gap-2 bg-secondary/60 text-secondary-foreground text-sm font-medium px-4 py-2 rounded-full mb-6">
               <Shield className="w-4 h-4" />
               Nothing stored · Southern California · Free to use
@@ -97,27 +97,39 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Demo Video */}
-      <section id="demo-video" className="container py-16 scroll-mt-20">
-        <div className="mb-8 text-center">
-          <h2 className="text-3xl font-bold text-foreground mb-3">Watch a quick demo</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            A walkthrough of searching Southern California providers by insurance and ZIP code, group therapy, veterans, Medi-Cal and hospital programs, Employee Assistance Programs, and free and low-cost help.
-          </p>
-        </div>
-        <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-border">
-          <video
-            src="/demo.mp4"
-            poster="/demo-poster.jpg"
-            controls
-            playsInline
-            preload="metadata"
-            className="w-full h-auto block"
-            aria-label="TherapyCareNow demo"
-          />
+          <aside className="w-full lg:w-[30rem] shrink-0 flex flex-col gap-6">
+            <div className="bg-destructive/8 border border-destructive/20 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1">
+                <p className="font-semibold text-foreground mb-1">In immediate danger?</p>
+                <p className="text-sm text-muted-foreground">
+                  For mental health crisis support, call or text 988 — free, confidential, 24/7.
+                </p>
+              </div>
+              <a
+                href="tel:988"
+                className="bg-card border-2 border-destructive text-destructive font-bold rounded-xl px-5 py-2.5 text-sm text-center hover:bg-destructive/5 transition-all"
+              >
+                Call 988
+              </a>
+            </div>
+            <div id="demo-video" className="scroll-mt-20">
+              <h2 className="text-xl font-bold text-foreground mb-2">Watch a quick demo</h2>
+              <p className="text-sm text-muted-foreground mb-4">
+                A walkthrough of searching Southern California providers by insurance and ZIP code, group therapy, veterans, Medi-Cal and hospital programs, Employee Assistance Programs, and free and low-cost help.
+              </p>
+              <div className="rounded-2xl overflow-hidden shadow-xl border border-border">
+                <video
+                  src="/demo.mp4"
+                  poster="/demo-poster.jpg"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  className="w-full h-auto block"
+                  aria-label="TherapyCareNow demo"
+                />
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
 
