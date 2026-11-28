@@ -105,16 +105,18 @@ async function main() {
   };
 
   const write = async (insuranceName: string, label: string, ids: number[], checked?: number[]) => {
-    const sourceTag = like(providerInsurance.planName, `${SOURCE_PREFIX}${label}`);
-    if (!checked) await db.delete(providerInsurance).where(sourceTag);
-    for (let i = 0; checked && i < checked.length; i += 500) {
-      await db.delete(providerInsurance).where(and(sourceTag, inArray(providerInsurance.providerId, checked.slice(i, i + 500))));
-    }
-    for (let i = 0; i < ids.length; i += 500) {
-      await db.insert(providerInsurance).values(
-        ids.slice(i, i + 500).map((providerId) => ({ providerId, insuranceName, planName: `${SOURCE_PREFIX}${label}` })),
-      );
-    }
+    await db.transaction(async (tx) => {
+      const sourceTag = like(providerInsurance.planName, `${SOURCE_PREFIX}${label}`);
+      if (!checked) await tx.delete(providerInsurance).where(sourceTag);
+      for (let i = 0; checked && i < checked.length; i += 500) {
+        await tx.delete(providerInsurance).where(and(sourceTag, inArray(providerInsurance.providerId, checked.slice(i, i + 500))));
+      }
+      for (let i = 0; i < ids.length; i += 500) {
+        await tx.insert(providerInsurance).values(
+          ids.slice(i, i + 500).map((providerId) => ({ providerId, insuranceName, planName: `${SOURCE_PREFIX}${label}` })),
+        );
+      }
+    });
     console.log(`${insuranceName}: ${ids.length} clinicians listed`);
   };
 
