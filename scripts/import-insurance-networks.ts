@@ -85,23 +85,38 @@ async function mediCalNpis(): Promise<Set<string>> {
 
 async function main() {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is required");
-  const db = drizzle(process.env.DATABASE_URL);
+  let db = drizzle(process.env.DATABASE_URL);
   const rows = await db.select({ id: providers.id, npi: providers.npiNumber }).from(providers).where(isNotNull(providers.npiNumber));
   const clinicians = rows.filter((r): r is { id: number; npi: string } => !!r.npi);
   console.log(`${clinicians.length} NPI-verified clinicians`);
 
   /** Replaces this source's matches for the clinicians that were checked (all of them when `checked` is omitted). */
   const save = async (insuranceName: string, label: string, ids: number[], checked?: number[]) => {
-    const sourceTag = like(providerInsurance.planName, `${SOURCE_PREFIX}${label}`);
-    if (!checked) await db.delete(providerInsurance).where(sourceTag);
-    for (let i = 0; checked && i < checked.length; i += 500) {
-      await db.delete(providerInsurance).where(and(sourceTag, inArray(providerInsurance.providerId, checked.slice(i, i + 500))));
+    // Directory lookups take hours, so the original connection may have been dropped; retry on a fresh one.
+    for (let attempt = 1; ; attempt++) {
+      try {
+        return await write(insuranceName, label, ids, checked);
+      } catch (err) {
+        if (attempt >= 3) throw err;
+        console.warn(`${insuranceName}: database write failed (${(err as Error).message.slice(0, 80)}); retrying`);
+        db = drizzle(process.env.DATABASE_URL!);
+      }
     }
-    for (let i = 0; i < ids.length; i += 500) {
-      await db.insert(providerInsurance).values(
-        ids.slice(i, i + 500).map((providerId) => ({ providerId, insuranceName, planName: `${SOURCE_PREFIX}${label}` })),
-      );
-    }
+  };
+
+  const write = async (insuranceName: string, label: string, ids: number[], checked?: number[]) => {
+    await db.transaction(async (tx) => {
+      const sourceTag = like(providerInsurance.planName, `${SOURCE_PREFIX}${label}`);
+      if (!checked) await tx.delete(providerInsurance).where(sourceTag);
+      for (let i = 0; checked && i < checked.length; i += 500) {
+        await tx.delete(providerInsurance).where(and(sourceTag, inArray(providerInsurance.providerId, checked.slice(i, i + 500))));
+      }
+      for (let i = 0; i < ids.length; i += 500) {
+        await tx.insert(providerInsurance).values(
+          ids.slice(i, i + 500).map((providerId) => ({ providerId, insuranceName, planName: `${SOURCE_PREFIX}${label}` })),
+        );
+      }
+    });
     console.log(`${insuranceName}: ${ids.length} clinicians listed`);
   };
 
